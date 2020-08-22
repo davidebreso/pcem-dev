@@ -401,9 +401,7 @@ void ams_init()
 void pc5086_init()
 {
         xt_init();
-        lpt1_remove();          /* remove 1st parallel port */
         lpt2_remove();          /* only one parallel port */
-        serial1_remove();       /* remove 1st serial port for debugging */
         serial2_remove();       /* only one serial port */
         device_add(&nvr_device);
 	    fdc_set_dskchg_activelow();
