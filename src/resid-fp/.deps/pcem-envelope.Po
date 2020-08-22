@@ -1,0 +1,6 @@
+resid-fp/pcem-envelope.o: resid-fp/envelope.cc resid-fp/envelope.h \
+  resid-fp/siddefs-fp.h
+
+resid-fp/envelope.h:
+
+resid-fp/siddefs-fp.h:

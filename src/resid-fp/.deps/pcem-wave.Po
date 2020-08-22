@@ -1,0 +1,6 @@
+resid-fp/pcem-wave.o: resid-fp/wave.cc resid-fp/wave.h \
+  resid-fp/siddefs-fp.h
+
+resid-fp/wave.h:
+
+resid-fp/siddefs-fp.h:

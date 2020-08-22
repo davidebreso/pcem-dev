@@ -144,6 +144,9 @@ struct
 //#define seg_fs _fs.base
 #define gs cpu_state.seg_gs.base
 
+/* Program counter */
+#define PC cpu_state.pc
+
 #define CPL ((cpu_state.seg_cs.access>>5)&3)
 
 #define C_FLAG  0x0001

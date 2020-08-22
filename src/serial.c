@@ -4,6 +4,7 @@
 #include "pic.h"
 #include "serial.h"
 #include "timer.h"
+#include "x86.h"
 
 enum
 {
@@ -83,7 +84,7 @@ uint8_t serial_read_fifo(SERIAL *serial)
 void serial_write(uint16_t addr, uint8_t val, void *p)
 {
         SERIAL *serial = (SERIAL *)p;
-//        pclog("Write serial %03X %02X %04X:%04X\n",addr,val,CS,pc);
+        pclog("Write serial %03X %02X %04X:%04X\n",addr,val,CS,PC);
         switch (addr&7)
         {
                 case 0:
@@ -171,7 +172,7 @@ uint8_t serial_read(uint16_t addr, void *p)
 {
         SERIAL *serial = (SERIAL *)p;
         uint8_t temp = 0;
-//        pclog("Read serial %03X %04X(%08X):%04X %i %i  ", addr, CS, cs, pc, mousedelay, ins);
+        pclog("Read serial %03X %04X:%04X\n", addr, CS, PC);
         switch (addr&7)
         {
                 case 0:
