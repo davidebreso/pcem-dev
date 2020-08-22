@@ -182,6 +182,7 @@ enum
         ROM_PC1640,
         ROM_PC2086,
         ROM_PC3086,        
+        ROM_PC5086,        
         ROM_AMIXT,      /*XT Clone with AMI BIOS*/
 	ROM_LTXT,
 	ROM_LXT3,
