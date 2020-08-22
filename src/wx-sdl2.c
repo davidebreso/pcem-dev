@@ -17,6 +17,12 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef __APPLE__
+#include <sys/types.h>
+#include <sys/stat.h>
+#endif
+
 #include "ibm.h"
 #include "device.h"
 #include "cassette.h"
@@ -233,6 +239,19 @@ void get_pcem_path(char *s, int size)
 #ifdef __linux
         wx_get_home_directory(s);
         strcat(s, ".pcem/");
+#elif defined __APPLE__
+
+    wx_get_home_directory(s);
+    strcat(s, "Library/Application Support/PCem/");
+
+    struct stat st = {0};
+
+    // create ~/Library/Application Support/PCem/
+    // if it doesn't exist
+    if (stat(s, &st) == -1) {
+        mkdir(s, 0700);
+    }
+
 #else
         char* path = SDL_GetBasePath();
         strcpy(s, path);
@@ -241,7 +260,9 @@ void get_pcem_path(char *s, int size)
 
 void set_window_title(const char *s)
 {
+#ifndef __APPLE__
         sdl_set_window_title(s);
+#endif
 }
 
 float flash_func(float x)

@@ -20,6 +20,9 @@
 
 #include "esdi_at.h"
 
+#ifdef __APPLE__
+#define off64_t off_t
+#endif
 
 #define IDE_TIME (TIMER_USEC*10)//(5 * 100 * (1 << TIMER_SHIFT))
 

@@ -21,6 +21,10 @@
 #include "scsi_zip.h"
 #include "ide.h"
 
+#ifdef __APPLE__
+#define off64_t off_t
+#endif
+
 /* ATA Commands */
 #define WIN_SRST			0x08 /* ATAPI Device Reset */
 #define WIN_RECAL			0x10

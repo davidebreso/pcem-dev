@@ -6,6 +6,13 @@
 #include "ibm.h"
 #include "hdd_file.h"
 
+#ifdef __APPLE__
+#define ftello64 ftello
+#define fseeko64 fseeko
+#define fopen64 fopen
+#define off64_t off_t
+#endif
+
 void hdd_load_ext(hdd_file_t *hdd, const char *fn, int spt, int hpc, int tracks, int read_only)
 {
 	if (hdd->f == NULL)

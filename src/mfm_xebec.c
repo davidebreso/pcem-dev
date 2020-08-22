@@ -21,6 +21,10 @@
 
 #include "mfm_xebec.h"
 
+#ifdef __APPLE__
+#define off64_t off_t
+#endif
+
 #define XEBEC_TIME (2000 * TIMER_USEC)
 
 extern char ide_fn[7][512];

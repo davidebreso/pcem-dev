@@ -20,6 +20,13 @@
 #include "video.h"
 #include "vid_voodoo.h"
 
+#ifdef __APPLE__
+#define ftello64 ftello
+#define fseeko64 fseeko
+#define fopen64 fopen
+#define off64_t off_t
+#endif
+
 //#define MAX_CYLINDERS ((((1 << 28)-1) / 16) / 63)
 #define MAX_CYLINDERS 265264 /*Award 430VX won't POST with a larger drive*/
 extern int pause;
