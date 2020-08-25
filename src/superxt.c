@@ -42,6 +42,9 @@ uint8_t superxt_read(uint16_t port, void *priv)
 
 void superxt_init()
 {
+        /* Set register 0x42 to invalid configuration at startup */
+        superxt_regs[0x42] = 0;
+
         io_sethandler(0x0022, 0x0002, superxt_read, NULL, NULL, superxt_write, NULL, NULL,  NULL);
         io_sethandler(0x0208, 0x0001, superxt_read, NULL, NULL, superxt_write, NULL, NULL,  NULL);
         io_sethandler(0x4208, 0x0001, superxt_read, NULL, NULL, superxt_write, NULL, NULL,  NULL);

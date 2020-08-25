@@ -147,7 +147,7 @@ uint8_t upc_config_read(uint16_t port, void *priv)
                 }
         }
 
-//        pclog("UPC READ : %04X, %02X\n", port, temp);
+        pclog("UPC READ : %04X, %02X\n", port, temp);
         return temp;
 }
 
@@ -156,12 +156,12 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
         upc_t *upc = (upc_t *)priv;
         int configuration_state_event = 0;
 
-//        pclog("UPC WRITE: %04X, %02X\n", port, val);
+        pclog("UPC WRITE: %04X, %02X\n", port, val);
 
         switch(port)
         {
                 case 0x2fa:
-                        if (upc->configuration_state == 0 && val == 0x55)
+                        if (upc->configuration_state == 0 && val == 0xAA)
                                 configuration_state_event = 1;
                         else if (upc->configuration_state == 4)
                         {
@@ -182,7 +182,7 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
                         }
                         break;
                 case 0x3fa:
-                        if (upc->configuration_state == 1 && val == 0xaa)
+                        if (upc->configuration_state == 1 && val == 0x55)
                                 configuration_state_event = 1;
                         else if (upc->configuration_state == 2 && val == 0x36)
                                 configuration_state_event = 1;
@@ -237,7 +237,7 @@ static void *upc_init()
         io_sethandler(0x02fa, 0x0001, NULL, NULL, NULL, upc_config_write, NULL, NULL, &upc);
         io_sethandler(0x03fa, 0x0001, NULL, NULL, NULL, upc_config_write, NULL, NULL, &upc);
 
-        upc.regs[0] = 0x0c;
+        upc.regs[0] = 0x00;
         upc.regs[1] = 0x00;
         upc.regs[2] = 0x00;
         upc.regs[3] = 0x00;
