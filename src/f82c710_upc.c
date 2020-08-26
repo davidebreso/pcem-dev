@@ -41,6 +41,7 @@ typedef struct upc_t
 {
         int configuration_state; // state of algorithm to enter configuration mode
         int configuration_mode;
+        uint8_t next_value;     // next expected value to get
         uint16_t cri_addr; // cri = configuration index register, addr is even
         uint16_t cap_addr; // cap = configuration access port, addr is odd and is cri_addr + 1
         uint8_t cri; // currently indexed register
@@ -80,14 +81,21 @@ void upc_update_ports(upc_t *upc)
         else
                 pclog("UPC: PARALLEL disabled\n");
 
-        if (upc->regs[12] & 0x80)
+        if ((upc->regs[12] & 0x40) != 0) 
         {
-                ide_pri_enable();
-                pclog("UPC: IDE enabled\n");
+                pclog("UPC: IDE XT mode not implemented!\n");        
         }
-        else
-                pclog("UPC: IDE disabled\n");
-
+        else 
+        {
+                if (upc->regs[12] & 0x80)
+                {
+                        ide_pri_enable();
+                        pclog("UPC: AT IDE enabled\n");
+                }
+                else
+                        pclog("UPC: AT IDE disabled\n");
+        }
+        
         if (upc->regs[12] & 0x20)
         {
                 fdc_add();
@@ -112,8 +120,6 @@ void upc_update_ports(upc_t *upc)
                 pclog("UPC: GPCS not implemented! (at default address: %04X)\n", upc->regs[9] * 4);
         else if (upc->regs[9] != 0)
                 pclog("UPC: GPCS not implemented! (at address: %04X)\n", upc->regs[9] * 4);
-        if ((upc->regs[12] & 0x40) != 0)
-                pclog("UPC: IDE XT mode not implemented!\n");
         if ((upc->regs[12] & 0x10) != 0)
                 pclog("UPC: FDC power down mode not implemented!\n");
         if ((upc->regs[12] & 0x0C) != 0)
@@ -161,8 +167,13 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
         switch(port)
         {
                 case 0x2fa:
-                        if (upc->configuration_state == 0 && val == 0xAA)
+                        /* Execute configuration step 1 for any value except 9, ff or 36 */
+                        if (upc->configuration_state == 0 && (val != 0x9 || val != 0x36 || val != 0xff))
+                        {
                                 configuration_state_event = 1;
+                                /* next value should be the 1's complement of the current one */
+                                upc->next_value = 0xff - val; 
+                        }
                         else if (upc->configuration_state == 4)
                         {
                                 uint8_t addr_verify = upc->cri_addr / 4;
@@ -182,7 +193,8 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
                         }
                         break;
                 case 0x3fa:
-                        if (upc->configuration_state == 1 && val == 0x55)
+                        /* go to configuration step 2 if value is the expected one */
+                        if (upc->configuration_state == 1 && val == upc->next_value)
                                 configuration_state_event = 1;
                         else if (upc->configuration_state == 2 && val == 0x36)
                                 configuration_state_event = 1;

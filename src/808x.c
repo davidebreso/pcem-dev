@@ -40,8 +40,6 @@ int ins=0;
 
 int is8086=0;
 
-int in_loop=0;
-
 static uint32_t oldds;
 uint32_t oldss;
 
@@ -1759,10 +1757,8 @@ void execx86(int cycs)
                         break;
 			case 0x64: /*JE alias*/
                         case 0x74: /*JE*/
-                        pclog("PC was %04X\n",cpu_state.pc);
                         offset=(int8_t)FETCH();
                         if (cpu_state.flags & Z_FLAG) { cpu_state.pc+=offset; cycles-=12; FETCHCLEAR(); }
-                        pclog("PC now %04X\n",cpu_state.pc);
                         cycles-=4;
                         break;
 			case 0x65: /*JNE alias*/
@@ -3046,18 +3042,10 @@ void execx86(int cycs)
                         cycles-=6;
                         break;
                         case 0xE2: /*LOOP*/
-                        if(!in_loop) {
-                            pclog("Loop started at PC %04X with DX %04X, BL %02X, SI %04X\n", cpu_state.pc, CX, BL, SI);
-                            in_loop = 1;
-                        }
 //                        printf("LOOP start\n");
                         offset=(int8_t)FETCH();
                         CX--;
                         if (CX) { cpu_state.pc+=offset; cycles-=12; FETCHCLEAR(); }
-                            else {
-                            pclog("Loop ended at PC %04X with DX %04X, BL %02X, SI %04X\n", cpu_state.pc, CX, BL, SI);
-                            in_loop = 0;
-                            }
                         cycles-=5;
 //                        printf("LOOP end!\n");
                         break;
@@ -3101,10 +3089,10 @@ void execx86(int cycs)
                         FETCHCLEAR();
                         break;
                         case 0xE9: /*JMP rel 16*/
-                        pclog("PC was %04X\n",cpu_state.pc);
+//                        pclog("PC was %04X\n",cpu_state.pc);
                         tempw = getword();
                         cpu_state.pc += tempw;
-                        pclog("PC now %04X\n",cpu_state.pc);
+//                        pclog("PC now %04X\n",cpu_state.pc);
                         cycles-=15;
                         FETCHCLEAR();
                         break;
