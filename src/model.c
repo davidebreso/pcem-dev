@@ -401,10 +401,10 @@ void ams_init()
 void pc5086_init()
 {
         xt_init();
-        lpt1_remove();          /* only one parallel port */
-        lpt2_remove();          /* only one parallel port */
-        serial1_remove();       /* only one serial port */
-        serial2_remove();       /* only one serial port */
+        lpt1_remove();      /* remove LPT ports, they will be enabled by 82C710 */
+        lpt2_remove();          
+        serial1_remove();   /* remove COM ports, they will be enabled by 82C710 */
+        serial2_remove();       
         device_add(&nvr_device);
 	    fdc_set_dskchg_activelow();
         superxt_init();

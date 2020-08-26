@@ -67,7 +67,8 @@ void upc_update_ports(upc_t *upc)
 
         if (upc->regs[0] & 0x4)
         {
-                serial1_init(upc->regs[4] * 4, upc->serial_irq, 0);
+                serial1_set(upc->regs[4] * 4, upc->serial_irq);
+                serial1.has_fifo = 0;
                 pclog("UPC: UART at %04X, irq %d\n", upc->regs[4] * 4, upc->serial_irq);
         }
         else
