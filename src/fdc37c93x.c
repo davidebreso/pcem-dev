@@ -124,7 +124,7 @@ void fdc37c93x_write(uint16_t port, uint8_t val, void *p)
                         if ((fdc37c93x->global_regs[0x22] & (1 << 4)) && (fdc37c93x->com1_regs[0x30] & 0x01))
                         {
 //                                pclog("COM1 addr = %04x, IRQ = %i\n", addr, irq);
-                                serial1_set(addr, irq);
+                                serial1_set(addr, irq, 1);
                         }
 /*                        else
                                 pclog("COM1 disabled\n");*/
@@ -135,7 +135,7 @@ void fdc37c93x_write(uint16_t port, uint8_t val, void *p)
                         if ((fdc37c93x->global_regs[0x22] & (1 << 5)) && (fdc37c93x->com2_regs[0x30] & 0x01))
                         {
 //                                pclog("COM2 addr = %04x, IRQ = %i\n", addr, irq);
-                                serial2_set(addr, irq);
+                                serial2_set(addr, irq, 1);
                         }
 /*                        else
                                 pclog("COM2 disabled\n");*/

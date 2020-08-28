@@ -351,9 +351,9 @@ static void ps1_m2133_write(uint16_t port, uint8_t val, void *p)
                         if (ps1_m2133_superio.regs[0] & 1)
                                 lpt1_init(ps1_lpt_io[ps1_m2133_superio.regs[1] & 3]);
                         if (ps1_m2133_superio.regs[0] & 2)
-                                serial1_set(ps1_com_io[(ps1_m2133_superio.regs[1] >> 2) & 3], 4);
+                                serial1_set(ps1_com_io[(ps1_m2133_superio.regs[1] >> 2) & 3], 4, 1);
                         if (ps1_m2133_superio.regs[0] & 4)
-                                serial2_set(ps1_com_io[(ps1_m2133_superio.regs[1] >> 4) & 3], 3);
+                                serial2_set(ps1_com_io[(ps1_m2133_superio.regs[1] >> 4) & 3], 3, 1);
                 }
                 break;
         }

@@ -53,12 +53,12 @@ static void acc3221_write(uint16_t addr, uint8_t val, void *p)
                                 if ((acc3221.regs[0xde] & REG_DE_SIRQ3_SOURCE) == REG_DE_SIRQ3_SERIAL1)
                                 {
 //                                        pclog("COM1 addr %03x IRQ 3\n", addr);
-                                        serial1_set(addr, 3);
+                                        serial1_set(addr, 3, 1);
                                 }
                                 else if ((acc3221.regs[0xde] & REG_DE_SIRQ4_SOURCE) == REG_DE_SIRQ4_SERIAL1)
                                 {
 //                                        pclog("COM1 addr %03x IRQ 4\n", addr);
-                                        serial1_set(addr, 4);
+                                        serial1_set(addr, 4, 1);
                                 }
 //                                else
 //                                        pclog("COM1 addr %03x no IRQ\n", addr);
@@ -74,12 +74,12 @@ static void acc3221_write(uint16_t addr, uint8_t val, void *p)
                                 if ((acc3221.regs[0xde] & REG_DE_SIRQ3_SOURCE) == REG_DE_SIRQ3_SERIAL2)
                                 {
 //                                        pclog("COM2 addr %03x IRQ 3\n", addr);
-                                        serial2_set(addr, 3);
+                                        serial2_set(addr, 3, 1);
                                 }
                                 else if ((acc3221.regs[0xde] & REG_DE_SIRQ4_SOURCE) == REG_DE_SIRQ4_SERIAL2)
                                 {
 //                                        pclog("COM2 addr %03x IRQ 4\n", addr);
-                                        serial2_set(addr, 4);
+                                        serial2_set(addr, 4, 1);
                                 }
 //                                else
 //                                        pclog("COM2 addr %03x no IRQ\n", addr);

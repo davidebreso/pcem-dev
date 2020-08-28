@@ -124,9 +124,9 @@ void acer386sx_io_write(uint16_t addr, uint8_t val, void *priv)
                         case 2: lpt1_init(0x278); break;
                 }
                 if (!(val & 0x04))
-                        serial1_set(0x3f8, 4);
+                        serial1_set(0x3f8, 4, 1);
                 if (!(val & 0x08))
-                        serial2_set(0x2f8, 3);
+                        serial2_set(0x2f8, 3, 1);
                 break;
         }
 }

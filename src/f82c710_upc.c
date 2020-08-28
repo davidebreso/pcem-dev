@@ -41,7 +41,7 @@ typedef struct upc_t
 {
         int configuration_state; // state of algorithm to enter configuration mode
         int configuration_mode;
-        uint8_t next_value;     // next expected value to get
+        uint8_t next_value;     // next expected value of configuration algorithm
         uint16_t cri_addr; // cri = configuration index register, addr is even
         uint16_t cap_addr; // cap = configuration access port, addr is odd and is cri_addr + 1
         uint8_t cri; // currently indexed register
@@ -64,11 +64,15 @@ void upc_update_ports(upc_t *upc)
         fdc_remove();
         ide_pri_disable();
         ide_sec_disable();
+        
+        if((upc->regs[0] & 0x80) == 0) {
+                pclog("UPC: configuration not valid, disable all peripherals.\n");
+                return;
+        }
 
         if (upc->regs[0] & 0x4)
         {
-                serial1_set(upc->regs[4] * 4, upc->serial_irq);
-                serial1.has_fifo = 0;
+                serial1_set(upc->regs[4] * 4, upc->serial_irq, 0);
                 pclog("UPC: UART at %04X, irq %d\n", upc->regs[4] * 4, upc->serial_irq);
         }
         else
@@ -154,7 +158,7 @@ uint8_t upc_config_read(uint16_t port, void *priv)
                 }
         }
 
-        pclog("UPC READ : %04X, %02X\n", port, temp);
+        // pclog("UPC READ : %04X, %02X\n", port, temp);
         return temp;
 }
 
@@ -163,13 +167,13 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
         upc_t *upc = (upc_t *)priv;
         int configuration_state_event = 0;
 
-        pclog("UPC WRITE: %04X, %02X\n", port, val);
+        // pclog("UPC WRITE: %04X, %02X\n", port, val);
 
         switch(port)
         {
                 case 0x2fa:
                         /* Execute configuration step 1 for any value except 9, ff or 36 */
-                        if (upc->configuration_state == 0 && (val != 0x9 || val != 0x36 || val != 0xff))
+                        if (upc->configuration_state == 0)
                         {
                                 configuration_state_event = 1;
                                 /* next value should be the 1's complement of the current one */
@@ -250,7 +254,7 @@ static void *upc_init()
         io_sethandler(0x02fa, 0x0001, NULL, NULL, NULL, upc_config_write, NULL, NULL, &upc);
         io_sethandler(0x03fa, 0x0001, NULL, NULL, NULL, upc_config_write, NULL, NULL, &upc);
 
-        upc.regs[0] = 0x00;
+        upc.regs[0] = 0x0c;
         upc.regs[1] = 0x00;
         upc.regs[2] = 0x00;
         upc.regs[3] = 0x00;

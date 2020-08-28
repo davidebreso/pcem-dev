@@ -65,16 +65,16 @@ void fdc37c665_write(uint16_t port, uint8_t val, void *priv)
                         else switch (fdc37c665_regs[2] & 3)
                         {
                                 case 0:
-                                serial1_set(0x3f8, 4);
+                                serial1_set(0x3f8, 4, 1);
                                 break;
                                 case 1:
-                                serial1_set(0x2f8, 4);
+                                serial1_set(0x2f8, 4, 1);
                                 break;
                                 case 2:
-                                serial1_set(com3_addr, 4);
+                                serial1_set(com3_addr, 4, 1);
                                 break;
                                 case 3:
-                                serial1_set(com4_addr, 4);
+                                serial1_set(com4_addr, 4, 1);
                                 break;
                         }
 
@@ -83,16 +83,16 @@ void fdc37c665_write(uint16_t port, uint8_t val, void *priv)
                         else switch (fdc37c665_regs[2] & 0x30)
                         {
                                 case 0x00:
-                                serial2_set(0x3f8, 3);
+                                serial2_set(0x3f8, 3, 1);
                                 break;
                                 case 0x10:
-                                serial2_set(0x2f8, 3);
+                                serial2_set(0x2f8, 3, 1);
                                 break;
                                 case 0x20:
-                                serial2_set(com3_addr, 3);
+                                serial2_set(com3_addr, 3, 1);
                                 break;
                                 case 0x30:
-                                serial2_set(com4_addr, 3);
+                                serial2_set(com4_addr, 3, 1);
                                 break;
                         }
 

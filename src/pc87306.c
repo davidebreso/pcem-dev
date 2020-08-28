@@ -139,10 +139,10 @@ static void pc87306_write(uint16_t port, uint8_t val, void *p)
                         switch ((pc87306->regs[REG_FAR] >> 2) & 3)
                         {
                                 case 0: case 2:
-                                serial1_set(addr, 4);
+                                serial1_set(addr, 4, 1);
                                 break;
                                 case 1: case 3:
-                                serial1_set(addr, 3);
+                                serial1_set(addr, 3, 1);
                                 break;
                         }
                 }
@@ -154,10 +154,10 @@ static void pc87306_write(uint16_t port, uint8_t val, void *p)
                         switch ((pc87306->regs[REG_FAR] >> 4) & 3)
                         {
                                 case 0: case 2:
-                                serial2_set(addr, 4);
+                                serial2_set(addr, 4, 1);
                                 break;
                                 case 1: case 3:
-                                serial2_set(addr, 3);
+                                serial2_set(addr, 3, 1);
                                 break;
                         }
                 }

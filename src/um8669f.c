@@ -103,12 +103,12 @@ void um8669f_pnp_write(uint16_t port, uint8_t val, void *p)
                                 case DEV_COM1:
                                 serial1_remove();
                                 if (um8669f->dev[DEV_COM1].enable & 1)
-                                        serial1_set(um8669f->dev[DEV_COM1].addr, um8669f->dev[DEV_COM1].irq);
+                                        serial1_set(um8669f->dev[DEV_COM1].addr, um8669f->dev[DEV_COM1].irq, 1);
                                 break;
                                 case DEV_COM2:
                                 serial2_remove();
                                 if (um8669f->dev[DEV_COM2].enable & 1)
-                                        serial2_set(um8669f->dev[DEV_COM2].addr, um8669f->dev[DEV_COM2].irq);
+                                        serial2_set(um8669f->dev[DEV_COM2].addr, um8669f->dev[DEV_COM2].irq, 1);
                                 break;
                                 case DEV_LPT1:
                                 lpt1_remove();

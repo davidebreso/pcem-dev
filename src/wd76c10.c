@@ -54,10 +54,10 @@ void wd76c10_write(uint16_t port, uint16_t val, void *priv)
                 {
                         switch ((val >> 5) & 7)
                         {
-                                case 1: serial1_set(0x3f8, 4); break;
-                                case 2: serial1_set(0x2f8, 4); break;
-                                case 3: serial1_set(0x3e8, 4); break;
-                                case 4: serial1_set(0x2e8, 4); break;
+                                case 1: serial1_set(0x3f8, 4, 1); break;
+                                case 2: serial1_set(0x2f8, 4, 1); break;
+                                case 3: serial1_set(0x3e8, 4, 1); break;
+                                case 4: serial1_set(0x2e8, 4, 1); break;
                                 default: serial1_remove(); break;
                         }
                 }
@@ -66,10 +66,10 @@ void wd76c10_write(uint16_t port, uint16_t val, void *priv)
                 {
                         switch ((val >> 1) & 7)
                         {
-                                case 1: serial2_set(0x3f8, 3); break;
-                                case 2: serial2_set(0x2f8, 3); break;
-                                case 3: serial2_set(0x3e8, 3); break;
-                                case 4: serial2_set(0x2e8, 3); break;
+                                case 1: serial2_set(0x3f8, 3, 1); break;
+                                case 2: serial2_set(0x2f8, 3, 1); break;
+                                case 3: serial2_set(0x3e8, 3, 1); break;
+                                case 4: serial2_set(0x2e8, 3, 1); break;
                                 default: serial2_remove(); break;
                         }
                 }
