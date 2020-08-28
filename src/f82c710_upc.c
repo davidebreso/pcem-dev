@@ -36,6 +36,15 @@
 #include "io.h"
 #include "lpt.h"
 #include "serial.h"
+ 
+#define UPC_MOUSE_DEV_IDLE     0x01      /* Device Idle */
+#define UPC_MOUSE_RX_FULL      0x02      /* Device Char received */
+#define UPC_MOUSE_TX_IDLE      0x04      /* Device XMIT Idle */
+#define UPC_MOUSE_RESET        0x08      /* Device Reset */
+#define UPC_MOUSE_INTS_ON      0x10      /* Device Interrupt On */
+#define UPC_MOUSE_ERROR_FLAG   0x20      /* Device Error */
+#define UPC_MOUSE_CLEAR        0x40      /* Device Clear */
+#define UPC_MOUSE_ENABLE       0x80      /* Device Enable */
 
 typedef struct upc_t
 {
@@ -51,9 +60,23 @@ typedef struct upc_t
 
         int serial_irq;
         int parallel_irq; // TODO: currently not implemented in PCem
+
+        int mouse_irq;
+        uint16_t mdata_addr;    // Address of PS/2 data register 
+        uint16_t mstat_addr;    // Address of PS/2 status register 
+        uint8_t mouse_status;   // Mouse interface status register
+        void (*mouse_write)(uint8_t val, void *p);
+        void *mouse_p;
 } upc_t;
 
 static upc_t upc;
+uint8_t upc_config_read(uint16_t port, void *priv);
+void upc_config_write(uint16_t port, uint8_t val, void *priv);
+
+void upc_mouse_disable(upc_t *upc); 
+void upc_mouse_enable(upc_t *upc); 
+uint8_t upc_mouse_read(uint16_t port, void *priv);
+void upc_mouse_write(uint16_t port, uint8_t val, void *priv);
 
 void upc_update_config(upc_t *upc)
 {
@@ -150,9 +173,14 @@ void upc_update_config(upc_t *upc)
                         break;
                         
                 case 13:
-                        if (upc->regs[13] != 0)
-                                pclog("UPC: PS/2 mouse port not implemented!\n");
-                        break;
+                if (upc->regs[13] != 0) {
+                        upc->mdata_addr = upc->regs[13] * 4;
+                        upc->mstat_addr = upc->mdata_addr + 1;
+                        pclog("UPC: PS/2 mouse port at %04X, irq %d\n", upc->mdata_addr, upc->mouse_irq);
+                        upc_mouse_enable(upc);                
+                } else {              
+                        pclog("UPC: PS/2 mouse port disabled\n");
+                }
                 
                 case 14:
                         if (upc->regs[14] != 0)
@@ -284,6 +312,7 @@ static void *upc_init()
 
         upc.serial_irq = device_get_config_int("serial_irq");
         upc.parallel_irq = device_get_config_int("parallel_irq");
+        upc.mouse_irq = 0x2;    /* set default for Amstrad PC5086 */
 
         // because of these addresses, serial ports must be 16450 without fifos
         io_sethandler(0x02fa, 0x0001, NULL, NULL, NULL, upc_config_write, NULL, NULL, &upc);
@@ -355,6 +384,27 @@ static device_config_t upc_config[] =
                 },
                 .default_int = 7
         },
+        {
+                .name = "parallel_irq",
+                .description = "Parallel Port IRQ",
+                .type = CONFIG_SELECTION,
+                .selection =
+                {
+                        {
+                                .description = "IRQ 7 (for address 0x378/LPTB)",
+                                .value = 7
+                        },
+                        {
+                                .description = "IRQ 5 (for address 0x278/LPTC)",
+                                .value = 5
+                        },
+                        {
+                                .description = "Disabled",
+                                .value = 0 // TODO: see if this breaks PCem's PIC
+                        }
+                },
+                .default_int = 7
+        },
         // For the Hyundai Super-286TR, the only other jumper is the Color/Mono one and it's handled by the at keyboard controller code.
         {
                 .type = -1
@@ -374,3 +424,42 @@ device_t f82c710_upc_device =
         NULL,
         upc_config
 };
+
+/****************** PS/2 mouse port *********************/
+uint8_t upc_mouse_read(uint16_t port, void *priv)
+{
+        upc_t *upc = (upc_t *)priv;
+        uint8_t temp = 0xff;
+        if(port == upc->mstat_addr) {
+            temp = upc->mouse_status;
+        }
+        
+        pclog("UPC mouse READ : %04X, %02X\n", port, temp);
+        return temp;
+}
+
+void upc_mouse_write(uint16_t port, uint8_t val, void *priv)
+{
+        upc_t *upc = (upc_t *)priv;
+        if(port == upc->mstat_addr) {
+            upc->mouse_status = val;
+        }
+
+        pclog("UPC mouse WRITE: %04X, %02X\n", port, val);
+}
+
+void upc_mouse_disable(upc_t *upc) 
+{
+    io_removehandler(upc->mdata_addr, 0x0002, upc_mouse_read, NULL, NULL, upc_mouse_write, NULL, NULL, upc);                
+}
+
+void upc_mouse_enable(upc_t *upc)
+{
+    io_sethandler(upc->mdata_addr, 0x0002, upc_mouse_read, NULL, NULL, upc_mouse_write, NULL, NULL, upc);
+}
+
+void upc_set_mouse(void (*mouse_write)(uint8_t val, void *p), void *p)
+{
+        upc.mouse_write = mouse_write;
+        upc.mouse_p = p;
+}
