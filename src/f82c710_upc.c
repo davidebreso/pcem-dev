@@ -36,7 +36,7 @@
 #include "io.h"
 #include "lpt.h"
 #include "serial.h"
- 
+
 #define UPC_MOUSE_DEV_IDLE     0x01      /* Device Idle */
 #define UPC_MOUSE_RX_FULL      0x02      /* Device Char received */
 #define UPC_MOUSE_TX_IDLE      0x04      /* Device XMIT Idle */
@@ -70,6 +70,7 @@ typedef struct upc_t
 } upc_t;
 
 static upc_t upc;
+
 uint8_t upc_config_read(uint16_t port, void *priv);
 void upc_config_write(uint16_t port, uint8_t val, void *priv);
 
