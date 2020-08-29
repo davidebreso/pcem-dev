@@ -55,87 +55,110 @@ typedef struct upc_t
 
 static upc_t upc;
 
-void upc_update_ports(upc_t *upc)
+void upc_update_config(upc_t *upc)
 {
-        serial1_remove();
-        serial2_remove();
-        lpt1_remove();
-        lpt2_remove();
-        fdc_remove();
-        ide_pri_disable();
-        ide_sec_disable();
+        switch(upc->cri)
+        {
+                case 0:
+                        if (upc->regs[0] & 0x4)
+                        {
+                                serial1_set(upc->regs[4] * 4, upc->serial_irq, 0);
+                                pclog("UPC: UART at %04X, irq %d\n", upc->regs[4] * 4, upc->serial_irq);
+                        }
+                        else
+                        {
+                                serial1_remove();
+                                pclog("UPC: UART disabled\n");
+                        }
+                        if (upc->regs[0] & 0x8)
+                        {
+                                lpt1_init(upc->regs[6] * 4);
+                                pclog("UPC: PARALLEL at %04X, irq %d\n", upc->regs[6] * 4, upc->parallel_irq);
+                        }
+                        else
+                        {
+                                lpt1_remove();
+                                pclog("UPC: PARALLEL disabled\n");
+                        }
+                        if ((upc->regs[0] & 0x60) != 0)
+                                pclog("UPC: Oscillator control not implemented!\n");
+                        break;
+                        
+                case 1:
+                        if ((upc->regs[1] & 0x80) != 0)
+                                pclog("UPC: Restricted serial reset not implemented!\n");
+                        if ((upc->regs[1] & 0x80) != 0)
+                                pclog("UPC: Restricted serial reset not implemented!\n");
+                        if ((upc->regs[1] & 0x40) != 0)
+                                pclog("UPC: Bidirectional parallel port support not implemented!\n");
+                        if ((upc->regs[1] & 0x38) != 0)
+                                pclog("UPC: UART force CTS, DSR, DCD not implemented!\n");
+                        break;
+                
+                case 2:            
+                        if ((upc->regs[2] & 0x70) != 0)
+                                pclog("UPC: UART clock control not implemented!\n");
+                        break;
+                        
+                case 9:
+                        if (upc->regs[9] == 0xb0)
+                                pclog("UPC: GPCS not implemented! (at default address: %04X)\n", upc->regs[9] * 4);
+                        else if (upc->regs[9] != 0)
+                                pclog("UPC: GPCS not implemented! (at address: %04X)\n", upc->regs[9] * 4);
+                        break;
+                        
+                case 12:        
+                        if ((upc->regs[12] & 0x40) != 0) 
+                        {
+                                ide_pri_disable();
+                                pclog("UPC: IDE XT mode not implemented!\n");        
+                        }
+                        else 
+                        {
+                                if (upc->regs[12] & 0x80)
+                                {
+                                        ide_pri_enable();
+                                        pclog("UPC: AT IDE enabled\n");
+                                }
+                                else
+                                {       
+                                        ide_pri_disable();
+                                        pclog("UPC: AT IDE disabled\n");
+                                }        
+                        }
         
-        if((upc->regs[0] & 0x80) == 0) {
-                pclog("UPC: configuration not valid, disable all peripherals.\n");
-                return;
-        }
+                        if (upc->regs[12] & 0x20)
+                        {
+                                /* Adding the floppy controller when it is already present causes problems.*/
+                                /* FIX: remove it before adding it */
+                                fdc_remove();   
+                                fdc_add();
+                                pclog("UPC: FDC enabled\n");
+                        }
+                        else
+                        {
+                                fdc_remove();
+                                pclog("UPC: FDC disabled\n");
+                        }
 
-        if (upc->regs[0] & 0x4)
-        {
-                serial1_set(upc->regs[4] * 4, upc->serial_irq, 0);
-                pclog("UPC: UART at %04X, irq %d\n", upc->regs[4] * 4, upc->serial_irq);
+                        if ((upc->regs[12] & 0x10) != 0)
+                                pclog("UPC: FDC power down mode not implemented!\n");
+                        if ((upc->regs[12] & 0x0C) != 0)
+                                pclog("UPC: RTCCS not implemented!\n");
+                        if ((upc->regs[12] & 0x01) != 0)
+                                pclog("UPC: PS/2 mouse port power down not implemented!\n");
+                        break;
+                        
+                case 13:
+                        if (upc->regs[13] != 0)
+                                pclog("UPC: PS/2 mouse port not implemented!\n");
+                        break;
+                
+                case 14:
+                        if (upc->regs[14] != 0)
+                                pclog("UPC: Test mode not implemented!\n");
+                        break;
         }
-        else
-                pclog("UPC: UART disabled\n");
-
-        if (upc->regs[0] & 0x8)
-        {
-                lpt1_init(upc->regs[6] * 4);
-                pclog("UPC: PARALLEL at %04X, irq %d\n", upc->regs[6] * 4, upc->parallel_irq);
-        }
-        else
-                pclog("UPC: PARALLEL disabled\n");
-
-        if ((upc->regs[12] & 0x40) != 0) 
-        {
-                pclog("UPC: IDE XT mode not implemented!\n");        
-        }
-        else 
-        {
-                if (upc->regs[12] & 0x80)
-                {
-                        ide_pri_enable();
-                        pclog("UPC: AT IDE enabled\n");
-                }
-                else
-                        pclog("UPC: AT IDE disabled\n");
-        }
-        
-        if (upc->regs[12] & 0x20)
-        {
-                fdc_add();
-                pclog("UPC: FDC enabled\n");
-        }
-        else
-                pclog("UPC: FDC disabled\n");
-
-        if ((upc->regs[0] & 0x60) != 0)
-                pclog("UPC: Oscillator control not implemented!\n");
-        if ((upc->regs[1] & 0x80) != 0)
-                pclog("UPC: Restricted serial reset not implemented!\n");
-        if ((upc->regs[1] & 0x80) != 0)
-                pclog("UPC: Restricted serial reset not implemented!\n");
-        if ((upc->regs[1] & 0x40) != 0)
-                pclog("UPC: Bidirectional parallel port support not implemented!\n");
-        if ((upc->regs[1] & 0x38) != 0)
-                pclog("UPC: UART force CTS, DSR, DCD not implemented!\n");
-        if ((upc->regs[2] & 0x70) != 0)
-                pclog("UPC: UART clock control not implemented!\n");
-        if (upc->regs[9] == 0xb0)
-                pclog("UPC: GPCS not implemented! (at default address: %04X)\n", upc->regs[9] * 4);
-        else if (upc->regs[9] != 0)
-                pclog("UPC: GPCS not implemented! (at address: %04X)\n", upc->regs[9] * 4);
-        if ((upc->regs[12] & 0x10) != 0)
-                pclog("UPC: FDC power down mode not implemented!\n");
-        if ((upc->regs[12] & 0x0C) != 0)
-                pclog("UPC: RTCCS not implemented!\n");
-        if ((upc->regs[12] & 0x01) != 0)
-                pclog("UPC: PS/2 mouse port power down not implemented!\n");
-        if (upc->regs[13] != 0)
-                pclog("UPC: PS/2 mouse port not implemented!\n");
-        if (upc->regs[14] != 0)
-                pclog("UPC: Test mode not implemented!\n");
-        // regs 10 and 11 not looked at
 }
 
 uint8_t upc_config_read(uint16_t port, void *priv)
@@ -218,6 +241,7 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
                 if (port == upc->cri_addr)
                 {
                         upc->cri = val & 0xf;
+
                 }
                 else if (port == upc->cap_addr)
                 {
@@ -226,11 +250,12 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
                                 pclog("UPC: exiting configuration mode\n");
                                 upc->configuration_mode = 0;
                                 io_removehandler(upc->cri_addr, 0x0002, upc_config_read, NULL, NULL, upc_config_write, NULL, NULL, upc);
-                                upc_update_ports(upc); // TODO: any benefit in updating at each register write instead of when exiting config mode?
                         }
                         else
                         {
                                 upc->regs[upc->cri] = val;
+                                /* configuration should be updated at each register write, otherwise PC5086 do not detect ports correctly */
+                                upc_update_config(upc);                        
                         }
                 }
         }
@@ -245,6 +270,16 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
 static void *upc_init()
 {
         pclog("UPC INIT\n");
+
+        /* Disable all peripherals. upc_update_config will enable configured peripherals */
+        serial1_remove();
+        serial2_remove();
+        lpt1_remove();
+        lpt2_remove();
+        fdc_remove();
+        ide_pri_disable();
+        ide_sec_disable();
+
         memset(&upc, 0, sizeof(upc));
 
         upc.serial_irq = device_get_config_int("serial_irq");
@@ -270,8 +305,9 @@ static void *upc_init()
         upc.regs[13] = 0x00;
         upc.regs[14] = 0x00;
 
-        upc_update_ports(&upc);
-
+        for(upc.cri = 0; upc.cri < 15; upc.cri++)
+            upc_update_config(&upc);
+        upc.cri = 0;
         return &upc;
 }
 
