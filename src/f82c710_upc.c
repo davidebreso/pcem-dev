@@ -36,15 +36,18 @@
 #include "io.h"
 #include "lpt.h"
 #include "serial.h"
+#include "x86.h"
+#include "keyboard_at.h"
+#include "pic.h"
 
-#define UPC_MOUSE_DEV_IDLE     0x01      /* Device Idle */
-#define UPC_MOUSE_RX_FULL      0x02      /* Device Char received */
-#define UPC_MOUSE_TX_IDLE      0x04      /* Device XMIT Idle */
-#define UPC_MOUSE_RESET        0x08      /* Device Reset */
-#define UPC_MOUSE_INTS_ON      0x10      /* Device Interrupt On */
-#define UPC_MOUSE_ERROR_FLAG   0x20      /* Device Error */
-#define UPC_MOUSE_CLEAR        0x40      /* Device Clear */
-#define UPC_MOUSE_ENABLE       0x80      /* Device Enable */
+#define UPC_MOUSE_DEV_IDLE     0x01      /* bit 0, Device Idle */
+#define UPC_MOUSE_RX_FULL      0x02      /* bit 1, Device Char received */
+#define UPC_MOUSE_TX_IDLE      0x04      /* bit 2, Device XMIT Idle */
+#define UPC_MOUSE_RESET        0x08      /* bit 3, Device Reset */
+#define UPC_MOUSE_INTS_ON      0x10      /* bit 4, Device Interrupt On */
+#define UPC_MOUSE_ERROR_FLAG   0x20      /* bit 5, Device Error */
+#define UPC_MOUSE_CLEAR        0x40      /* bit 6, Device Clear */
+#define UPC_MOUSE_ENABLE       0x80      /* bit 7, Device Enable */
 
 typedef struct upc_t
 {
@@ -65,8 +68,10 @@ typedef struct upc_t
         uint16_t mdata_addr;    // Address of PS/2 data register 
         uint16_t mstat_addr;    // Address of PS/2 status register 
         uint8_t mouse_status;   // Mouse interface status register
+        uint8_t mouse_data;     // Mouse interface data register
         void (*mouse_write)(uint8_t val, void *p);
         void *mouse_p;
+	    pc_timer_t mouse_delay_timer;
 } upc_t;
 
 static upc_t upc;
@@ -78,6 +83,7 @@ void upc_mouse_disable(upc_t *upc);
 void upc_mouse_enable(upc_t *upc); 
 uint8_t upc_mouse_read(uint16_t port, void *priv);
 void upc_mouse_write(uint16_t port, uint8_t val, void *priv);
+void upc_mouse_poll(void *priv);
 
 void upc_update_config(upc_t *upc)
 {
@@ -181,6 +187,7 @@ void upc_update_config(upc_t *upc)
                         upc_mouse_enable(upc);                
                 } else {              
                         pclog("UPC: PS/2 mouse port disabled\n");
+                        upc_mouse_disable(upc);                
                 }
                 
                 case 14:
@@ -313,7 +320,6 @@ static void *upc_init()
 
         upc.serial_irq = device_get_config_int("serial_irq");
         upc.parallel_irq = device_get_config_int("parallel_irq");
-        upc.mouse_irq = 0x2;    /* set default for Amstrad PC5086 */
 
         // because of these addresses, serial ports must be 16450 without fifos
         io_sethandler(0x02fa, 0x0001, NULL, NULL, NULL, upc_config_write, NULL, NULL, &upc);
@@ -338,7 +344,22 @@ static void *upc_init()
         for(upc.cri = 0; upc.cri < 15; upc.cri++)
             upc_update_config(&upc);
         upc.cri = 0;
-        return &upc;
+        
+        /********************* Initialize mouse interface ********************/
+        if(romset == ROM_PC5086)    /* IRQ is 2 for PC5086 and 12 for others */
+        {
+                upc.mouse_irq = 2;
+        } else {
+                upc.mouse_irq = 12;
+        }
+        upc.mdata_addr   = upc.regs[13] * 4;
+        upc.mstat_addr   = upc.mdata_addr + 1;         
+        upc.mouse_status = UPC_MOUSE_DEV_IDLE | UPC_MOUSE_TX_IDLE;
+        upc.mouse_data   = 0xff;     
+        /* Set timer for mouse polling */
+        timer_add(&upc.mouse_delay_timer, upc_mouse_poll, &upc, 1);
+
+        return &upc;        
 }
 
 static device_config_t upc_config[] =
@@ -363,27 +384,6 @@ static device_config_t upc_config[] =
                         }
                 },
                 .default_int = 4
-        },
-        {
-                .name = "parallel_irq",
-                .description = "Parallel Port IRQ",
-                .type = CONFIG_SELECTION,
-                .selection =
-                {
-                        {
-                                .description = "IRQ 7 (for address 0x378/LPTB)",
-                                .value = 7
-                        },
-                        {
-                                .description = "IRQ 5 (for address 0x278/LPTC)",
-                                .value = 5
-                        },
-                        {
-                                .description = "Disabled",
-                                .value = 0 // TODO: see if this breaks PCem's PIC
-                        }
-                },
-                .default_int = 7
         },
         {
                 .name = "parallel_irq",
@@ -431,22 +431,59 @@ uint8_t upc_mouse_read(uint16_t port, void *priv)
 {
         upc_t *upc = (upc_t *)priv;
         uint8_t temp = 0xff;
-        if(port == upc->mstat_addr) {
-            temp = upc->mouse_status;
+        if(port == upc->mstat_addr) 
+        {
+                temp = upc->mouse_status;
         }
         
-        pclog("UPC mouse READ : %04X, %02X\n", port, temp);
+        if(port == upc->mdata_addr && (upc->mouse_status & UPC_MOUSE_RX_FULL))
+        { 
+                temp = upc->mouse_data;
+                upc->mouse_data = 0xff;
+                upc->mouse_status &= ~UPC_MOUSE_RX_FULL;
+                upc->mouse_status |= UPC_MOUSE_DEV_IDLE;
+                // upc_mouse_update_status(upc);
+        }
+        
+        // pclog("%04X:%04X UPC mouse READ: %04X, %02X\n", CS, cpu_state.pc, port, temp);
         return temp;
 }
 
 void upc_mouse_write(uint16_t port, uint8_t val, void *priv)
 {
+        // pclog("%04X:%04X UPC mouse WRITE: %04X, %02X\n", CS, cpu_state.pc, port, val);
+
         upc_t *upc = (upc_t *)priv;
-        if(port == upc->mstat_addr) {
-            upc->mouse_status = val;
+        if(port == upc->mstat_addr) 
+        {
+                /* write status bits
+                 * DEV_IDLE, TX_IDLE, RX_FULL and ERROR_FLAG bits are unchanged
+                 */        
+                upc->mouse_status = (val & 0xD8) | (upc->mouse_status & 0x27);
+                if(upc->mouse_status & UPC_MOUSE_ENABLE)
+                {
+                        mouse_scan = 1;
+                } else {
+                        mouse_scan = 0;
+                }
+                if(upc->mouse_status & (UPC_MOUSE_CLEAR | UPC_MOUSE_RESET))
+                {
+                        /* if CLEAR or RESET bit is set, clear mouse queue */
+                        mouse_queue_start = mouse_queue_end;
+                        upc->mouse_status &= ~UPC_MOUSE_RX_FULL;
+                        upc->mouse_status |= UPC_MOUSE_DEV_IDLE | UPC_MOUSE_TX_IDLE;
+                }
         }
 
-        pclog("UPC mouse WRITE: %04X, %02X\n", port, val);
+        if(port == upc->mdata_addr) {
+            if((upc->mouse_status & UPC_MOUSE_TX_IDLE) && (upc->mouse_status & UPC_MOUSE_ENABLE))
+            {
+                    upc->mouse_data = val;
+                    if(upc->mouse_write)
+                        upc->mouse_write(val, upc->mouse_p);
+            }                
+        }
+
 }
 
 void upc_mouse_disable(upc_t *upc) 
@@ -463,4 +500,31 @@ void upc_set_mouse(void (*mouse_write)(uint8_t val, void *p), void *p)
 {
         upc.mouse_write = mouse_write;
         upc.mouse_p = p;
+}
+
+void upc_mouse_poll(void *priv)
+{
+        upc_t *upc = (upc_t *)priv;
+	    timer_advance_u64(&upc->mouse_delay_timer, (1000 * TIMER_USEC));
+	
+    	// pclog("Mouse timer. %d %d %02X %02X\n", mouse_queue_start, mouse_queue_end, upc->mouse_status, upc->mouse_data);
+        /* check if there is something in the mouse queue */
+    	if(mouse_queue_start != mouse_queue_end)
+        {
+	            if((upc->mouse_status & UPC_MOUSE_ENABLE) && !(upc->mouse_status & UPC_MOUSE_RX_FULL))
+        	    {
+	                    upc->mouse_data = mouse_queue[mouse_queue_start];
+                        mouse_queue_start = (mouse_queue_start + 1) & 0xf;	
+                        /* update mouse status */
+                        upc->mouse_status |= UPC_MOUSE_RX_FULL;
+                        upc->mouse_status &= ~(UPC_MOUSE_DEV_IDLE);
+                        pclog("Reading %02X from the mouse queue at %i %i. New status is %02X\n", upc->mouse_data, mouse_queue_start, mouse_queue_end, upc->mouse_status);
+                        /* raise IRQ if enabled */
+                        if(upc->mouse_status & UPC_MOUSE_INTS_ON)
+                        {
+                                picint(1 << upc->mouse_irq);                                        
+                                pclog("upc_mouse : take IRQ %d\n", upc->mouse_irq);
+                        }
+        	    }
+        }
 }

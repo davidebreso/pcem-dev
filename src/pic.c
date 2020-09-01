@@ -10,13 +10,18 @@ int pic_intpending;
 
 void pic_updatepending()
 {
-        if ((pic2.pend&~pic2.mask)&~pic2.mask2)
-                pic.pend |= (1 << 2);
-        else
-                pic.pend &= ~(1 << 2);
-        pic_intpending = (pic.pend & ~pic.mask) & ~pic.mask2;
-        if (!((pic.mask | pic.mask2) & (1 << 2)))
-                pic_intpending |= ((pic2.pend&~pic2.mask)&~pic2.mask2);
+        if(AT || romset == ROM_XI8088)
+        {
+                if ((pic2.pend&~pic2.mask)&~pic2.mask2)
+                        pic.pend |= (1 << 2);
+                else
+                        pic.pend &= ~(1 << 2);
+                pic_intpending = (pic.pend & ~pic.mask) & ~pic.mask2;
+                if (!((pic.mask | pic.mask2) & (1 << 2)))
+                        pic_intpending |= ((pic2.pend&~pic2.mask)&~pic2.mask2);
+        } else {
+                pic_intpending = (pic.pend & ~pic.mask) & ~pic.mask2;                
+        }
 /*        pclog("pic_intpending = %i  %02X %02X %02X %02X\n", pic_intpending, pic.ins, pic.pend, pic.mask, pic.mask2);
         pclog("                    %02X %02X %02X %02X %i %i\n", pic2.ins, pic2.pend, pic2.mask, pic2.mask2, ((pic.mask | pic.mask2) & (1 << 2)), ((pic2.pend&~pic2.mask)&~pic2.mask2));*/
 }
@@ -396,54 +401,35 @@ uint8_t picinterrupt()
 {
         uint8_t temp=pic.pend&~pic.mask;
         int c;
-        for (c = 0; c < 2; c++)
+        for (c = 0; c < 8; c++)
         {
-                if (temp & (1 << c))
+                if ((AT || romset == ROM_XI8088) && (temp & (1 << 2)))
                 {
-                        if (!(pic.level_sensitive & (1 << c)))
-                                pic.pend &= ~(1 << c);
-                        pic.ins |= (1 << c);
-                        pic_update_mask(&pic.mask2, pic.ins);                      
-                   
-                        pic_updatepending();
-                        if (!c)
-                                pit_set_gate(&pit2, 0, 0);
-                        
-                        if (pic.icw4 & 0x02)
-                                pic_autoeoi();
-                                
-                        return c+pic.vector;
-                }
-        }
-        if (temp & (1 << 2))
-        {
-                uint8_t temp2 = pic2.pend & ~pic2.mask;
-                for (c = 0; c < 8; c++)
-                {
-                        if (temp2 & (1 << c))
+                        uint8_t temp2 = pic2.pend & ~pic2.mask;
+                        for (c = 0; c < 8; c++)
                         {
-                                if (!(pic2.level_sensitive & (1 << c)))
-                                        pic2.pend &= ~(1 << c);
-                                pic2.ins |= (1 << c);
-                                pic_update_mask(&pic2.mask2, pic2.ins);
+                                if (temp2 & (1 << c))
+                                {
+                                        if (!(pic2.level_sensitive & (1 << c)))
+                                                pic2.pend &= ~(1 << c);
+                                        pic2.ins |= (1 << c);
+                                        pic_update_mask(&pic2.mask2, pic2.ins);
                         
-                                if (!(pic2.level_sensitive & (1 << c)))
-                                        pic.pend &= ~(1 << c);
-                                pic.ins |= (1 << 2); /*Cascade IRQ*/
-                                pic_update_mask(&pic.mask2, pic.ins);
+                                        if (!(pic2.level_sensitive & (1 << c)))
+                                                pic.pend &= ~(1 << c);
+                                        pic.ins |= (1 << 2); /*Cascade IRQ*/
+                                        pic_update_mask(&pic.mask2, pic.ins);
 
-                                pic_updatepending();
+                                        pic_updatepending();
 
-                                if (pic2.icw4 & 0x02)
-                                        pic2_autoeoi();
+                                        if (pic2.icw4 & 0x02)
+                                                pic2_autoeoi();
 
-                                return c+pic2.vector;
+                                        return c+pic2.vector;
+                                }
                         }
                 }
-        }
-        for (c = 3; c < 8; c++)
-        {
-                if (temp & (1 << c))
+                else if (temp & (1 << c))
                 {
                         if (!(pic.level_sensitive & (1 << c)))
                                 pic.pend &= ~(1 << c);
