@@ -177,7 +177,7 @@ static void writenvr(uint16_t addr, uint8_t val, void *p)
         int c, old;
         
         cycles -= ISA_CYCLES(8);
-//        printf("Write NVR %03X %02X %02X %04X:%04X %i\n",addr,nvraddr,val,cs>>4,pc,ins);
+        // pclog("Write NVR %03X %02X %02X %04X:%04X %i\n",addr,nvraddr,val,CS,cpu_state.pc,ins);
         if (addr&1)
         {
                 if (nvraddr==RTC_REGC || nvraddr==RTC_REGD)
@@ -248,7 +248,7 @@ uint8_t readnvr(uint16_t addr, void *p)
 {
 //        nvr_t *nvr = (nvr_t *)p;
         uint8_t temp;
-//        printf("Read NVR %03X %02X %02X %04X:%04X\n",addr,nvraddr,nvrram[nvraddr],cs>>4,pc);
+        // pclog("Read NVR %03X %02X %02X %04X:%04X\n",addr,nvraddr,nvrram[nvraddr],CS,cpu_state.pc);
         cycles -= ISA_CYCLES(8);
         if (addr&1)
         {
