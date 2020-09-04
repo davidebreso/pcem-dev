@@ -14,6 +14,11 @@ static mem_mapping_t superxt_ems_mapping[4];
 uint32_t get_superxt_ems_addr(uint32_t addr)
 {
         // pclog("get_superxt_ems_addr(%08X) called.\n", addr);
+        if(addr < superxt_emsbase || addr >= superxt_emsbase + 0x10000)
+        {
+                pclog("WARNING: read/write outside EMS window at address %08X\n", addr);
+                return addr;
+        }
         addr = addr - superxt_emsbase;      /* Address relative to EMS window */
         int page_index = (addr >> 14) & 3;   /* Page number */
         uint32_t page_base = (superxt_emspage[page_index] & 0x7F) << 14;    /* bit 7 is enabled/disabled */
@@ -27,6 +32,12 @@ uint32_t get_superxt_ems_addr(uint32_t addr)
 static void mem_writeb_superxtems(uint32_t addr, uint8_t val, void *priv)
 {
         // pclog("mem_writeb_superxtems(%08X, %04X, %p) called. ", addr, val, priv);
+        int page_index = (addr >> 14) & 3;
+        if(!(superxt_emspage[page_index] & 0x80))
+        {
+                pclog("WARNING: write to a disabled EMS page at address %08X\n", addr);
+                return;                
+        }
         addr = get_superxt_ems_addr(addr);
         // pclog("Physical address is %08X\n", addr);
         if (addr < (mem_size << 10))
@@ -38,6 +49,12 @@ static uint8_t mem_readb_superxtems(uint32_t addr, void *priv)
         uint8_t val = 0xFF;
         
         // pclog("mem_readb_superxtems(%08X, %p) called. ", addr, priv);
+        int page_index = (addr >> 14) & 3;
+        if(!(superxt_emspage[page_index] & 0x80))
+        {
+                pclog("WARNING: reading a disabled EMS page at address %08X\n", addr);
+                return 0xFF;                
+        }
         addr = get_superxt_ems_addr(addr);
         // pclog("Physical address is %08X, ", addr);
         if (addr < (mem_size << 10))
