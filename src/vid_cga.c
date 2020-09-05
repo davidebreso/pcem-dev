@@ -25,7 +25,7 @@ void cga_out(uint16_t addr, uint8_t val, void *p)
 {
         cga_t *cga = (cga_t *)p;
         uint8_t old;
-//        pclog("CGA_OUT %04X %02X\n", addr, val);
+        pclog("CGA_OUT %04X %02X\n", addr, val);
         switch (addr)
         {
                 case 0x3D4:
@@ -60,7 +60,7 @@ void cga_out(uint16_t addr, uint8_t val, void *p)
 uint8_t cga_in(uint16_t addr, void *p)
 {
         cga_t *cga = (cga_t *)p;
-//        pclog("CGA_IN %04X\n", addr);
+        pclog("CGA_IN %04X\n", addr);
         switch (addr)
         {
                 case 0x3D4:
@@ -76,7 +76,7 @@ uint8_t cga_in(uint16_t addr, void *p)
 void cga_write(uint32_t addr, uint8_t val, void *p)
 {
         cga_t *cga = (cga_t *)p;
-//        pclog("CGA_WRITE %04X %02X\n", addr, val);
+        pclog("CGA_WRITE %04X %02X\n", addr, val);
         cga->vram[addr & 0x3fff] = val;
         if (cga->snow_enabled)
         {
@@ -99,7 +99,7 @@ uint8_t cga_read(uint32_t addr, void *p)
                 cga->charbuffer[offset | 1] = cga->vram[addr & 0x3fff];
         }
         egareads++;
-//        pclog("CGA_READ %04X\n", addr);
+        pclog("CGA_READ %04X\n", addr);
         return cga->vram[addr & 0x3fff];
 }
 

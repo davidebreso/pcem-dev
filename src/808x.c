@@ -2172,6 +2172,7 @@ void execx86(int cycs)
                         cycles-=5;
                         break;
                         case 0x9A: /*CALL FAR*/
+                        // pclog("%02X:%02X ", CS, cpu_state.pc);
                         tempw=getword();
                         tempw2=getword();
                         tempw3=CS;
@@ -2185,6 +2186,7 @@ void execx86(int cycs)
                         SP-=4;
                         cycles-=36;
                         FETCHCLEAR();
+                        // pclog("CALL FAR %02X:%02X\n", CS, cpu_state.pc);
                         break;
                         case 0x9B: /*WAIT*/
                         cycles-=4;
@@ -3097,6 +3099,7 @@ void execx86(int cycs)
                         FETCHCLEAR();
                         break;
                         case 0xEA: /*JMP far*/
+                        // pclog("%02X:%02X ", CS, cpu_state.pc);
                         addr=getword();
                         tempw=getword();
                         cpu_state.pc=addr;
@@ -3106,6 +3109,7 @@ void execx86(int cycs)
 //                        cs=CS<<4;
                         cycles-=15;
                         FETCHCLEAR();
+                        // pclog("JMP FAR %02X:%02X\n", CS, cpu_state.pc);
                         break;
                         case 0xEB: /*JMP rel*/
                         offset=(int8_t)FETCH();
@@ -3493,6 +3497,7 @@ void execx86(int cycs)
                                 FETCHCLEAR();
                                 break;
                                 case 0x18: /*CALL far*/
+                                // pclog("%02X:%02X ", CS, cpu_state.pc);
                                 tempw=readmemw(easeg,cpu_state.eaaddr);
                                 tempw2=readmemw(easeg,(cpu_state.eaaddr+2)&0xFFFF); //geteaw2();
                                 tempw3=CS;
@@ -3506,6 +3511,7 @@ void execx86(int cycs)
                                 SP-=4;
                                 cycles-=53;
                                 FETCHCLEAR();
+                                // pclog("CALL FAR %02X:%02X\n", CS, cpu_state.pc);
                                 break;
                                 case 0x20: /*JMP*/
                                 cpu_state.pc=geteaw();
@@ -3514,6 +3520,7 @@ void execx86(int cycs)
                                 FETCHCLEAR();
                                 break;
                                 case 0x28: /*JMP far*/
+                                // pclog("%02X:%02X ", CS, cpu_state.pc);
                                 cpu_state.pc=readmemw(easeg,cpu_state.eaaddr); //geteaw();
 //                        printf("FF 28\n");
                                 loadcs(readmemw(easeg,(cpu_state.eaaddr+2)&0xFFFF)); //geteaw2();
@@ -3521,6 +3528,7 @@ void execx86(int cycs)
 //                                cs=CS<<4;
                                 cycles-=24;
                                 FETCHCLEAR();
+                                // pclog("JMP FAR %02X:%02X\n", addr, CS, cpu_state.pc);
                                 break;
                                 case 0x30: /*PUSH w*/
                                 tempw=geteaw();

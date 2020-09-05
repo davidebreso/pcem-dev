@@ -37,7 +37,8 @@ void svga_out(uint16_t addr, uint8_t val, void *p)
         svga_t *svga = (svga_t *)p;
         int c;
         uint8_t o;
-//        printf("OUT SVGA %03X %02X %04X:%04X\n",addr,val,CS,pc);
+        
+        // pclog("OUT SVGA %03X %02X %04X:%04X\n",addr,val,CS,cpu_state.pc);
         switch (addr)
         {
                 case 0x3C0:
@@ -212,7 +213,7 @@ uint8_t svga_in(uint16_t addr, void *p)
 {
         svga_t *svga = (svga_t *)p;
         uint8_t temp;
-//        if (addr!=0x3da) pclog("Read port %04X\n",addr);
+        // if (addr!=0x3da) pclog("Read port %04X\n",addr);
         switch (addr)
         {
                 case 0x3C0: 

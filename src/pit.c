@@ -33,7 +33,7 @@ float isa_timing, bus_timing;
 int firsttime=1;
 void setpitclock(float clock)
 {
-//        printf("PIT clock %f\n",clock);
+        printf("PIT clock %f\n",clock);
         cpuclock=clock;
         PITCONST = (uint64_t)(clock / 1193182.0 * (float)(1ull << 32));
         CGACONST = (uint64_t)((clock / (19687503.0/11.0)) * (float)(1ull << 32));
@@ -43,11 +43,11 @@ void setpitclock(float clock)
         isa_timing = clock/8000000.0;
         bus_timing = clock/(double)cpu_busspeed;
         video_updatetiming();
-//        pclog("PITCONST=%f CGACONST=%f\n", PITCONST, CGACONST);
-//        pclog("CPUMULTI=%g\n", ((14318184.0*(double)(1 << TIMER_SHIFT)) / (double)models[model].cpu[cpu_manufacturer].cpus[cpu].rspeed));
+        // pclog("PITCONST=%f CGACONST=%f\n", PITCONST, CGACONST);
+        // pclog("CPUMULTI=%g\n", ((14318184.0*(double)(1 << TIMER_SHIFT)) / (double)models[model].cpu[cpu_manufacturer].cpus[cpu].rspeed));
         
         xt_cpu_multi = (uint64_t)((14318184.0*(double)(1ull << 32)) / (double)cpu_get_speed());
-//        pclog("egacycles %i egacycles2 %i temp %f clock %f\n",egacycles,egacycles2,temp,clock);
+        // pclog("egacycles %i egacycles2 %i temp %f clock %f\n",egacycles,egacycles2,temp,clock);
 /*        if (video_recalctimings)
                 video_recalctimings();*/
         RTCCONST = (uint64_t)((clock / 32768.0) * (float)(1ull << 32));

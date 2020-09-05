@@ -17,6 +17,7 @@
 #include "vid_ati_mach64.h"
 #include "vid_cga.h"
 #include "vid_cl5429.h"
+#include "vid_ct451.h"
 #include "vid_compaq_cga.h"
 #include "vid_ega.h"
 #include "vid_et4000.h"
@@ -90,6 +91,7 @@ static VIDEO_CARD video_cards[] =
         {"ATI VGA Charger (ATI-28800)",            "ati28800",       &ati28800_device,                  GFX_VGACHARGER,      VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 3,  3,  6,   5,  5, 10}},
         {"ATI VGA Edge-16 (ATI-18800)",            "ati18800",       &ati18800_device,                  GFX_VGAEDGE16,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
         {"CGA",                                    "cga",            &cga_device,                       GFX_CGA,             VIDEO_FLAG_TYPE_CGA,     {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
+        {"Chips and Technologies 82C451",          "ct451",          &ct451_device,                     GFX_CT451,           VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 6,  8, 16,   6,  8, 16}},
         {"Cirrus Logic CL-GD5428",                 "cl_gd5428",      &gd5428_device,                    GFX_CL_GD5428,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  4,  8,  10, 10, 20}},
         {"Cirrus Logic CL-GD5429",                 "cl_gd5429",      &gd5429_device,                    GFX_CL_GD5429,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  4,  8,  10, 10, 20}},
         {"Cirrus Logic CL-GD5430",                 "cl_gd5430",      &gd5430_device,                    GFX_CL_GD5430,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  4,  8,  10, 10, 20}},

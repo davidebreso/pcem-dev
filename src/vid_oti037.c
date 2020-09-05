@@ -33,8 +33,8 @@ void oti037_out(uint16_t addr, uint8_t val, void *p)
 
         if ((((addr&0xFFF0) == 0x3D0 || (addr&0xFFF0) == 0x3B0) && addr < 0x3de) && !(svga->miscout & 1)) addr ^= 0x60; // mono / color addr selection
 
-//        pclog("oti037_out : %04X %02X  %02X %i ", addr, val, ram[0x489], ins);
-//        pclog("  %04X:%04X\n", CS,cpu_state.pc);        
+        pclog("oti037_out : %04X %02X  %02X %i ", addr, val, ram[0x489], ins);
+        pclog("  %04X:%04X\n", CS,cpu_state.pc);        
         switch (addr)
         {
                 case 0x3C3:
@@ -95,7 +95,7 @@ uint8_t oti037_in(uint16_t addr, void *p)
 
         if ((((addr&0xFFF0) == 0x3D0 || (addr&0xFFF0) == 0x3B0) && addr < 0x3de) && !(svga->miscout & 1)) addr ^= 0x60;  // mono / color addr selection
 
-//        if (addr != 0x3da && addr != 0x3ba) pclog("oti037_in : %04X ", addr);
+        pclog("oti037_in : %04X ", addr);
 
         switch (addr)
         {
@@ -145,8 +145,8 @@ uint8_t oti037_in(uint16_t addr, void *p)
                                 svga->cgastat |= 0x20;
                         break;
                 }
-                return svga->cgastat;
-
+                temp = svga->cgastat;
+                break;
 
                 case 0x3DE: 
                 temp = oti037->index;
@@ -160,7 +160,7 @@ uint8_t oti037_in(uint16_t addr, void *p)
                 temp = svga_in(addr, svga);
                 break;
         }
-//        if (addr != 0x3da && addr != 0x3ba) pclog("%02X  %04X:%04X\n", temp, CS,cpu_state.pc);        
+        pclog("%02X  %04X:%04X\n", temp, CS,cpu_state.pc);        
         return temp;
 }
 

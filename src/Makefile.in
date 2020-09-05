@@ -182,51 +182,52 @@ am__pcem_SOURCES_DIST = 386.c 386_common.c 386_dynarec.c \
 	soundopenal.c superxt.c sst39sf010.c tandy_eeprom.c \
 	tandy_rom.c t1000.c t3100e.c timer.c um8669f.c um8881f.c \
 	vid_ati_eeprom.c vid_ati_mach64.c vid_ati18800.c \
-	vid_ati28800.c vid_ati68860_ramdac.c vid_cga.c vid_cl5429.c \
-	vid_colorplus.c vid_compaq_cga.c vid_ega.c vid_et4000.c \
-	vid_et4000w32.c vid_genius.c vid_hercules.c vid_ht216.c \
-	vid_icd2061.c vid_ics2595.c vid_im1024.c vid_incolor.c \
-	vid_mda.c vid_mga.c vid_olivetti_m24.c vid_oti037.c \
-	vid_oti067.c vid_paradise.c vid_pc200.c vid_pc1512.c \
-	vid_pc1640.c vid_pcjr.c vid_pgc.c vid_ps1_svga.c vid_s3.c \
-	vid_s3_virge.c vid_sdac_ramdac.c vid_sigma.c vid_stg_ramdac.c \
-	vid_svga.c vid_svga_render.c vid_t1000.c vid_t3100e.c \
-	vid_tandy.c vid_tandysl.c vid_tgui9440.c vid_tkd8001_ramdac.c \
-	vid_tvga.c vid_unk_ramdac.c vid_vga.c vid_voodoo.c video.c \
-	wd76c10.c vid_wy700.c vt82c586b.c vl82c480.c w83877tf.c \
-	x86seg.c x87.c x87_timings.c xi8088.c xtide.c sound_dbopl.cc \
-	sound_resid.cc dosbox/cdrom_image.cpp dosbox/dbopl.cpp \
-	dosbox/nukedopl.cpp dosbox/vid_cga_comp.c resid-fp/convolve.cc \
-	resid-fp/convolve-sse.cc resid-fp/envelope.cc \
-	resid-fp/extfilt.cc resid-fp/filter.cc resid-fp/pot.cc \
-	resid-fp/sid.cc resid-fp/voice.cc resid-fp/wave6581_PS_.cc \
-	resid-fp/wave6581_PST.cc resid-fp/wave6581_P_T.cc \
-	resid-fp/wave6581__ST.cc resid-fp/wave8580_PS_.cc \
-	resid-fp/wave8580_PST.cc resid-fp/wave8580_P_T.cc \
-	resid-fp/wave8580__ST.cc resid-fp/wave.cc wx-main.cc \
-	wx-config_sel.c wx-dialogbox.cc wx-utils.cc wx-app.cc \
-	wx-sdl2-joystick.c wx-sdl2-mouse.c wx-sdl2-keyboard.c \
-	wx-sdl2-video.c wx-sdl2.c wx-config.c wx-deviceconfig.cc \
-	wx-status.cc wx-sdl2-status.c wx-thread.c wx-common.c \
-	wx-sdl2-video-renderer.c wx-sdl2-video-gl3.c wx-glslp-parser.c \
-	wx-shader_man.c wx-shaderconfig.cc wx-joystickconfig.cc \
-	wx-createdisc.cc wx-resources.cpp midi_alsa.c wx-sdl2-midi.c \
-	codegen_backend_x86.c codegen_backend_x86_ops.c \
-	codegen_backend_x86_ops_fpu.c codegen_backend_x86_ops_sse.c \
-	codegen_backend_x86_uops.c codegen_backend_x86-64.c \
-	codegen_backend_x86-64_ops.c codegen_backend_x86-64_ops_sse.c \
-	codegen_backend_x86-64_uops.c codegen_backend_arm.c \
-	codegen_backend_arm_ops.c codegen_backend_arm_uops.c \
-	codegen_backend_arm64.c codegen_backend_arm64_imm.c \
-	codegen_backend_arm64_ops.c codegen_backend_arm64_uops.c \
-	ne2000.c nethandler.c wx-hostconfig.c slirp/bootp.c \
-	slirp/cksum.c slirp/debug.c slirp/if.c slirp/ip_icmp.c \
-	slirp/ip_input.c slirp/ip_output.c slirp/mbuf.c slirp/misc.c \
-	slirp/queue.c slirp/sbuf.c slirp/slirp.c slirp/socket.c \
-	slirp/tcp_input.c slirp/tcp_output.c slirp/tcp_subr.c \
-	slirp/tcp_timer.c slirp/tftp.c slirp/udp.c cdrom-ioctl-linux.c \
-	wx-sdl2-display.c cdrom-ioctl-dummy.c cdrom-ioctl-osx.c \
-	cdrom-ioctl.c wx-sdl2-display-win.c
+	vid_ati28800.c vid_ati68860_ramdac.c vid_cga.c vid_ct451.c \
+	vid_cl5429.c vid_colorplus.c vid_compaq_cga.c vid_ega.c \
+	vid_et4000.c vid_et4000w32.c vid_genius.c vid_hercules.c \
+	vid_ht216.c vid_icd2061.c vid_ics2595.c vid_im1024.c \
+	vid_incolor.c vid_mda.c vid_mga.c vid_olivetti_m24.c \
+	vid_oti037.c vid_oti067.c vid_paradise.c vid_pc200.c \
+	vid_pc1512.c vid_pc1640.c vid_pcjr.c vid_pgc.c vid_ps1_svga.c \
+	vid_s3.c vid_s3_virge.c vid_sdac_ramdac.c vid_sigma.c \
+	vid_stg_ramdac.c vid_svga.c vid_svga_render.c vid_t1000.c \
+	vid_t3100e.c vid_tandy.c vid_tandysl.c vid_tgui9440.c \
+	vid_tkd8001_ramdac.c vid_tvga.c vid_unk_ramdac.c vid_vga.c \
+	vid_voodoo.c video.c wd76c10.c vid_wy700.c vt82c586b.c \
+	vl82c480.c w83877tf.c x86seg.c x87.c x87_timings.c xi8088.c \
+	xtide.c sound_dbopl.cc sound_resid.cc dosbox/cdrom_image.cpp \
+	dosbox/dbopl.cpp dosbox/nukedopl.cpp dosbox/vid_cga_comp.c \
+	resid-fp/convolve.cc resid-fp/convolve-sse.cc \
+	resid-fp/envelope.cc resid-fp/extfilt.cc resid-fp/filter.cc \
+	resid-fp/pot.cc resid-fp/sid.cc resid-fp/voice.cc \
+	resid-fp/wave6581_PS_.cc resid-fp/wave6581_PST.cc \
+	resid-fp/wave6581_P_T.cc resid-fp/wave6581__ST.cc \
+	resid-fp/wave8580_PS_.cc resid-fp/wave8580_PST.cc \
+	resid-fp/wave8580_P_T.cc resid-fp/wave8580__ST.cc \
+	resid-fp/wave.cc wx-main.cc wx-config_sel.c wx-dialogbox.cc \
+	wx-utils.cc wx-app.cc wx-sdl2-joystick.c wx-sdl2-mouse.c \
+	wx-sdl2-keyboard.c wx-sdl2-video.c wx-sdl2.c wx-config.c \
+	wx-deviceconfig.cc wx-status.cc wx-sdl2-status.c wx-thread.c \
+	wx-common.c wx-sdl2-video-renderer.c wx-sdl2-video-gl3.c \
+	wx-glslp-parser.c wx-shader_man.c wx-shaderconfig.cc \
+	wx-joystickconfig.cc wx-createdisc.cc wx-resources.cpp \
+	midi_alsa.c wx-sdl2-midi.c codegen_backend_x86.c \
+	codegen_backend_x86_ops.c codegen_backend_x86_ops_fpu.c \
+	codegen_backend_x86_ops_sse.c codegen_backend_x86_uops.c \
+	codegen_backend_x86-64.c codegen_backend_x86-64_ops.c \
+	codegen_backend_x86-64_ops_sse.c codegen_backend_x86-64_uops.c \
+	codegen_backend_arm.c codegen_backend_arm_ops.c \
+	codegen_backend_arm_uops.c codegen_backend_arm64.c \
+	codegen_backend_arm64_imm.c codegen_backend_arm64_ops.c \
+	codegen_backend_arm64_uops.c ne2000.c nethandler.c \
+	wx-hostconfig.c slirp/bootp.c slirp/cksum.c slirp/debug.c \
+	slirp/if.c slirp/ip_icmp.c slirp/ip_input.c slirp/ip_output.c \
+	slirp/mbuf.c slirp/misc.c slirp/queue.c slirp/sbuf.c \
+	slirp/slirp.c slirp/socket.c slirp/tcp_input.c \
+	slirp/tcp_output.c slirp/tcp_subr.c slirp/tcp_timer.c \
+	slirp/tftp.c slirp/udp.c cdrom-ioctl-linux.c wx-sdl2-display.c \
+	cdrom-ioctl-dummy.c cdrom-ioctl-osx.c cdrom-ioctl.c \
+	wx-sdl2-display-win.c
 am__dirstamp = $(am__leading_dot)dirstamp
 @USE_ALSA_TRUE@am__objects_1 = pcem-midi_alsa.$(OBJEXT)
 @USE_ALSA_FALSE@am__objects_2 = pcem-wx-sdl2-midi.$(OBJEXT)
@@ -378,35 +379,36 @@ am_pcem_OBJECTS = pcem-386.$(OBJEXT) pcem-386_common.$(OBJEXT) \
 	pcem-vid_ati_eeprom.$(OBJEXT) pcem-vid_ati_mach64.$(OBJEXT) \
 	pcem-vid_ati18800.$(OBJEXT) pcem-vid_ati28800.$(OBJEXT) \
 	pcem-vid_ati68860_ramdac.$(OBJEXT) pcem-vid_cga.$(OBJEXT) \
-	pcem-vid_cl5429.$(OBJEXT) pcem-vid_colorplus.$(OBJEXT) \
-	pcem-vid_compaq_cga.$(OBJEXT) pcem-vid_ega.$(OBJEXT) \
-	pcem-vid_et4000.$(OBJEXT) pcem-vid_et4000w32.$(OBJEXT) \
-	pcem-vid_genius.$(OBJEXT) pcem-vid_hercules.$(OBJEXT) \
-	pcem-vid_ht216.$(OBJEXT) pcem-vid_icd2061.$(OBJEXT) \
-	pcem-vid_ics2595.$(OBJEXT) pcem-vid_im1024.$(OBJEXT) \
-	pcem-vid_incolor.$(OBJEXT) pcem-vid_mda.$(OBJEXT) \
-	pcem-vid_mga.$(OBJEXT) pcem-vid_olivetti_m24.$(OBJEXT) \
-	pcem-vid_oti037.$(OBJEXT) pcem-vid_oti067.$(OBJEXT) \
-	pcem-vid_paradise.$(OBJEXT) pcem-vid_pc200.$(OBJEXT) \
-	pcem-vid_pc1512.$(OBJEXT) pcem-vid_pc1640.$(OBJEXT) \
-	pcem-vid_pcjr.$(OBJEXT) pcem-vid_pgc.$(OBJEXT) \
-	pcem-vid_ps1_svga.$(OBJEXT) pcem-vid_s3.$(OBJEXT) \
-	pcem-vid_s3_virge.$(OBJEXT) pcem-vid_sdac_ramdac.$(OBJEXT) \
-	pcem-vid_sigma.$(OBJEXT) pcem-vid_stg_ramdac.$(OBJEXT) \
-	pcem-vid_svga.$(OBJEXT) pcem-vid_svga_render.$(OBJEXT) \
-	pcem-vid_t1000.$(OBJEXT) pcem-vid_t3100e.$(OBJEXT) \
-	pcem-vid_tandy.$(OBJEXT) pcem-vid_tandysl.$(OBJEXT) \
-	pcem-vid_tgui9440.$(OBJEXT) pcem-vid_tkd8001_ramdac.$(OBJEXT) \
-	pcem-vid_tvga.$(OBJEXT) pcem-vid_unk_ramdac.$(OBJEXT) \
-	pcem-vid_vga.$(OBJEXT) pcem-vid_voodoo.$(OBJEXT) \
-	pcem-video.$(OBJEXT) pcem-wd76c10.$(OBJEXT) \
-	pcem-vid_wy700.$(OBJEXT) pcem-vt82c586b.$(OBJEXT) \
-	pcem-vl82c480.$(OBJEXT) pcem-w83877tf.$(OBJEXT) \
-	pcem-x86seg.$(OBJEXT) pcem-x87.$(OBJEXT) \
-	pcem-x87_timings.$(OBJEXT) pcem-xi8088.$(OBJEXT) \
-	pcem-xtide.$(OBJEXT) pcem-sound_dbopl.$(OBJEXT) \
-	pcem-sound_resid.$(OBJEXT) dosbox/pcem-cdrom_image.$(OBJEXT) \
-	dosbox/pcem-dbopl.$(OBJEXT) dosbox/pcem-nukedopl.$(OBJEXT) \
+	pcem-vid_ct451.$(OBJEXT) pcem-vid_cl5429.$(OBJEXT) \
+	pcem-vid_colorplus.$(OBJEXT) pcem-vid_compaq_cga.$(OBJEXT) \
+	pcem-vid_ega.$(OBJEXT) pcem-vid_et4000.$(OBJEXT) \
+	pcem-vid_et4000w32.$(OBJEXT) pcem-vid_genius.$(OBJEXT) \
+	pcem-vid_hercules.$(OBJEXT) pcem-vid_ht216.$(OBJEXT) \
+	pcem-vid_icd2061.$(OBJEXT) pcem-vid_ics2595.$(OBJEXT) \
+	pcem-vid_im1024.$(OBJEXT) pcem-vid_incolor.$(OBJEXT) \
+	pcem-vid_mda.$(OBJEXT) pcem-vid_mga.$(OBJEXT) \
+	pcem-vid_olivetti_m24.$(OBJEXT) pcem-vid_oti037.$(OBJEXT) \
+	pcem-vid_oti067.$(OBJEXT) pcem-vid_paradise.$(OBJEXT) \
+	pcem-vid_pc200.$(OBJEXT) pcem-vid_pc1512.$(OBJEXT) \
+	pcem-vid_pc1640.$(OBJEXT) pcem-vid_pcjr.$(OBJEXT) \
+	pcem-vid_pgc.$(OBJEXT) pcem-vid_ps1_svga.$(OBJEXT) \
+	pcem-vid_s3.$(OBJEXT) pcem-vid_s3_virge.$(OBJEXT) \
+	pcem-vid_sdac_ramdac.$(OBJEXT) pcem-vid_sigma.$(OBJEXT) \
+	pcem-vid_stg_ramdac.$(OBJEXT) pcem-vid_svga.$(OBJEXT) \
+	pcem-vid_svga_render.$(OBJEXT) pcem-vid_t1000.$(OBJEXT) \
+	pcem-vid_t3100e.$(OBJEXT) pcem-vid_tandy.$(OBJEXT) \
+	pcem-vid_tandysl.$(OBJEXT) pcem-vid_tgui9440.$(OBJEXT) \
+	pcem-vid_tkd8001_ramdac.$(OBJEXT) pcem-vid_tvga.$(OBJEXT) \
+	pcem-vid_unk_ramdac.$(OBJEXT) pcem-vid_vga.$(OBJEXT) \
+	pcem-vid_voodoo.$(OBJEXT) pcem-video.$(OBJEXT) \
+	pcem-wd76c10.$(OBJEXT) pcem-vid_wy700.$(OBJEXT) \
+	pcem-vt82c586b.$(OBJEXT) pcem-vl82c480.$(OBJEXT) \
+	pcem-w83877tf.$(OBJEXT) pcem-x86seg.$(OBJEXT) \
+	pcem-x87.$(OBJEXT) pcem-x87_timings.$(OBJEXT) \
+	pcem-xi8088.$(OBJEXT) pcem-xtide.$(OBJEXT) \
+	pcem-sound_dbopl.$(OBJEXT) pcem-sound_resid.$(OBJEXT) \
+	dosbox/pcem-cdrom_image.$(OBJEXT) dosbox/pcem-dbopl.$(OBJEXT) \
+	dosbox/pcem-nukedopl.$(OBJEXT) \
 	dosbox/pcem-vid_cga_comp.$(OBJEXT) \
 	resid-fp/pcem-convolve.$(OBJEXT) \
 	resid-fp/pcem-convolve-sse.$(OBJEXT) \
@@ -605,7 +607,8 @@ am__depfiles_remade = ./$(DEPDIR)/pcem-386.Po \
 	./$(DEPDIR)/pcem-vid_ati_mach64.Po ./$(DEPDIR)/pcem-vid_cga.Po \
 	./$(DEPDIR)/pcem-vid_cl5429.Po \
 	./$(DEPDIR)/pcem-vid_colorplus.Po \
-	./$(DEPDIR)/pcem-vid_compaq_cga.Po ./$(DEPDIR)/pcem-vid_ega.Po \
+	./$(DEPDIR)/pcem-vid_compaq_cga.Po \
+	./$(DEPDIR)/pcem-vid_ct451.Po ./$(DEPDIR)/pcem-vid_ega.Po \
 	./$(DEPDIR)/pcem-vid_et4000.Po \
 	./$(DEPDIR)/pcem-vid_et4000w32.Po \
 	./$(DEPDIR)/pcem-vid_genius.Po \
@@ -922,39 +925,39 @@ pcem_SOURCES = 386.c 386_common.c 386_dynarec.c 386_dynarec_ops.c \
 	soundopenal.c superxt.c sst39sf010.c tandy_eeprom.c \
 	tandy_rom.c t1000.c t3100e.c timer.c um8669f.c um8881f.c \
 	vid_ati_eeprom.c vid_ati_mach64.c vid_ati18800.c \
-	vid_ati28800.c vid_ati68860_ramdac.c vid_cga.c vid_cl5429.c \
-	vid_colorplus.c vid_compaq_cga.c vid_ega.c vid_et4000.c \
-	vid_et4000w32.c vid_genius.c vid_hercules.c vid_ht216.c \
-	vid_icd2061.c vid_ics2595.c vid_im1024.c vid_incolor.c \
-	vid_mda.c vid_mga.c vid_olivetti_m24.c vid_oti037.c \
-	vid_oti067.c vid_paradise.c vid_pc200.c vid_pc1512.c \
-	vid_pc1640.c vid_pcjr.c vid_pgc.c vid_ps1_svga.c vid_s3.c \
-	vid_s3_virge.c vid_sdac_ramdac.c vid_sigma.c vid_stg_ramdac.c \
-	vid_svga.c vid_svga_render.c vid_t1000.c vid_t3100e.c \
-	vid_tandy.c vid_tandysl.c vid_tgui9440.c vid_tkd8001_ramdac.c \
-	vid_tvga.c vid_unk_ramdac.c vid_vga.c vid_voodoo.c video.c \
-	wd76c10.c vid_wy700.c vt82c586b.c vl82c480.c w83877tf.c \
-	x86seg.c x87.c x87_timings.c xi8088.c xtide.c sound_dbopl.cc \
-	sound_resid.cc dosbox/cdrom_image.cpp dosbox/dbopl.cpp \
-	dosbox/nukedopl.cpp dosbox/vid_cga_comp.c resid-fp/convolve.cc \
-	resid-fp/convolve-sse.cc resid-fp/envelope.cc \
-	resid-fp/extfilt.cc resid-fp/filter.cc resid-fp/pot.cc \
-	resid-fp/sid.cc resid-fp/voice.cc resid-fp/wave6581_PS_.cc \
-	resid-fp/wave6581_PST.cc resid-fp/wave6581_P_T.cc \
-	resid-fp/wave6581__ST.cc resid-fp/wave8580_PS_.cc \
-	resid-fp/wave8580_PST.cc resid-fp/wave8580_P_T.cc \
-	resid-fp/wave8580__ST.cc resid-fp/wave.cc wx-main.cc \
-	wx-config_sel.c wx-dialogbox.cc wx-utils.cc wx-app.cc \
-	wx-sdl2-joystick.c wx-sdl2-mouse.c wx-sdl2-keyboard.c \
-	wx-sdl2-video.c wx-sdl2.c wx-config.c wx-deviceconfig.cc \
-	wx-status.cc wx-sdl2-status.c wx-thread.c wx-common.c \
-	wx-sdl2-video-renderer.c wx-sdl2-video-gl3.c wx-glslp-parser.c \
-	wx-shader_man.c wx-shaderconfig.cc wx-joystickconfig.cc \
-	wx-createdisc.cc wx-resources.cpp $(am__append_4) \
-	$(am__append_5) $(am__append_6) $(am__append_8) \
-	$(am__append_9) $(am__append_10) $(am__append_13) \
-	$(am__append_15) $(am__append_16) $(am__append_17) \
-	$(am__append_20)
+	vid_ati28800.c vid_ati68860_ramdac.c vid_cga.c vid_ct451.c \
+	vid_cl5429.c vid_colorplus.c vid_compaq_cga.c vid_ega.c \
+	vid_et4000.c vid_et4000w32.c vid_genius.c vid_hercules.c \
+	vid_ht216.c vid_icd2061.c vid_ics2595.c vid_im1024.c \
+	vid_incolor.c vid_mda.c vid_mga.c vid_olivetti_m24.c \
+	vid_oti037.c vid_oti067.c vid_paradise.c vid_pc200.c \
+	vid_pc1512.c vid_pc1640.c vid_pcjr.c vid_pgc.c vid_ps1_svga.c \
+	vid_s3.c vid_s3_virge.c vid_sdac_ramdac.c vid_sigma.c \
+	vid_stg_ramdac.c vid_svga.c vid_svga_render.c vid_t1000.c \
+	vid_t3100e.c vid_tandy.c vid_tandysl.c vid_tgui9440.c \
+	vid_tkd8001_ramdac.c vid_tvga.c vid_unk_ramdac.c vid_vga.c \
+	vid_voodoo.c video.c wd76c10.c vid_wy700.c vt82c586b.c \
+	vl82c480.c w83877tf.c x86seg.c x87.c x87_timings.c xi8088.c \
+	xtide.c sound_dbopl.cc sound_resid.cc dosbox/cdrom_image.cpp \
+	dosbox/dbopl.cpp dosbox/nukedopl.cpp dosbox/vid_cga_comp.c \
+	resid-fp/convolve.cc resid-fp/convolve-sse.cc \
+	resid-fp/envelope.cc resid-fp/extfilt.cc resid-fp/filter.cc \
+	resid-fp/pot.cc resid-fp/sid.cc resid-fp/voice.cc \
+	resid-fp/wave6581_PS_.cc resid-fp/wave6581_PST.cc \
+	resid-fp/wave6581_P_T.cc resid-fp/wave6581__ST.cc \
+	resid-fp/wave8580_PS_.cc resid-fp/wave8580_PST.cc \
+	resid-fp/wave8580_P_T.cc resid-fp/wave8580__ST.cc \
+	resid-fp/wave.cc wx-main.cc wx-config_sel.c wx-dialogbox.cc \
+	wx-utils.cc wx-app.cc wx-sdl2-joystick.c wx-sdl2-mouse.c \
+	wx-sdl2-keyboard.c wx-sdl2-video.c wx-sdl2.c wx-config.c \
+	wx-deviceconfig.cc wx-status.cc wx-sdl2-status.c wx-thread.c \
+	wx-common.c wx-sdl2-video-renderer.c wx-sdl2-video-gl3.c \
+	wx-glslp-parser.c wx-shader_man.c wx-shaderconfig.cc \
+	wx-joystickconfig.cc wx-createdisc.cc wx-resources.cpp \
+	$(am__append_4) $(am__append_5) $(am__append_6) \
+	$(am__append_8) $(am__append_9) $(am__append_10) \
+	$(am__append_13) $(am__append_15) $(am__append_16) \
+	$(am__append_17) $(am__append_20)
 pcem_CFLAGS = $(subst -fpermissive,,$(shell $(WX_CONFIG_PATH) \
 	--cxxflags) $(shell sdl2-config --cflags)) $(am__append_7) \
 	$(am__append_11) $(am__append_18) $(am__append_22)
@@ -1362,6 +1365,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_cl5429.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_colorplus.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_compaq_cga.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_ct451.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_ega.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_et4000.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_et4000w32.Po@am__quote@ # am--include-marker
@@ -4065,6 +4069,20 @@ pcem-vid_cga.obj: vid_cga.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_cga.obj `if test -f 'vid_cga.c'; then $(CYGPATH_W) 'vid_cga.c'; else $(CYGPATH_W) '$(srcdir)/vid_cga.c'; fi`
 
+pcem-vid_ct451.o: vid_ct451.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_ct451.o -MD -MP -MF $(DEPDIR)/pcem-vid_ct451.Tpo -c -o pcem-vid_ct451.o `test -f 'vid_ct451.c' || echo '$(srcdir)/'`vid_ct451.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_ct451.Tpo $(DEPDIR)/pcem-vid_ct451.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_ct451.c' object='pcem-vid_ct451.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_ct451.o `test -f 'vid_ct451.c' || echo '$(srcdir)/'`vid_ct451.c
+
+pcem-vid_ct451.obj: vid_ct451.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_ct451.obj -MD -MP -MF $(DEPDIR)/pcem-vid_ct451.Tpo -c -o pcem-vid_ct451.obj `if test -f 'vid_ct451.c'; then $(CYGPATH_W) 'vid_ct451.c'; else $(CYGPATH_W) '$(srcdir)/vid_ct451.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_ct451.Tpo $(DEPDIR)/pcem-vid_ct451.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_ct451.c' object='pcem-vid_ct451.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_ct451.obj `if test -f 'vid_ct451.c'; then $(CYGPATH_W) 'vid_ct451.c'; else $(CYGPATH_W) '$(srcdir)/vid_ct451.c'; fi`
+
 pcem-vid_cl5429.o: vid_cl5429.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_cl5429.o -MD -MP -MF $(DEPDIR)/pcem-vid_cl5429.Tpo -c -o pcem-vid_cl5429.o `test -f 'vid_cl5429.c' || echo '$(srcdir)/'`vid_cl5429.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_cl5429.Tpo $(DEPDIR)/pcem-vid_cl5429.Po
@@ -6501,6 +6519,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pcem-vid_cl5429.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_colorplus.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_compaq_cga.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_ct451.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_ega.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_et4000.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_et4000w32.Po
@@ -6876,6 +6895,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pcem-vid_cl5429.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_colorplus.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_compaq_cga.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_ct451.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_ega.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_et4000.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_et4000w32.Po

@@ -184,9 +184,9 @@ enum
         ROM_PC3086,        
         ROM_PC5086,        
         ROM_AMIXT,      /*XT Clone with AMI BIOS*/
-	ROM_LTXT,
-	ROM_LXT3,
-	ROM_PX386,
+    	ROM_LTXT,
+    	ROM_LXT3,
+    	ROM_PX386,
         ROM_DTK386,
         ROM_PXXT,
         ROM_JUKOPC,
@@ -314,6 +314,7 @@ enum
 	GFX_AVGA2,      /*Acumos AVGA2 / Cirrus Logic CL-GD5402*/
         GFX_CL_GD5428,  /*Cirrus Logic CL-GD5428*/
         GFX_IBM_GD5428, /*IBM 1MB SVGA Adapter/A*/
+        GFX_CT451,  /* Chips and Technologies 82C451 */
 
         GFX_MAX
 };
