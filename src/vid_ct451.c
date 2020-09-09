@@ -9,8 +9,8 @@
 #include "vid_ct451.h"
 #include "vid_svga.h"
 
-/* Enable debug output */
-int ct451out = 0;
+/* Enable debug log */
+int ct451log = 0;
 
 typedef struct ct451_t
 {
@@ -41,7 +41,7 @@ void ct451_out(uint16_t addr, uint8_t val, void *p)
         uint8_t old;
 
         /* if VGA chip is disabled, respond only to ports 0x10x and setup control */
-        if (!(ct451->sleep & 1) && ((addr&0xFFF0) != 0x100 || addr == 0x46E8))
+        if (!(ct451->setup & 8) && ((addr&0xFF00) == 0x300))
                 return;
 
         /* Extension registers address selection. 
@@ -53,21 +53,21 @@ void ct451_out(uint16_t addr, uint8_t val, void *p)
         {
                 if(ct451->xena & 0x40)
                 {
-                        if(ct451out) pclog("%04X->", addr);
+                        if(ct451log) pclog("%04X->", addr);
                         addr ^= 0x60;        
-                        if(ct451out) pclog("%04X ", addr);
+                        if(ct451log) pclog("%04X ", addr);
                 }
         }
         /* mono / color addr selection */
         else if (((addr&0xFFF0) == 0x3D0 || (addr&0xFFF0) == 0x3B0) && !(svga->miscout & 1))
         {
-                if(ct451out) pclog("%04X->", addr);
+                if(ct451log) pclog("%04X->", addr);
                 addr ^= 0x60;        
-                if(ct451out) pclog("%04X ", addr);        
+                if(ct451log) pclog("%04X ", addr);        
         }
 
-        if(ct451out) pclog("ct451_out : %04X %02X  %02X %i ", addr, val, ram[0x489], ins);
-        if(ct451out) pclog("  %04X:%04X\n", CS,cpu_state.pc); 
+        if(ct451log) pclog("ct451_out : %04X %02X  %02X %i ", addr, val, ram[0x489], ins);
+        if(ct451log) pclog("  %04X:%04X\n", CS,cpu_state.pc); 
         
         switch(addr)
         {
@@ -76,7 +76,9 @@ void ct451_out(uint16_t addr, uint8_t val, void *p)
                 break;
                 
                 case 0x103:     /* Extension Enable Register */
-                ct451->xena = val;
+                /* The register is available only in Setup mode (bit 4 of setup register set) */
+                if(ct451->setup & 0x10)
+                        ct451->xena = val;
                 break;
             
                 case 0x104:     /* Global ID (read-only) */
@@ -89,7 +91,7 @@ void ct451_out(uint16_t addr, uint8_t val, void *p)
                 case 0x3D5:     /* CRCT Register data */
                 if (svga->crtcreg > 0x18)
                 {
-                        if(ct451out) pclog("Write to undocumented CRTC register %02X\n", svga->crtcreg);
+                        if(ct451log) pclog("Write to undocumented CRTC register %02X\n", svga->crtcreg);
                         return;                
                 }
                 /* If group protect 0 is enabled, disable write to CR00-CR06 */
@@ -134,11 +136,11 @@ uint8_t ct451_in(uint16_t addr, void *p)
 {
         ct451_t *ct451 = (ct451_t *)p;
         svga_t *svga = &ct451->svga;
-        uint8_t temp;
+        uint8_t temp = 0xff;
 
         /* if VGA chip is disabled, respond only to ports 0x10x and setup control */
-        if (!(ct451->sleep & 1) && ((addr&0xFFF0) != 0x100 || addr == 0x46E8))
-                return 0xff;
+        if (!(ct451->setup & 8) && ((addr&0xFF00) == 0x300))
+                return temp;
 
         /* Extension registers address selection. 
          * Address depends on bit 6 of Extension enable register:
@@ -149,17 +151,17 @@ uint8_t ct451_in(uint16_t addr, void *p)
         {
                 if(ct451->xena & 0x40)
                 {
-                        if(ct451out) pclog("%04X->", addr);
+                        if(ct451log) pclog("%04X->", addr);
                         addr ^= 0x60;        
-                        if(ct451out) pclog("%04X ", addr);
+                        if(ct451log) pclog("%04X ", addr);
                 }
         }
         /* mono / color addr selection */
         else if (((addr&0xFFF0) == 0x3D0 || (addr&0xFFF0) == 0x3B0) && !(svga->miscout & 1))
         {
-                if(ct451out) pclog("%04X->", addr);
+                if(ct451log) pclog("%04X->", addr);
                 addr ^= 0x60;        
-                if(ct451out) pclog("%04X ", addr);        
+                if(ct451log) pclog("%04X ", addr);        
         }
         
         switch(addr)
@@ -169,7 +171,9 @@ uint8_t ct451_in(uint16_t addr, void *p)
                 break;
             
                 case 0x103:     /* Extension Enable Register */
-                temp = ct451->xena;
+                /* The register is available only in Setup mode (bit 4 of setup register set) */
+                if(ct451->setup & 0x10)
+                        temp = ct451->xena;
                 break;
             
                 case 0x104:     /* Global ID (0xA5 read-only) */
@@ -183,7 +187,7 @@ uint8_t ct451_in(uint16_t addr, void *p)
                 case 0x3D5:
                 if (svga->crtcreg > 0x18)
                 {
-                        if(ct451out) pclog("Read from undocumented CRTC register %02X\n", svga->crtcreg);
+                        if(ct451log) pclog("Read from undocumented CRTC register %02X\n", svga->crtcreg);
                         temp = 0xff;                
                 } 
                 else
@@ -208,8 +212,8 @@ uint8_t ct451_in(uint16_t addr, void *p)
                 temp = svga_in(addr, svga);
         }
         
-        if(ct451out) pclog("ct451_in : %04X %02X  %02X %i ", addr, temp, ram[0x489], ins);
-        if(ct451out) pclog("  %04X:%04X\n", CS,cpu_state.pc);        
+        if(ct451log) pclog("ct451_in : %04X %02X  %02X %i ", addr, temp, ram[0x489], ins);
+        if(ct451log) pclog("  %04X:%04X\n", CS,cpu_state.pc);        
 
         return temp;
 }
@@ -218,17 +222,17 @@ void *ct451_common_init(char *bios_fn, int vram_size)
 {
         ct451_t *ct451 = malloc(sizeof(ct451_t));
         memset(ct451, 0, sizeof(ct451_t));
-        if(ct451out) pclog("CT451: setting up BIOS from %s\n", bios_fn);
+        if(ct451log) pclog("CT451: setting up BIOS from %s\n", bios_fn);
         rom_init(&ct451->bios_rom, bios_fn, 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
 
-        if(ct451out) pclog("CT451: calling SVGA init\n");
+        if(ct451log) pclog("CT451: calling SVGA init\n");
         svga_init(&ct451->svga, ct451, vram_size << 10,
                    NULL,
                    ct451_in, ct451_out,
                    NULL,
                    NULL);
 
-        if(ct451out) pclog("CT451: setting up I/O handler\n");
+        if(ct451log) pclog("CT451: setting up I/O handler\n");
         /* handler for setup registers */
         io_sethandler(0x0100, 0x0005, ct451_in, NULL, NULL, ct451_out, NULL, NULL, ct451);
         /* handler for VGA registers */
@@ -257,7 +261,7 @@ static int ct451_available()
 
 void ct451_close(void *p)
 {
-        if(ct451out) pclog("ct451_close %08X\n", p);
+        if(ct451log) pclog("ct451_close %08X\n", p);
 
         ct451_t *ct451 = (ct451_t *)p;
 
@@ -268,7 +272,7 @@ void ct451_close(void *p)
 
 void ct451_speed_changed(void *p)
 {
-        if(ct451out) pclog("ct451_speed_changed %08X\n", p);
+        if(ct451log) pclog("ct451_speed_changed %08X\n", p);
 
         ct451_t *ct451 = (ct451_t *)p;
 
@@ -277,7 +281,7 @@ void ct451_speed_changed(void *p)
 
 void ct451_force_redraw(void *p)
 {
-        if(ct451out) pclog("ct451_force_redraw %08X\n", p);
+        if(ct451log) pclog("ct451_force_redraw %08X\n", p);
 
         ct451_t *ct451 = (ct451_t *)p;
 
@@ -286,7 +290,7 @@ void ct451_force_redraw(void *p)
 
 void ct451_add_status_info(char *s, int max_len, void *p)
 {
-        if(ct451out) pclog("ct451_add_status_info %08X\n", p);
+        if(ct451log) pclog("ct451_add_status_info %08X\n", p);
 
         ct451_t *ct451 = (ct451_t *)p;
 

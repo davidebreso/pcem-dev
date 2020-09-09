@@ -217,7 +217,8 @@ uint8_t upc_config_read(uint16_t port, void *priv)
                 }
         }
 
-        // pclog("UPC READ : %04X, %02X\n", port, temp);
+
+        // pclog("%04X:%04X UPC READ: %04X, %02X\n", CS, cpu_state.pc, port, temp);
         return temp;
 }
 
@@ -226,7 +227,7 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
         upc_t *upc = (upc_t *)priv;
         int configuration_state_event = 0;
 
-        // pclog("UPC WRITE: %04X, %02X\n", port, val);
+        // pclog("%04X:%04X UPC WRITE: %04X, %02X\n", CS, cpu_state.pc, port, val);
 
         switch(port)
         {
@@ -520,12 +521,12 @@ void upc_mouse_poll(void *priv)
                         /* update mouse status */
                         upc->mouse_status |= UPC_MOUSE_RX_FULL;
                         upc->mouse_status &= ~(UPC_MOUSE_DEV_IDLE);
-                        // pclog("Reading %02X from the mouse queue at %i %i. New status is %02X\n", upc->mouse_data, mouse_queue_start, mouse_queue_end, upc->mouse_status);
+                        pclog("Reading %02X from the mouse queue at %i %i. New status is %02X\n", upc->mouse_data, mouse_queue_start, mouse_queue_end, upc->mouse_status);
                         /* raise IRQ if enabled */
                         if(upc->mouse_status & UPC_MOUSE_INTS_ON)
                         {
                                 picint(1 << upc->mouse_irq);
-                                // pclog("upc_mouse : take IRQ %d\n", upc->mouse_irq);
+                                pclog("upc_mouse : take IRQ %d\n", upc->mouse_irq);
                         }
         	    }
         }

@@ -3630,10 +3630,10 @@ void execx86(int cycs)
                                 cpu_state.flags &= ~I_FLAG;
                                 cpu_state.flags &= ~T_FLAG;
                                 cpu_state.pc=readmemw(0,addr);
-                                // printf("INT INT INT\n");
+                                printf("INT INT INT\n");
                                 loadcs(readmemw(0,addr+2));
                                 FETCHCLEAR();
-                                // printf("INTERRUPT %d %02X:%02X\n", addr, CS, cpu_state.pc);
+                                printf("INTERRUPT %d %02X:%02X\n", addr, CS, cpu_state.pc);
                         }
                 }
                 takeint = (cpu_state.flags & I_FLAG) && (pic.pend&~pic.mask);
