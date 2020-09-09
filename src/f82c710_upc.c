@@ -147,6 +147,7 @@ void upc_update_config(upc_t *upc)
                         {
                                 if (upc->regs[12] & 0x80)
                                 {
+                                        ide_pri_disable();
                                         ide_pri_enable();
                                         pclog("UPC: AT IDE enabled\n");
                                 }
@@ -217,7 +218,7 @@ uint8_t upc_config_read(uint16_t port, void *priv)
                 }
         }
 
-        // pclog("UPC READ : %04X, %02X\n", port, temp);
+        pclog("UPC READ : %04X, %02X\n", port, temp);
         return temp;
 }
 
@@ -226,7 +227,7 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
         upc_t *upc = (upc_t *)priv;
         int configuration_state_event = 0;
 
-        // pclog("UPC WRITE: %04X, %02X\n", port, val);
+        pclog("UPC WRITE: %04X, %02X\n", port, val);
 
         switch(port)
         {
