@@ -138,37 +138,34 @@ void upc_update_config(upc_t *upc)
                         break;
                         
                 case 12:        
+                        /* Adding the IDE and floppy controllers when they are already present causes problems.*/
+                        /* FIX: remove floppy and IDE controllers before adding them again */                        
+                        fdc_remove();   
+                        ide_pri_disable();
                         if ((upc->regs[12] & 0x40) != 0) 
                         {
-                                ide_pri_disable();
                                 pclog("UPC: IDE XT mode not implemented!\n");        
                         }
                         else 
                         {
                                 if (upc->regs[12] & 0x80)
                                 {
-                                        ide_pri_disable();
                                         ide_pri_enable();
                                         pclog("UPC: AT IDE enabled\n");
                                 }
                                 else
                                 {       
-                                        ide_pri_disable();
                                         pclog("UPC: AT IDE disabled\n");
                                 }        
                         }
         
                         if (upc->regs[12] & 0x20)
                         {
-                                /* Adding the floppy controller when it is already present causes problems.*/
-                                /* FIX: remove it before adding it */
-                                fdc_remove();   
                                 fdc_add();
                                 pclog("UPC: FDC enabled\n");
                         }
                         else
                         {
-                                fdc_remove();
                                 pclog("UPC: FDC disabled\n");
                         }
 
@@ -218,7 +215,7 @@ uint8_t upc_config_read(uint16_t port, void *priv)
                 }
         }
 
-        pclog("UPC READ : %04X, %02X\n", port, temp);
+        // pclog("UPC READ : %04X, %02X\n", port, temp);
         return temp;
 }
 
@@ -227,7 +224,7 @@ void upc_config_write(uint16_t port, uint8_t val, void *priv)
         upc_t *upc = (upc_t *)priv;
         int configuration_state_event = 0;
 
-        pclog("UPC WRITE: %04X, %02X\n", port, val);
+        // pclog("UPC WRITE: %04X, %02X\n", port, val);
 
         switch(port)
         {
