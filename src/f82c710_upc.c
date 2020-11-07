@@ -139,7 +139,7 @@ void upc_update_config(upc_t *upc)
                         
                 case 12:        
                         /* Adding the IDE and floppy controllers when they are already present causes problems.*/
-                        /* FIX: remove floppy and IDE controllers before adding them again */                        
+                        /* FIX: remove floppy and IDE controllers before adding them again if needed. */                        
                         fdc_remove();   
                         ide_pri_disable();
                         if ((upc->regs[12] & 0x40) != 0) 
