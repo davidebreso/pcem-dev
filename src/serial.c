@@ -266,6 +266,10 @@ void serial1_set(uint16_t addr, int irq, int has_fifo)
         serial1.addr = addr;
         serial1.has_fifo = has_fifo;
 }
+void serial1_set_has_fifo(int has_fifo)
+{
+        serial1.has_fifo = has_fifo;
+}
 void serial1_remove()
 {
         io_removehandler(serial1.addr, 0x0008, serial_read,  NULL, NULL, serial_write,  NULL, NULL, &serial1);
@@ -287,6 +291,10 @@ void serial2_set(uint16_t addr, int irq, int has_fifo)
         io_sethandler(addr, 0x0008, serial_read, NULL, NULL, serial_write, NULL, NULL, &serial2);
         serial2.irq = irq;
         serial2.addr = addr;
+        serial2.has_fifo = has_fifo;
+}
+void serial2_set_has_fifo(int has_fifo)
+{
         serial2.has_fifo = has_fifo;
 }
 void serial2_remove()

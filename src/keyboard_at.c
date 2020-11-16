@@ -310,6 +310,10 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                                 keyboard_at.output_port = val;
                                 break;
                                 
+                                case 0xd2: /*Write to keyboard output buffer*/
+                                keyboard_at_adddata(val);
+                                break;
+
                                 case 0xd3: /*Write to mouse output buffer*/
                                 keyboard_at_adddata_mouse(val);
                                 break;
@@ -522,9 +526,9 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                                 key_ctrl_queue_start = key_ctrl_queue_end = 0;
                                 keyboard_at.status &= ~STAT_OFULL;
                         }
-			/* T3100e expects STAT_IFULL to be set immediately
+			/* T3100e and Samsung SPC-6000A expects STAT_IFULL to be set immediately
 			 * after sending 0xAA */
-                        if(romset == ROM_T3100E) keyboard_at.status |= STAT_IFULL;
+                        if(romset == ROM_T3100E || romset == ROM_SPC6000A) keyboard_at.status |= STAT_IFULL;
                         keyboard_at.status |= STAT_SYSFLAG;
                         keyboard_at.mem[0] |= 0x04;
                         keyboard_at_adddata(0x55);
@@ -624,7 +628,10 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                         break;
                         
                         case 0xca: /*AMI - read keyboard mode*/
-                        keyboard_at_adddata(0x00); /*ISA mode*/
+                        if (romset == ROM_GA686BX) /*TODO*/
+                                keyboard_at_adddata(0x01); /*PS2 mode*/
+                        else
+                                keyboard_at_adddata(0x00); /*ISA mode*/
                         break;
                         
                         case 0xcb: /*AMI - set keyboard mode*/
@@ -643,6 +650,10 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                         keyboard_at.want60 = 1;
                         break;
                         
+                        case 0xd2: /*Write keyboard output buffer*/
+                        keyboard_at.want60 = 1;
+                        break;
+
                         case 0xd3: /*Write mouse output buffer*/
                         keyboard_at.want60 = 1;
                         break;

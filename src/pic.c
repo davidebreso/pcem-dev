@@ -11,7 +11,7 @@ int piclog=0;
 
 void pic_updatepending()
 {
-        if(AT || romset == ROM_XI8088)
+        if (AT || romset == ROM_XI8088)
         {
                 if ((pic2.pend&~pic2.mask)&~pic2.mask2)
                         pic.pend |= (1 << 2);
@@ -20,9 +20,10 @@ void pic_updatepending()
                 pic_intpending = (pic.pend & ~pic.mask) & ~pic.mask2;
                 if (!((pic.mask | pic.mask2) & (1 << 2)))
                         pic_intpending |= ((pic2.pend&~pic2.mask)&~pic2.mask2);
-        } else {
-                pic_intpending = (pic.pend & ~pic.mask) & ~pic.mask2;                
         }
+        else
+                pic_intpending = (pic.pend & ~pic.mask) & ~pic.mask2;
+
 /*        pclog("pic_intpending = %i  %02X %02X %02X %02X\n", pic_intpending, pic.ins, pic.pend, pic.mask, pic.mask2);
         pclog("                    %02X %02X %02X %02X %i %i\n", pic2.ins, pic2.pend, pic2.mask, pic2.mask2, ((pic.mask | pic.mask2) & (1 << 2)), ((pic2.pend&~pic2.mask)&~pic2.mask2));*/
 }
@@ -429,9 +430,6 @@ uint8_t picinterrupt()
                                         if (pic2.icw4 & 0x02)
                                                 pic2_autoeoi();
 
-                                        // pclog("int vector %02x\n", c+pic.vector);
-                                        piclog = 0;
-
                                         return c+pic2.vector;
                                 }
                         }
@@ -446,8 +444,6 @@ uint8_t picinterrupt()
 
                         if (pic.icw4 & 0x02)
                                 pic_autoeoi();
-                        // pclog("int vector %02x\n", c+pic.vector);
-                        piclog = 0;
                         return c+pic.vector;
                 }
         }

@@ -29,7 +29,7 @@ int codegen_get_instruction_uop(codeblock_t *block, uint32_t pc, int *first_inst
 {
         int c;
         
-        for (c = 0; c < block->ins; c++)
+        for (c = 0; c <= block->ins; c++)
         {
                 if (codegen_instructions[c].pc == pc)
                 {
@@ -368,7 +368,7 @@ static uint8_t opcode_modrm[256] =
 static uint8_t opcode_0f_modrm[256] =
 {
         1, 1, 1, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 1, 0, 1, /*00*/
-        0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, /*10*/
+        0, 0, 0, 0,  0, 0, 0, 0,  1, 1, 1, 1,  1, 1, 1, 1, /*10*/
         1, 1, 1, 1,  1, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, /*20*/
         0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, /*30*/
 

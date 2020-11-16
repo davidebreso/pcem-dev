@@ -50,6 +50,7 @@
 #include "vid_wy700.h"
 #include "vid_t3100e.h"
 #include "vid_t1000.h"
+#include "vid_voodoo_banshee.h"
 
 enum
 {
@@ -82,6 +83,9 @@ typedef struct
 
 static VIDEO_CARD video_cards[] =
 {
+        {"3DFX Voodoo Banshee (reference)",        "banshee",        &voodoo_banshee_device,            GFX_BANSHEE,         VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 2,  2,  1,  20, 20, 21}},
+        {"3DFX Voodoo 3 2000",                     "v3_2000",        &voodoo_3_2000_device,             GFX_VOODOO_3_2000,   VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 2,  2,  1,  20, 20, 21}},
+        {"3DFX Voodoo 3 3000",                     "v3_3000",        &voodoo_3_3000_device,             GFX_VOODOO_3_3000,   VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 2,  2,  1,  20, 20, 21}},
         {"Acumos AVGA2 / Cirrus Logic CL-GD5402",  "avga2",          &avga2_device,                     GFX_AVGA2,           VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 3,  3,  6,   5,  5, 10}},
         {"ATI Graphics Pro Turbo (Mach64 GX)",     "mach64gx",       &mach64gx_device,                  GFX_MACH64GX,        VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 2,  2,  1,  20, 20, 21}},
         {"ATI Video Xpression (Mach64 VT2)",       "mach64vt2",      &mach64vt2_device,                 GFX_MACH64VT2,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 2,  2,  1,  20, 20, 21}},
@@ -95,6 +99,7 @@ static VIDEO_CARD video_cards[] =
         {"Cirrus Logic CL-GD5430",                 "cl_gd5430",      &gd5430_device,                    GFX_CL_GD5430,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  4,  8,  10, 10, 20}},
         {"Cirrus Logic CL-GD5434",                 "cl_gd5434",      &gd5434_device,                    GFX_CL_GD5434,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  4,  8,  10, 10, 20}},
         {"Compaq CGA",                             "compaq_cga",     &compaq_cga_device,                GFX_COMPAQ_CGA,      VIDEO_FLAG_TYPE_CGA,     {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
+        {"Creative Labs 3D Blaster Banshee PCI",   "cl_banshee",     &creative_voodoo_banshee_device,   GFX_CL_BANSHEE,      VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 2,  2,  1,  20, 20, 21}},
         {"Diamond Stealth 32 (Tseng ET4000/w32p)", "stealth32",      &et4000w32p_device,                GFX_ET4000W32,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  4,  4,  10, 10, 10}},
         {"Diamond Stealth 3D 2000 (S3 ViRGE)",     "stealth3d_2000", &s3_virge_device,                  GFX_VIRGE,           VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 2,  2,  3,  28, 28, 45}},
         {"EGA",                                    "ega",            &ega_device,                       GFX_EGA,             VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
@@ -102,6 +107,7 @@ static VIDEO_CARD video_cards[] =
         {"Hercules InColor",                       "incolor",        &incolor_device,                   GFX_INCOLOR,         VIDEO_FLAG_TYPE_MDA,     {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
         {"IBM 1MB SVGA Adapter/A (CL GD5428)",     "ibm1mbsvga",     &ibm_gd5428_device,                GFX_IBM_GD5428,      VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  4,  8,  10, 10, 20}},
         {"Image Manager 1024",                     "im1024",         &im1024_device,                    GFX_IM1024,          VIDEO_FLAG_TYPE_CGA,     {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
+        {"Kasan Hangulmadang-16 (Tseng ET4000AX)", "kasan16",        &et4000_kasan_device,                   GFX_KASAN16VGA,      VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 3,  3,  6,   5,  5, 10}},
         {"Matrox Mystique",                        "mystique",       &mystique_device,                  GFX_MYSTIQUE,        VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  4,  4,  10, 10, 10}},
         {"MDA",                                    "mda",            &mda_device,                       GFX_MDA,             VIDEO_FLAG_TYPE_MDA,     {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
         {"MDSI Genius",                            "genius",         &genius_device,                    GFX_GENIUS,          VIDEO_FLAG_TYPE_MDA,     {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
@@ -119,6 +125,7 @@ static VIDEO_CARD video_cards[] =
         {"S3 ViRGE/DX",                            "virge375",       &s3_virge_375_device,              GFX_VIRGEDX,         VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 2,  2,  3,  28, 28, 45}},
         {"Sigma Color 400",                        "sigma400",       &sigma_device,                     GFX_SIGMA400,        VIDEO_FLAG_TYPE_CGA,     {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
         {"Trident TVGA8900D",                      "tvga8900d",      &tvga8900d_device,                 GFX_TVGA,            VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 3,  3,  6,   8,  8, 12}},
+        {"Trident TVGA9000B",                      "tvga9000b",      &tvga9000b_device,                 GFX_TVGA9000B,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 7,  7, 12,   7,  7, 12}},
         {"Trident TGUI9400CXi",                    "tgui9400cxi",    &tgui9400cxi_device,               GFX_TGUI9400CXI,     VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  8, 16,   4,  8, 16}},
         {"Trident TGUI9440",                       "tgui9440",       &tgui9440_device,                  GFX_TGUI9440,        VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  8, 16,   4,  8, 16}},
         {"Trigem Korean VGA (Tseng ET4000AX)",      "tgkorvga",       &et4000k_device,                   GFX_TGKOREANVGA,     VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 3,  3,  6,   5,  5, 10}},
@@ -216,6 +223,12 @@ device_t *video_card_getdevice(int card, int romset)
                 case ROM_SPC4620P:
                 if (card == GFX_BUILTIN)
                         return &ati28800k_spc4620p_device;
+                break;
+                
+                case ROM_SPC6033P:
+                if (card == GFX_BUILTIN)
+                        return &ati28800k_spc6033p_device;
+                break;
 
                 case ROM_ACER386:
                 return &oti067_acer386_device;
@@ -594,6 +607,7 @@ void video_updatetiming()
                         break;
 
                         case ROM_SPC4620P:
+                        case ROM_SPC6033P:
                         if (gfxcard == GFX_BUILTIN)
                                 timing = &timing_spc4620p;
                         break;
@@ -795,6 +809,14 @@ void video_init()
                 if (gfxcard == GFX_BUILTIN)
                 {
                         device_add(&ati28800k_spc4620p_device);
+                        return;
+                }
+                break;
+
+                case ROM_SPC6033P:
+                if (gfxcard == GFX_BUILTIN)
+                {
+                        device_add(&ati28800k_spc6033p_device);
                         return;
                 }
                 break;
