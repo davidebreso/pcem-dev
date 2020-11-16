@@ -15,6 +15,13 @@
 #include "minivhd_internal.h"
 #include "minivhd_util.h"
 
+#ifdef __APPLE__
+#define ftello64 ftello
+#define fseeko64 fseeko
+#define fopen64 fopen
+#define off64_t off_t
+#endif
+
 const char MVHD_CONECTIX_COOKIE[] = "conectix";
 const char MVHD_CREATOR[] = "pcem";
 const char MVHD_CREATOR_HOST_OS[] = "Wi2k";

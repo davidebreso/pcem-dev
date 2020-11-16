@@ -86,11 +86,11 @@ static void w83877tf_write_reg(w83877tf_t *w83877tf, int index, uint8_t val)
 
         serial1_remove();
         if (w83877tf->regs[0x24] >= 0x40)
-                serial1_set((w83877tf->regs[0x24] & ~1) << 2, w83877tf->regs[0x28] >> 4, 1);
+                serial1_set((w83877tf->regs[0x24] & ~1) << 2, w83877tf->regs[0x28] >> 4);
 
         serial2_remove();
         if (w83877tf->regs[0x25] >= 0x40)
-                serial2_set((w83877tf->regs[0x25] & ~1) << 2, w83877tf->regs[0x28] & 0xf, 1);
+                serial2_set((w83877tf->regs[0x25] & ~1) << 2, w83877tf->regs[0x28] & 0xf);
 
 //        pclog("LPT at %04x\n", w83877tf->regs[0x23] << 2);
 //        pclog("Serial1 at %04x %i\n", (w83877tf->regs[0x24] & ~1) << 2, w83877tf->regs[0x28] >> 4);

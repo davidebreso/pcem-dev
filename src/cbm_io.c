@@ -25,10 +25,10 @@ static void cbm_io_write(uint16_t port, uint8_t val, void *p)
         switch (val & 0xc)
         {
                 case 0x4:
-                serial1_set(0x2f8, 3, 1);
+                serial1_set(0x2f8, 3);
                 break;
                 case 0x8:
-                serial1_set(0x3f8, 4, 1);
+                serial1_set(0x3f8, 4);
                 break;
         }
 }

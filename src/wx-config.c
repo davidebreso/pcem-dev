@@ -20,6 +20,13 @@
 #include "video.h"
 #include "vid_voodoo.h"
 
+#ifdef __APPLE__
+#define ftello64 ftello
+#define fseeko64 fseeko
+#define fopen64 fopen
+#define off64_t off_t
+#endif
+
 #include "minivhd/minivhd.h"
 #include "minivhd/minivhd_util.h"
 
