@@ -155,23 +155,25 @@ am__pcem_SOURCES_DIST = 386.c 386_common.c 386_dynarec.c \
 	codegen_ops_shift.c codegen_ops_misc.c codegen_ops_mov.c \
 	codegen_ops_stack.c codegen_reg.c codegen_timing_486.c \
 	codegen_timing_686.c codegen_timing_common.c \
-	codegen_timing_k6.c codegen_timing_pentium.c \
+	codegen_timing_cyrixiii.c codegen_timing_k6.c \
+	codegen_timing_p6.c codegen_timing_pentium.c \
 	codegen_timing_winchip.c codegen_timing_winchip2.c compaq.c \
 	config.c cpu.c cpu_tables.c cs8230.c dells200.c device.c \
 	disc.c disc_fdi.c disc_img.c disc_sector.c dma.c esdi_at.c \
 	f82c710_upc.c fdc.c fdc37c665.c fdc37c93x.c fdd.c fdi2raw.c \
 	gameport.c hdd.c hdd_esdi.c hdd_file.c headland.c i430lx.c \
-	i430fx.c i430hx.c i430vx.c ide.c ide_atapi.c ide_sff8038i.c \
-	intel.c intel_flash.c io.c jim.c joystick_ch_flightstick_pro.c \
-	joystick_standard.c joystick_sw_pad.c joystick_tm_fcs.c \
-	keyboard.c keyboard_amstrad.c keyboard_at.c keyboard_olim24.c \
+	i430fx.c i430hx.c i430vx.c i440fx.c i440bx.c ide.c ide_atapi.c \
+	ide_sff8038i.c intel.c intel_flash.c io.c jim.c \
+	joystick_ch_flightstick_pro.c joystick_standard.c \
+	joystick_sw_pad.c joystick_tm_fcs.c keyboard.c \
+	keyboard_amstrad.c keyboard_at.c keyboard_olim24.c \
 	keyboard_pcjr.c keyboard_xt.c laserxt.c lpt.c lpt_dac.c \
 	lpt_dss.c mca.c mcr.c mem.c mem_bios.c mfm_at.c mfm_xebec.c \
 	model.c mouse.c mouse_msystems.c mouse_ps2.c mouse_serial.c \
 	mvp3.c neat.c nmi.c nvr.c olivetti_m24.c opti495.c paths.c \
-	pc.c pc87306.c pci.c pic.c piix.c pit.c ppi.c ps1.c ps2.c \
-	ps2_mca.c ps2_nvr.c nvr_tc8521.c pzx.c rom.c rtc.c \
-	rtc_tc8521.c scamp.c scat.c scsi.c scsi_53c400.c \
+	pc.c pc87306.c pc87307.c pci.c pic.c piix.c piix_pm.c pit.c \
+	ppi.c ps1.c ps2.c ps2_mca.c ps2_nvr.c nvr_tc8521.c pzx.c rom.c \
+	rtc.c rtc_tc8521.c scamp.c scat.c scsi.c scsi_53c400.c \
 	scsi_aha1540.c scsi_cd.c scsi_hd.c scsi_ibm.c scsi_zip.c \
 	serial.c sio.c sis496.c sl82c460.c sound.c sound_ad1848.c \
 	sound_adlib.c sound_adlibgold.c sound_audiopci.c \
@@ -179,21 +181,25 @@ am__pcem_SOURCES_DIST = 386.c 386_common.c 386_dynarec.c \
 	sound_mpu401_uart.c sound_opl.c sound_pas16.c sound_ps1.c \
 	sound_pssj.c sound_sb.c sound_sb_dsp.c sound_sn76489.c \
 	sound_speaker.c sound_ssi2001.c sound_wss.c sound_ym7128.c \
-	soundopenal.c superxt.c sst39sf010.c tandy_eeprom.c \
+	soundopenal.c sst39sf010.c superxt.c tandy_eeprom.c \
 	tandy_rom.c t1000.c t3100e.c timer.c um8669f.c um8881f.c \
 	vid_ati_eeprom.c vid_ati_mach64.c vid_ati18800.c \
 	vid_ati28800.c vid_ati68860_ramdac.c vid_cga.c vid_cl5429.c \
-	vid_colorplus.c vid_compaq_cga.c vid_ega.c vid_et4000.c \
-	vid_et4000w32.c vid_genius.c vid_hercules.c vid_ht216.c \
-	vid_icd2061.c vid_ics2595.c vid_im1024.c vid_incolor.c \
-	vid_mda.c vid_mga.c vid_olivetti_m24.c vid_oti037.c \
-	vid_oti067.c vid_paradise.c vid_pc200.c vid_pc1512.c \
-	vid_pc1640.c vid_pcjr.c vid_pgc.c vid_ps1_svga.c vid_s3.c \
-	vid_s3_virge.c vid_sdac_ramdac.c vid_sigma.c vid_stg_ramdac.c \
-	vid_svga.c vid_svga_render.c vid_t1000.c vid_t3100e.c \
-	vid_tandy.c vid_tandysl.c vid_tgui9440.c vid_tkd8001_ramdac.c \
-	vid_tvga.c vid_unk_ramdac.c vid_vga.c vid_voodoo.c video.c \
-	wd76c10.c vid_wy700.c vt82c586b.c vl82c480.c w83877tf.c \
+	vid_colorplus.c vid_compaq_cga.c vid_ddc.c vid_ega.c \
+	vid_et4000.c vid_et4000w32.c vid_genius.c vid_hercules.c \
+	vid_ht216.c vid_icd2061.c vid_ics2595.c vid_im1024.c \
+	vid_incolor.c vid_mda.c vid_mga.c vid_olivetti_m24.c \
+	vid_oti037.c vid_oti067.c vid_paradise.c vid_pc200.c \
+	vid_pc1512.c vid_pc1640.c vid_pcjr.c vid_pgc.c vid_ps1_svga.c \
+	vid_s3.c vid_s3_virge.c vid_sdac_ramdac.c vid_sigma.c \
+	vid_stg_ramdac.c vid_svga.c vid_svga_render.c vid_t1000.c \
+	vid_t3100e.c vid_tandy.c vid_tandysl.c vid_tgui9440.c \
+	vid_tkd8001_ramdac.c vid_tvga.c vid_unk_ramdac.c vid_vga.c \
+	vid_voodoo.c vid_voodoo_banshee.c vid_voodoo_banshee_blitter.c \
+	vid_voodoo_blitter.c vid_voodoo_display.c vid_voodoo_fb.c \
+	vid_voodoo_fifo.c vid_voodoo_reg.c vid_voodoo_render.c \
+	vid_voodoo_setup.c vid_voodoo_texture.c video.c wd76c10.c \
+	vid_wy700.c vt82c586b.c vl82c480.c w83877tf.c w83977tf.c \
 	x86seg.c x87.c x87_timings.c xi8088.c xtide.c sound_dbopl.cc \
 	sound_resid.cc dosbox/cdrom_image.cpp dosbox/dbopl.cpp \
 	dosbox/nukedopl.cpp dosbox/vid_cga_comp.c resid-fp/convolve.cc \
@@ -203,14 +209,18 @@ am__pcem_SOURCES_DIST = 386.c 386_common.c 386_dynarec.c \
 	resid-fp/wave6581_PST.cc resid-fp/wave6581_P_T.cc \
 	resid-fp/wave6581__ST.cc resid-fp/wave8580_PS_.cc \
 	resid-fp/wave8580_PST.cc resid-fp/wave8580_P_T.cc \
-	resid-fp/wave8580__ST.cc resid-fp/wave.cc wx-main.cc \
-	wx-config_sel.c wx-dialogbox.cc wx-utils.cc wx-app.cc \
-	wx-sdl2-joystick.c wx-sdl2-mouse.c wx-sdl2-keyboard.c \
-	wx-sdl2-video.c wx-sdl2.c wx-config.c wx-deviceconfig.cc \
-	wx-status.cc wx-sdl2-status.c wx-thread.c wx-common.c \
-	wx-sdl2-video-renderer.c wx-sdl2-video-gl3.c wx-glslp-parser.c \
-	wx-shader_man.c wx-shaderconfig.cc wx-joystickconfig.cc \
-	wx-createdisc.cc wx-resources.cpp midi_alsa.c wx-sdl2-midi.c \
+	resid-fp/wave8580__ST.cc resid-fp/wave.cc minivhd/cwalk.c \
+	minivhd/libxml2_encoding.c minivhd/minivhd_convert.c \
+	minivhd/minivhd_create.c minivhd/minivhd_io.c \
+	minivhd/minivhd_manage.c minivhd/minivhd_struct_rw.c \
+	minivhd/minivhd_util.c wx-main.cc wx-config_sel.c \
+	wx-dialogbox.cc wx-utils.cc wx-app.cc wx-sdl2-joystick.c \
+	wx-sdl2-mouse.c wx-sdl2-keyboard.c wx-sdl2-video.c wx-sdl2.c \
+	wx-config.c wx-deviceconfig.cc wx-status.cc wx-sdl2-status.c \
+	wx-thread.c wx-common.c wx-sdl2-video-renderer.c \
+	wx-sdl2-video-gl3.c wx-glslp-parser.c wx-shader_man.c \
+	wx-shaderconfig.cc wx-joystickconfig.cc wx-createdisc.cc \
+	wx-resources.cpp midi_alsa.c wx-sdl2-midi.c \
 	codegen_backend_x86.c codegen_backend_x86_ops.c \
 	codegen_backend_x86_ops_fpu.c codegen_backend_x86_ops_sse.c \
 	codegen_backend_x86_uops.c codegen_backend_x86-64.c \
@@ -311,7 +321,9 @@ am_pcem_OBJECTS = pcem-386.$(OBJEXT) pcem-386_common.$(OBJEXT) \
 	pcem-codegen_timing_486.$(OBJEXT) \
 	pcem-codegen_timing_686.$(OBJEXT) \
 	pcem-codegen_timing_common.$(OBJEXT) \
+	pcem-codegen_timing_cyrixiii.$(OBJEXT) \
 	pcem-codegen_timing_k6.$(OBJEXT) \
+	pcem-codegen_timing_p6.$(OBJEXT) \
 	pcem-codegen_timing_pentium.$(OBJEXT) \
 	pcem-codegen_timing_winchip.$(OBJEXT) \
 	pcem-codegen_timing_winchip2.$(OBJEXT) pcem-compaq.$(OBJEXT) \
@@ -328,7 +340,8 @@ am_pcem_OBJECTS = pcem-386.$(OBJEXT) pcem-386_common.$(OBJEXT) \
 	pcem-hdd_esdi.$(OBJEXT) pcem-hdd_file.$(OBJEXT) \
 	pcem-headland.$(OBJEXT) pcem-i430lx.$(OBJEXT) \
 	pcem-i430fx.$(OBJEXT) pcem-i430hx.$(OBJEXT) \
-	pcem-i430vx.$(OBJEXT) pcem-ide.$(OBJEXT) \
+	pcem-i430vx.$(OBJEXT) pcem-i440fx.$(OBJEXT) \
+	pcem-i440bx.$(OBJEXT) pcem-ide.$(OBJEXT) \
 	pcem-ide_atapi.$(OBJEXT) pcem-ide_sff8038i.$(OBJEXT) \
 	pcem-intel.$(OBJEXT) pcem-intel_flash.$(OBJEXT) \
 	pcem-io.$(OBJEXT) pcem-jim.$(OBJEXT) \
@@ -348,8 +361,9 @@ am_pcem_OBJECTS = pcem-386.$(OBJEXT) pcem-386_common.$(OBJEXT) \
 	pcem-mvp3.$(OBJEXT) pcem-neat.$(OBJEXT) pcem-nmi.$(OBJEXT) \
 	pcem-nvr.$(OBJEXT) pcem-olivetti_m24.$(OBJEXT) \
 	pcem-opti495.$(OBJEXT) pcem-paths.$(OBJEXT) pcem-pc.$(OBJEXT) \
-	pcem-pc87306.$(OBJEXT) pcem-pci.$(OBJEXT) pcem-pic.$(OBJEXT) \
-	pcem-piix.$(OBJEXT) pcem-pit.$(OBJEXT) pcem-ppi.$(OBJEXT) \
+	pcem-pc87306.$(OBJEXT) pcem-pc87307.$(OBJEXT) \
+	pcem-pci.$(OBJEXT) pcem-pic.$(OBJEXT) pcem-piix.$(OBJEXT) \
+	pcem-piix_pm.$(OBJEXT) pcem-pit.$(OBJEXT) pcem-ppi.$(OBJEXT) \
 	pcem-ps1.$(OBJEXT) pcem-ps2.$(OBJEXT) pcem-ps2_mca.$(OBJEXT) \
 	pcem-ps2_nvr.$(OBJEXT) pcem-nvr_tc8521.$(OBJEXT) \
 	pcem-pzx.$(OBJEXT) pcem-rom.$(OBJEXT) pcem-rtc.$(OBJEXT) \
@@ -370,8 +384,8 @@ am_pcem_OBJECTS = pcem-386.$(OBJEXT) pcem-386_common.$(OBJEXT) \
 	pcem-sound_sb_dsp.$(OBJEXT) pcem-sound_sn76489.$(OBJEXT) \
 	pcem-sound_speaker.$(OBJEXT) pcem-sound_ssi2001.$(OBJEXT) \
 	pcem-sound_wss.$(OBJEXT) pcem-sound_ym7128.$(OBJEXT) \
-	pcem-soundopenal.$(OBJEXT) pcem-superxt.$(OBJEXT) \
-	pcem-sst39sf010.$(OBJEXT) pcem-tandy_eeprom.$(OBJEXT) \
+	pcem-soundopenal.$(OBJEXT) pcem-sst39sf010.$(OBJEXT) \
+	pcem-superxt.$(OBJEXT) pcem-tandy_eeprom.$(OBJEXT) \
 	pcem-tandy_rom.$(OBJEXT) pcem-t1000.$(OBJEXT) \
 	pcem-t3100e.$(OBJEXT) pcem-timer.$(OBJEXT) \
 	pcem-um8669f.$(OBJEXT) pcem-um8881f.$(OBJEXT) \
@@ -379,29 +393,37 @@ am_pcem_OBJECTS = pcem-386.$(OBJEXT) pcem-386_common.$(OBJEXT) \
 	pcem-vid_ati18800.$(OBJEXT) pcem-vid_ati28800.$(OBJEXT) \
 	pcem-vid_ati68860_ramdac.$(OBJEXT) pcem-vid_cga.$(OBJEXT) \
 	pcem-vid_cl5429.$(OBJEXT) pcem-vid_colorplus.$(OBJEXT) \
-	pcem-vid_compaq_cga.$(OBJEXT) pcem-vid_ega.$(OBJEXT) \
-	pcem-vid_et4000.$(OBJEXT) pcem-vid_et4000w32.$(OBJEXT) \
-	pcem-vid_genius.$(OBJEXT) pcem-vid_hercules.$(OBJEXT) \
-	pcem-vid_ht216.$(OBJEXT) pcem-vid_icd2061.$(OBJEXT) \
-	pcem-vid_ics2595.$(OBJEXT) pcem-vid_im1024.$(OBJEXT) \
-	pcem-vid_incolor.$(OBJEXT) pcem-vid_mda.$(OBJEXT) \
-	pcem-vid_mga.$(OBJEXT) pcem-vid_olivetti_m24.$(OBJEXT) \
-	pcem-vid_oti037.$(OBJEXT) pcem-vid_oti067.$(OBJEXT) \
-	pcem-vid_paradise.$(OBJEXT) pcem-vid_pc200.$(OBJEXT) \
-	pcem-vid_pc1512.$(OBJEXT) pcem-vid_pc1640.$(OBJEXT) \
-	pcem-vid_pcjr.$(OBJEXT) pcem-vid_pgc.$(OBJEXT) \
-	pcem-vid_ps1_svga.$(OBJEXT) pcem-vid_s3.$(OBJEXT) \
-	pcem-vid_s3_virge.$(OBJEXT) pcem-vid_sdac_ramdac.$(OBJEXT) \
-	pcem-vid_sigma.$(OBJEXT) pcem-vid_stg_ramdac.$(OBJEXT) \
-	pcem-vid_svga.$(OBJEXT) pcem-vid_svga_render.$(OBJEXT) \
-	pcem-vid_t1000.$(OBJEXT) pcem-vid_t3100e.$(OBJEXT) \
-	pcem-vid_tandy.$(OBJEXT) pcem-vid_tandysl.$(OBJEXT) \
-	pcem-vid_tgui9440.$(OBJEXT) pcem-vid_tkd8001_ramdac.$(OBJEXT) \
-	pcem-vid_tvga.$(OBJEXT) pcem-vid_unk_ramdac.$(OBJEXT) \
-	pcem-vid_vga.$(OBJEXT) pcem-vid_voodoo.$(OBJEXT) \
-	pcem-video.$(OBJEXT) pcem-wd76c10.$(OBJEXT) \
-	pcem-vid_wy700.$(OBJEXT) pcem-vt82c586b.$(OBJEXT) \
-	pcem-vl82c480.$(OBJEXT) pcem-w83877tf.$(OBJEXT) \
+	pcem-vid_compaq_cga.$(OBJEXT) pcem-vid_ddc.$(OBJEXT) \
+	pcem-vid_ega.$(OBJEXT) pcem-vid_et4000.$(OBJEXT) \
+	pcem-vid_et4000w32.$(OBJEXT) pcem-vid_genius.$(OBJEXT) \
+	pcem-vid_hercules.$(OBJEXT) pcem-vid_ht216.$(OBJEXT) \
+	pcem-vid_icd2061.$(OBJEXT) pcem-vid_ics2595.$(OBJEXT) \
+	pcem-vid_im1024.$(OBJEXT) pcem-vid_incolor.$(OBJEXT) \
+	pcem-vid_mda.$(OBJEXT) pcem-vid_mga.$(OBJEXT) \
+	pcem-vid_olivetti_m24.$(OBJEXT) pcem-vid_oti037.$(OBJEXT) \
+	pcem-vid_oti067.$(OBJEXT) pcem-vid_paradise.$(OBJEXT) \
+	pcem-vid_pc200.$(OBJEXT) pcem-vid_pc1512.$(OBJEXT) \
+	pcem-vid_pc1640.$(OBJEXT) pcem-vid_pcjr.$(OBJEXT) \
+	pcem-vid_pgc.$(OBJEXT) pcem-vid_ps1_svga.$(OBJEXT) \
+	pcem-vid_s3.$(OBJEXT) pcem-vid_s3_virge.$(OBJEXT) \
+	pcem-vid_sdac_ramdac.$(OBJEXT) pcem-vid_sigma.$(OBJEXT) \
+	pcem-vid_stg_ramdac.$(OBJEXT) pcem-vid_svga.$(OBJEXT) \
+	pcem-vid_svga_render.$(OBJEXT) pcem-vid_t1000.$(OBJEXT) \
+	pcem-vid_t3100e.$(OBJEXT) pcem-vid_tandy.$(OBJEXT) \
+	pcem-vid_tandysl.$(OBJEXT) pcem-vid_tgui9440.$(OBJEXT) \
+	pcem-vid_tkd8001_ramdac.$(OBJEXT) pcem-vid_tvga.$(OBJEXT) \
+	pcem-vid_unk_ramdac.$(OBJEXT) pcem-vid_vga.$(OBJEXT) \
+	pcem-vid_voodoo.$(OBJEXT) pcem-vid_voodoo_banshee.$(OBJEXT) \
+	pcem-vid_voodoo_banshee_blitter.$(OBJEXT) \
+	pcem-vid_voodoo_blitter.$(OBJEXT) \
+	pcem-vid_voodoo_display.$(OBJEXT) pcem-vid_voodoo_fb.$(OBJEXT) \
+	pcem-vid_voodoo_fifo.$(OBJEXT) pcem-vid_voodoo_reg.$(OBJEXT) \
+	pcem-vid_voodoo_render.$(OBJEXT) \
+	pcem-vid_voodoo_setup.$(OBJEXT) \
+	pcem-vid_voodoo_texture.$(OBJEXT) pcem-video.$(OBJEXT) \
+	pcem-wd76c10.$(OBJEXT) pcem-vid_wy700.$(OBJEXT) \
+	pcem-vt82c586b.$(OBJEXT) pcem-vl82c480.$(OBJEXT) \
+	pcem-w83877tf.$(OBJEXT) pcem-w83977tf.$(OBJEXT) \
 	pcem-x86seg.$(OBJEXT) pcem-x87.$(OBJEXT) \
 	pcem-x87_timings.$(OBJEXT) pcem-xi8088.$(OBJEXT) \
 	pcem-xtide.$(OBJEXT) pcem-sound_dbopl.$(OBJEXT) \
@@ -422,7 +444,14 @@ am_pcem_OBJECTS = pcem-386.$(OBJEXT) pcem-386_common.$(OBJEXT) \
 	resid-fp/pcem-wave8580_PST.$(OBJEXT) \
 	resid-fp/pcem-wave8580_P_T.$(OBJEXT) \
 	resid-fp/pcem-wave8580__ST.$(OBJEXT) \
-	resid-fp/pcem-wave.$(OBJEXT) pcem-wx-main.$(OBJEXT) \
+	resid-fp/pcem-wave.$(OBJEXT) minivhd/pcem-cwalk.$(OBJEXT) \
+	minivhd/pcem-libxml2_encoding.$(OBJEXT) \
+	minivhd/pcem-minivhd_convert.$(OBJEXT) \
+	minivhd/pcem-minivhd_create.$(OBJEXT) \
+	minivhd/pcem-minivhd_io.$(OBJEXT) \
+	minivhd/pcem-minivhd_manage.$(OBJEXT) \
+	minivhd/pcem-minivhd_struct_rw.$(OBJEXT) \
+	minivhd/pcem-minivhd_util.$(OBJEXT) pcem-wx-main.$(OBJEXT) \
 	pcem-wx-config_sel.$(OBJEXT) pcem-wx-dialogbox.$(OBJEXT) \
 	pcem-wx-utils.$(OBJEXT) pcem-wx-app.$(OBJEXT) \
 	pcem-wx-sdl2-joystick.$(OBJEXT) pcem-wx-sdl2-mouse.$(OBJEXT) \
@@ -517,7 +546,9 @@ am__depfiles_remade = ./$(DEPDIR)/pcem-386.Po \
 	./$(DEPDIR)/pcem-codegen_timing_486.Po \
 	./$(DEPDIR)/pcem-codegen_timing_686.Po \
 	./$(DEPDIR)/pcem-codegen_timing_common.Po \
+	./$(DEPDIR)/pcem-codegen_timing_cyrixiii.Po \
 	./$(DEPDIR)/pcem-codegen_timing_k6.Po \
+	./$(DEPDIR)/pcem-codegen_timing_p6.Po \
 	./$(DEPDIR)/pcem-codegen_timing_pentium.Po \
 	./$(DEPDIR)/pcem-codegen_timing_winchip.Po \
 	./$(DEPDIR)/pcem-codegen_timing_winchip2.Po \
@@ -535,6 +566,7 @@ am__depfiles_remade = ./$(DEPDIR)/pcem-386.Po \
 	./$(DEPDIR)/pcem-hdd_file.Po ./$(DEPDIR)/pcem-headland.Po \
 	./$(DEPDIR)/pcem-i430fx.Po ./$(DEPDIR)/pcem-i430hx.Po \
 	./$(DEPDIR)/pcem-i430lx.Po ./$(DEPDIR)/pcem-i430vx.Po \
+	./$(DEPDIR)/pcem-i440bx.Po ./$(DEPDIR)/pcem-i440fx.Po \
 	./$(DEPDIR)/pcem-ide.Po ./$(DEPDIR)/pcem-ide_atapi.Po \
 	./$(DEPDIR)/pcem-ide_sff8038i.Po ./$(DEPDIR)/pcem-intel.Po \
 	./$(DEPDIR)/pcem-intel_flash.Po ./$(DEPDIR)/pcem-io.Po \
@@ -563,8 +595,9 @@ am__depfiles_remade = ./$(DEPDIR)/pcem-386.Po \
 	./$(DEPDIR)/pcem-nvr_tc8521.Po \
 	./$(DEPDIR)/pcem-olivetti_m24.Po ./$(DEPDIR)/pcem-opti495.Po \
 	./$(DEPDIR)/pcem-paths.Po ./$(DEPDIR)/pcem-pc.Po \
-	./$(DEPDIR)/pcem-pc87306.Po ./$(DEPDIR)/pcem-pci.Po \
-	./$(DEPDIR)/pcem-pic.Po ./$(DEPDIR)/pcem-piix.Po \
+	./$(DEPDIR)/pcem-pc87306.Po ./$(DEPDIR)/pcem-pc87307.Po \
+	./$(DEPDIR)/pcem-pci.Po ./$(DEPDIR)/pcem-pic.Po \
+	./$(DEPDIR)/pcem-piix.Po ./$(DEPDIR)/pcem-piix_pm.Po \
 	./$(DEPDIR)/pcem-pit.Po ./$(DEPDIR)/pcem-ppi.Po \
 	./$(DEPDIR)/pcem-ps1.Po ./$(DEPDIR)/pcem-ps2.Po \
 	./$(DEPDIR)/pcem-ps2_mca.Po ./$(DEPDIR)/pcem-ps2_nvr.Po \
@@ -605,8 +638,8 @@ am__depfiles_remade = ./$(DEPDIR)/pcem-386.Po \
 	./$(DEPDIR)/pcem-vid_ati_mach64.Po ./$(DEPDIR)/pcem-vid_cga.Po \
 	./$(DEPDIR)/pcem-vid_cl5429.Po \
 	./$(DEPDIR)/pcem-vid_colorplus.Po \
-	./$(DEPDIR)/pcem-vid_compaq_cga.Po ./$(DEPDIR)/pcem-vid_ega.Po \
-	./$(DEPDIR)/pcem-vid_et4000.Po \
+	./$(DEPDIR)/pcem-vid_compaq_cga.Po ./$(DEPDIR)/pcem-vid_ddc.Po \
+	./$(DEPDIR)/pcem-vid_ega.Po ./$(DEPDIR)/pcem-vid_et4000.Po \
 	./$(DEPDIR)/pcem-vid_et4000w32.Po \
 	./$(DEPDIR)/pcem-vid_genius.Po \
 	./$(DEPDIR)/pcem-vid_hercules.Po ./$(DEPDIR)/pcem-vid_ht216.Po \
@@ -632,9 +665,20 @@ am__depfiles_remade = ./$(DEPDIR)/pcem-386.Po \
 	./$(DEPDIR)/pcem-vid_tkd8001_ramdac.Po \
 	./$(DEPDIR)/pcem-vid_tvga.Po \
 	./$(DEPDIR)/pcem-vid_unk_ramdac.Po ./$(DEPDIR)/pcem-vid_vga.Po \
-	./$(DEPDIR)/pcem-vid_voodoo.Po ./$(DEPDIR)/pcem-vid_wy700.Po \
-	./$(DEPDIR)/pcem-video.Po ./$(DEPDIR)/pcem-vl82c480.Po \
-	./$(DEPDIR)/pcem-vt82c586b.Po ./$(DEPDIR)/pcem-w83877tf.Po \
+	./$(DEPDIR)/pcem-vid_voodoo.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_banshee.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_blitter.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_display.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_fb.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_fifo.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_reg.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_render.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_setup.Po \
+	./$(DEPDIR)/pcem-vid_voodoo_texture.Po \
+	./$(DEPDIR)/pcem-vid_wy700.Po ./$(DEPDIR)/pcem-video.Po \
+	./$(DEPDIR)/pcem-vl82c480.Po ./$(DEPDIR)/pcem-vt82c586b.Po \
+	./$(DEPDIR)/pcem-w83877tf.Po ./$(DEPDIR)/pcem-w83977tf.Po \
 	./$(DEPDIR)/pcem-wd76c10.Po ./$(DEPDIR)/pcem-wx-app.Po \
 	./$(DEPDIR)/pcem-wx-common.Po ./$(DEPDIR)/pcem-wx-config.Po \
 	./$(DEPDIR)/pcem-wx-config_sel.Po \
@@ -665,6 +709,14 @@ am__depfiles_remade = ./$(DEPDIR)/pcem-386.Po \
 	dosbox/$(DEPDIR)/pcem-dbopl.Po \
 	dosbox/$(DEPDIR)/pcem-nukedopl.Po \
 	dosbox/$(DEPDIR)/pcem-vid_cga_comp.Po \
+	minivhd/$(DEPDIR)/pcem-cwalk.Po \
+	minivhd/$(DEPDIR)/pcem-libxml2_encoding.Po \
+	minivhd/$(DEPDIR)/pcem-minivhd_convert.Po \
+	minivhd/$(DEPDIR)/pcem-minivhd_create.Po \
+	minivhd/$(DEPDIR)/pcem-minivhd_io.Po \
+	minivhd/$(DEPDIR)/pcem-minivhd_manage.Po \
+	minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Po \
+	minivhd/$(DEPDIR)/pcem-minivhd_util.Po \
 	resid-fp/$(DEPDIR)/pcem-convolve-sse.Po \
 	resid-fp/$(DEPDIR)/pcem-convolve.Po \
 	resid-fp/$(DEPDIR)/pcem-envelope.Po \
@@ -880,6 +932,8 @@ WINDRES = $(shell $(WX_CONFIG_PATH) --rescomp)
 # DOSBox
 
 # resid-fp
+
+#MiniVHD
 pcem_SOURCES = 386.c 386_common.c 386_dynarec.c 386_dynarec_ops.c \
 	808x.c 82091aa.c acc2036.c acc2168.c acc3221.c acer386sx.c \
 	ali1429.c amstrad.c cassette.c cbm_io.c cdrom-image.cc \
@@ -895,23 +949,25 @@ pcem_SOURCES = 386.c 386_common.c 386_dynarec.c 386_dynarec_ops.c \
 	codegen_ops_shift.c codegen_ops_misc.c codegen_ops_mov.c \
 	codegen_ops_stack.c codegen_reg.c codegen_timing_486.c \
 	codegen_timing_686.c codegen_timing_common.c \
-	codegen_timing_k6.c codegen_timing_pentium.c \
+	codegen_timing_cyrixiii.c codegen_timing_k6.c \
+	codegen_timing_p6.c codegen_timing_pentium.c \
 	codegen_timing_winchip.c codegen_timing_winchip2.c compaq.c \
 	config.c cpu.c cpu_tables.c cs8230.c dells200.c device.c \
 	disc.c disc_fdi.c disc_img.c disc_sector.c dma.c esdi_at.c \
 	f82c710_upc.c fdc.c fdc37c665.c fdc37c93x.c fdd.c fdi2raw.c \
 	gameport.c hdd.c hdd_esdi.c hdd_file.c headland.c i430lx.c \
-	i430fx.c i430hx.c i430vx.c ide.c ide_atapi.c ide_sff8038i.c \
-	intel.c intel_flash.c io.c jim.c joystick_ch_flightstick_pro.c \
-	joystick_standard.c joystick_sw_pad.c joystick_tm_fcs.c \
-	keyboard.c keyboard_amstrad.c keyboard_at.c keyboard_olim24.c \
+	i430fx.c i430hx.c i430vx.c i440fx.c i440bx.c ide.c ide_atapi.c \
+	ide_sff8038i.c intel.c intel_flash.c io.c jim.c \
+	joystick_ch_flightstick_pro.c joystick_standard.c \
+	joystick_sw_pad.c joystick_tm_fcs.c keyboard.c \
+	keyboard_amstrad.c keyboard_at.c keyboard_olim24.c \
 	keyboard_pcjr.c keyboard_xt.c laserxt.c lpt.c lpt_dac.c \
 	lpt_dss.c mca.c mcr.c mem.c mem_bios.c mfm_at.c mfm_xebec.c \
 	model.c mouse.c mouse_msystems.c mouse_ps2.c mouse_serial.c \
 	mvp3.c neat.c nmi.c nvr.c olivetti_m24.c opti495.c paths.c \
-	pc.c pc87306.c pci.c pic.c piix.c pit.c ppi.c ps1.c ps2.c \
-	ps2_mca.c ps2_nvr.c nvr_tc8521.c pzx.c rom.c rtc.c \
-	rtc_tc8521.c scamp.c scat.c scsi.c scsi_53c400.c \
+	pc.c pc87306.c pc87307.c pci.c pic.c piix.c piix_pm.c pit.c \
+	ppi.c ps1.c ps2.c ps2_mca.c ps2_nvr.c nvr_tc8521.c pzx.c rom.c \
+	rtc.c rtc_tc8521.c scamp.c scat.c scsi.c scsi_53c400.c \
 	scsi_aha1540.c scsi_cd.c scsi_hd.c scsi_ibm.c scsi_zip.c \
 	serial.c sio.c sis496.c sl82c460.c sound.c sound_ad1848.c \
 	sound_adlib.c sound_adlibgold.c sound_audiopci.c \
@@ -919,21 +975,25 @@ pcem_SOURCES = 386.c 386_common.c 386_dynarec.c 386_dynarec_ops.c \
 	sound_mpu401_uart.c sound_opl.c sound_pas16.c sound_ps1.c \
 	sound_pssj.c sound_sb.c sound_sb_dsp.c sound_sn76489.c \
 	sound_speaker.c sound_ssi2001.c sound_wss.c sound_ym7128.c \
-	soundopenal.c superxt.c sst39sf010.c tandy_eeprom.c \
+	soundopenal.c sst39sf010.c superxt.c tandy_eeprom.c \
 	tandy_rom.c t1000.c t3100e.c timer.c um8669f.c um8881f.c \
 	vid_ati_eeprom.c vid_ati_mach64.c vid_ati18800.c \
 	vid_ati28800.c vid_ati68860_ramdac.c vid_cga.c vid_cl5429.c \
-	vid_colorplus.c vid_compaq_cga.c vid_ega.c vid_et4000.c \
-	vid_et4000w32.c vid_genius.c vid_hercules.c vid_ht216.c \
-	vid_icd2061.c vid_ics2595.c vid_im1024.c vid_incolor.c \
-	vid_mda.c vid_mga.c vid_olivetti_m24.c vid_oti037.c \
-	vid_oti067.c vid_paradise.c vid_pc200.c vid_pc1512.c \
-	vid_pc1640.c vid_pcjr.c vid_pgc.c vid_ps1_svga.c vid_s3.c \
-	vid_s3_virge.c vid_sdac_ramdac.c vid_sigma.c vid_stg_ramdac.c \
-	vid_svga.c vid_svga_render.c vid_t1000.c vid_t3100e.c \
-	vid_tandy.c vid_tandysl.c vid_tgui9440.c vid_tkd8001_ramdac.c \
-	vid_tvga.c vid_unk_ramdac.c vid_vga.c vid_voodoo.c video.c \
-	wd76c10.c vid_wy700.c vt82c586b.c vl82c480.c w83877tf.c \
+	vid_colorplus.c vid_compaq_cga.c vid_ddc.c vid_ega.c \
+	vid_et4000.c vid_et4000w32.c vid_genius.c vid_hercules.c \
+	vid_ht216.c vid_icd2061.c vid_ics2595.c vid_im1024.c \
+	vid_incolor.c vid_mda.c vid_mga.c vid_olivetti_m24.c \
+	vid_oti037.c vid_oti067.c vid_paradise.c vid_pc200.c \
+	vid_pc1512.c vid_pc1640.c vid_pcjr.c vid_pgc.c vid_ps1_svga.c \
+	vid_s3.c vid_s3_virge.c vid_sdac_ramdac.c vid_sigma.c \
+	vid_stg_ramdac.c vid_svga.c vid_svga_render.c vid_t1000.c \
+	vid_t3100e.c vid_tandy.c vid_tandysl.c vid_tgui9440.c \
+	vid_tkd8001_ramdac.c vid_tvga.c vid_unk_ramdac.c vid_vga.c \
+	vid_voodoo.c vid_voodoo_banshee.c vid_voodoo_banshee_blitter.c \
+	vid_voodoo_blitter.c vid_voodoo_display.c vid_voodoo_fb.c \
+	vid_voodoo_fifo.c vid_voodoo_reg.c vid_voodoo_render.c \
+	vid_voodoo_setup.c vid_voodoo_texture.c video.c wd76c10.c \
+	vid_wy700.c vt82c586b.c vl82c480.c w83877tf.c w83977tf.c \
 	x86seg.c x87.c x87_timings.c xi8088.c xtide.c sound_dbopl.cc \
 	sound_resid.cc dosbox/cdrom_image.cpp dosbox/dbopl.cpp \
 	dosbox/nukedopl.cpp dosbox/vid_cga_comp.c resid-fp/convolve.cc \
@@ -943,18 +1003,21 @@ pcem_SOURCES = 386.c 386_common.c 386_dynarec.c 386_dynarec_ops.c \
 	resid-fp/wave6581_PST.cc resid-fp/wave6581_P_T.cc \
 	resid-fp/wave6581__ST.cc resid-fp/wave8580_PS_.cc \
 	resid-fp/wave8580_PST.cc resid-fp/wave8580_P_T.cc \
-	resid-fp/wave8580__ST.cc resid-fp/wave.cc wx-main.cc \
-	wx-config_sel.c wx-dialogbox.cc wx-utils.cc wx-app.cc \
-	wx-sdl2-joystick.c wx-sdl2-mouse.c wx-sdl2-keyboard.c \
-	wx-sdl2-video.c wx-sdl2.c wx-config.c wx-deviceconfig.cc \
-	wx-status.cc wx-sdl2-status.c wx-thread.c wx-common.c \
-	wx-sdl2-video-renderer.c wx-sdl2-video-gl3.c wx-glslp-parser.c \
-	wx-shader_man.c wx-shaderconfig.cc wx-joystickconfig.cc \
-	wx-createdisc.cc wx-resources.cpp $(am__append_4) \
-	$(am__append_5) $(am__append_6) $(am__append_8) \
-	$(am__append_9) $(am__append_10) $(am__append_13) \
-	$(am__append_15) $(am__append_16) $(am__append_17) \
-	$(am__append_20)
+	resid-fp/wave8580__ST.cc resid-fp/wave.cc minivhd/cwalk.c \
+	minivhd/libxml2_encoding.c minivhd/minivhd_convert.c \
+	minivhd/minivhd_create.c minivhd/minivhd_io.c \
+	minivhd/minivhd_manage.c minivhd/minivhd_struct_rw.c \
+	minivhd/minivhd_util.c wx-main.cc wx-config_sel.c \
+	wx-dialogbox.cc wx-utils.cc wx-app.cc wx-sdl2-joystick.c \
+	wx-sdl2-mouse.c wx-sdl2-keyboard.c wx-sdl2-video.c wx-sdl2.c \
+	wx-config.c wx-deviceconfig.cc wx-status.cc wx-sdl2-status.c \
+	wx-thread.c wx-common.c wx-sdl2-video-renderer.c \
+	wx-sdl2-video-gl3.c wx-glslp-parser.c wx-shader_man.c \
+	wx-shaderconfig.cc wx-joystickconfig.cc wx-createdisc.cc \
+	wx-resources.cpp $(am__append_4) $(am__append_5) \
+	$(am__append_6) $(am__append_8) $(am__append_9) \
+	$(am__append_10) $(am__append_13) $(am__append_15) \
+	$(am__append_16) $(am__append_17) $(am__append_20)
 pcem_CFLAGS = $(subst -fpermissive,,$(shell $(WX_CONFIG_PATH) \
 	--cxxflags) $(shell sdl2-config --cflags)) $(am__append_7) \
 	$(am__append_11) $(am__append_18) $(am__append_22)
@@ -1092,6 +1155,28 @@ resid-fp/pcem-wave8580__ST.$(OBJEXT): resid-fp/$(am__dirstamp) \
 	resid-fp/$(DEPDIR)/$(am__dirstamp)
 resid-fp/pcem-wave.$(OBJEXT): resid-fp/$(am__dirstamp) \
 	resid-fp/$(DEPDIR)/$(am__dirstamp)
+minivhd/$(am__dirstamp):
+	@$(MKDIR_P) minivhd
+	@: > minivhd/$(am__dirstamp)
+minivhd/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) minivhd/$(DEPDIR)
+	@: > minivhd/$(DEPDIR)/$(am__dirstamp)
+minivhd/pcem-cwalk.$(OBJEXT): minivhd/$(am__dirstamp) \
+	minivhd/$(DEPDIR)/$(am__dirstamp)
+minivhd/pcem-libxml2_encoding.$(OBJEXT): minivhd/$(am__dirstamp) \
+	minivhd/$(DEPDIR)/$(am__dirstamp)
+minivhd/pcem-minivhd_convert.$(OBJEXT): minivhd/$(am__dirstamp) \
+	minivhd/$(DEPDIR)/$(am__dirstamp)
+minivhd/pcem-minivhd_create.$(OBJEXT): minivhd/$(am__dirstamp) \
+	minivhd/$(DEPDIR)/$(am__dirstamp)
+minivhd/pcem-minivhd_io.$(OBJEXT): minivhd/$(am__dirstamp) \
+	minivhd/$(DEPDIR)/$(am__dirstamp)
+minivhd/pcem-minivhd_manage.$(OBJEXT): minivhd/$(am__dirstamp) \
+	minivhd/$(DEPDIR)/$(am__dirstamp)
+minivhd/pcem-minivhd_struct_rw.$(OBJEXT): minivhd/$(am__dirstamp) \
+	minivhd/$(DEPDIR)/$(am__dirstamp)
+minivhd/pcem-minivhd_util.$(OBJEXT): minivhd/$(am__dirstamp) \
+	minivhd/$(DEPDIR)/$(am__dirstamp)
 slirp/$(am__dirstamp):
 	@$(MKDIR_P) slirp
 	@: > slirp/$(am__dirstamp)
@@ -1144,6 +1229,7 @@ pcem$(EXEEXT): $(pcem_OBJECTS) $(pcem_DEPENDENCIES) $(EXTRA_pcem_DEPENDENCIES)
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f dosbox/*.$(OBJEXT)
+	-rm -f minivhd/*.$(OBJEXT)
 	-rm -f resid-fp/*.$(OBJEXT)
 	-rm -f slirp/*.$(OBJEXT)
 
@@ -1217,7 +1303,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_486.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_686.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_common.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_cyrixiii.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_k6.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_p6.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_pentium.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_winchip.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-codegen_timing_winchip2.Po@am__quote@ # am--include-marker
@@ -1249,6 +1337,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-i430hx.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-i430lx.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-i430vx.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-i440bx.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-i440fx.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ide.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ide_atapi.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ide_sff8038i.Po@am__quote@ # am--include-marker
@@ -1294,9 +1384,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-paths.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-pc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-pc87306.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-pc87307.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-pci.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-pic.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-piix.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-piix_pm.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-pit.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ppi.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ps1.Po@am__quote@ # am--include-marker
@@ -1362,6 +1454,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_cl5429.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_colorplus.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_compaq_cga.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_ddc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_ega.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_et4000.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_et4000w32.Po@am__quote@ # am--include-marker
@@ -1401,11 +1494,22 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_unk_ramdac.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_vga.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_banshee.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_blitter.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_display.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_fb.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_fifo.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_reg.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_render.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_setup.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_voodoo_texture.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vid_wy700.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-video.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vl82c480.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-vt82c586b.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-w83877tf.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-w83977tf.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-wd76c10.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-wx-app.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-wx-common.Po@am__quote@ # am--include-marker
@@ -1444,6 +1548,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@dosbox/$(DEPDIR)/pcem-dbopl.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@dosbox/$(DEPDIR)/pcem-nukedopl.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@dosbox/$(DEPDIR)/pcem-vid_cga_comp.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@minivhd/$(DEPDIR)/pcem-cwalk.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@minivhd/$(DEPDIR)/pcem-libxml2_encoding.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@minivhd/$(DEPDIR)/pcem-minivhd_convert.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@minivhd/$(DEPDIR)/pcem-minivhd_create.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@minivhd/$(DEPDIR)/pcem-minivhd_io.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@minivhd/$(DEPDIR)/pcem-minivhd_manage.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@minivhd/$(DEPDIR)/pcem-minivhd_util.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@resid-fp/$(DEPDIR)/pcem-convolve-sse.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@resid-fp/$(DEPDIR)/pcem-convolve.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@resid-fp/$(DEPDIR)/pcem-envelope.Po@am__quote@ # am--include-marker
@@ -2147,6 +2259,20 @@ pcem-codegen_timing_common.obj: codegen_timing_common.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-codegen_timing_common.obj `if test -f 'codegen_timing_common.c'; then $(CYGPATH_W) 'codegen_timing_common.c'; else $(CYGPATH_W) '$(srcdir)/codegen_timing_common.c'; fi`
 
+pcem-codegen_timing_cyrixiii.o: codegen_timing_cyrixiii.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-codegen_timing_cyrixiii.o -MD -MP -MF $(DEPDIR)/pcem-codegen_timing_cyrixiii.Tpo -c -o pcem-codegen_timing_cyrixiii.o `test -f 'codegen_timing_cyrixiii.c' || echo '$(srcdir)/'`codegen_timing_cyrixiii.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-codegen_timing_cyrixiii.Tpo $(DEPDIR)/pcem-codegen_timing_cyrixiii.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='codegen_timing_cyrixiii.c' object='pcem-codegen_timing_cyrixiii.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-codegen_timing_cyrixiii.o `test -f 'codegen_timing_cyrixiii.c' || echo '$(srcdir)/'`codegen_timing_cyrixiii.c
+
+pcem-codegen_timing_cyrixiii.obj: codegen_timing_cyrixiii.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-codegen_timing_cyrixiii.obj -MD -MP -MF $(DEPDIR)/pcem-codegen_timing_cyrixiii.Tpo -c -o pcem-codegen_timing_cyrixiii.obj `if test -f 'codegen_timing_cyrixiii.c'; then $(CYGPATH_W) 'codegen_timing_cyrixiii.c'; else $(CYGPATH_W) '$(srcdir)/codegen_timing_cyrixiii.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-codegen_timing_cyrixiii.Tpo $(DEPDIR)/pcem-codegen_timing_cyrixiii.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='codegen_timing_cyrixiii.c' object='pcem-codegen_timing_cyrixiii.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-codegen_timing_cyrixiii.obj `if test -f 'codegen_timing_cyrixiii.c'; then $(CYGPATH_W) 'codegen_timing_cyrixiii.c'; else $(CYGPATH_W) '$(srcdir)/codegen_timing_cyrixiii.c'; fi`
+
 pcem-codegen_timing_k6.o: codegen_timing_k6.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-codegen_timing_k6.o -MD -MP -MF $(DEPDIR)/pcem-codegen_timing_k6.Tpo -c -o pcem-codegen_timing_k6.o `test -f 'codegen_timing_k6.c' || echo '$(srcdir)/'`codegen_timing_k6.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-codegen_timing_k6.Tpo $(DEPDIR)/pcem-codegen_timing_k6.Po
@@ -2160,6 +2286,20 @@ pcem-codegen_timing_k6.obj: codegen_timing_k6.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='codegen_timing_k6.c' object='pcem-codegen_timing_k6.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-codegen_timing_k6.obj `if test -f 'codegen_timing_k6.c'; then $(CYGPATH_W) 'codegen_timing_k6.c'; else $(CYGPATH_W) '$(srcdir)/codegen_timing_k6.c'; fi`
+
+pcem-codegen_timing_p6.o: codegen_timing_p6.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-codegen_timing_p6.o -MD -MP -MF $(DEPDIR)/pcem-codegen_timing_p6.Tpo -c -o pcem-codegen_timing_p6.o `test -f 'codegen_timing_p6.c' || echo '$(srcdir)/'`codegen_timing_p6.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-codegen_timing_p6.Tpo $(DEPDIR)/pcem-codegen_timing_p6.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='codegen_timing_p6.c' object='pcem-codegen_timing_p6.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-codegen_timing_p6.o `test -f 'codegen_timing_p6.c' || echo '$(srcdir)/'`codegen_timing_p6.c
+
+pcem-codegen_timing_p6.obj: codegen_timing_p6.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-codegen_timing_p6.obj -MD -MP -MF $(DEPDIR)/pcem-codegen_timing_p6.Tpo -c -o pcem-codegen_timing_p6.obj `if test -f 'codegen_timing_p6.c'; then $(CYGPATH_W) 'codegen_timing_p6.c'; else $(CYGPATH_W) '$(srcdir)/codegen_timing_p6.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-codegen_timing_p6.Tpo $(DEPDIR)/pcem-codegen_timing_p6.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='codegen_timing_p6.c' object='pcem-codegen_timing_p6.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-codegen_timing_p6.obj `if test -f 'codegen_timing_p6.c'; then $(CYGPATH_W) 'codegen_timing_p6.c'; else $(CYGPATH_W) '$(srcdir)/codegen_timing_p6.c'; fi`
 
 pcem-codegen_timing_pentium.o: codegen_timing_pentium.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-codegen_timing_pentium.o -MD -MP -MF $(DEPDIR)/pcem-codegen_timing_pentium.Tpo -c -o pcem-codegen_timing_pentium.o `test -f 'codegen_timing_pentium.c' || echo '$(srcdir)/'`codegen_timing_pentium.c
@@ -2594,6 +2734,34 @@ pcem-i430vx.obj: i430vx.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='i430vx.c' object='pcem-i430vx.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-i430vx.obj `if test -f 'i430vx.c'; then $(CYGPATH_W) 'i430vx.c'; else $(CYGPATH_W) '$(srcdir)/i430vx.c'; fi`
+
+pcem-i440fx.o: i440fx.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-i440fx.o -MD -MP -MF $(DEPDIR)/pcem-i440fx.Tpo -c -o pcem-i440fx.o `test -f 'i440fx.c' || echo '$(srcdir)/'`i440fx.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-i440fx.Tpo $(DEPDIR)/pcem-i440fx.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='i440fx.c' object='pcem-i440fx.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-i440fx.o `test -f 'i440fx.c' || echo '$(srcdir)/'`i440fx.c
+
+pcem-i440fx.obj: i440fx.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-i440fx.obj -MD -MP -MF $(DEPDIR)/pcem-i440fx.Tpo -c -o pcem-i440fx.obj `if test -f 'i440fx.c'; then $(CYGPATH_W) 'i440fx.c'; else $(CYGPATH_W) '$(srcdir)/i440fx.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-i440fx.Tpo $(DEPDIR)/pcem-i440fx.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='i440fx.c' object='pcem-i440fx.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-i440fx.obj `if test -f 'i440fx.c'; then $(CYGPATH_W) 'i440fx.c'; else $(CYGPATH_W) '$(srcdir)/i440fx.c'; fi`
+
+pcem-i440bx.o: i440bx.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-i440bx.o -MD -MP -MF $(DEPDIR)/pcem-i440bx.Tpo -c -o pcem-i440bx.o `test -f 'i440bx.c' || echo '$(srcdir)/'`i440bx.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-i440bx.Tpo $(DEPDIR)/pcem-i440bx.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='i440bx.c' object='pcem-i440bx.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-i440bx.o `test -f 'i440bx.c' || echo '$(srcdir)/'`i440bx.c
+
+pcem-i440bx.obj: i440bx.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-i440bx.obj -MD -MP -MF $(DEPDIR)/pcem-i440bx.Tpo -c -o pcem-i440bx.obj `if test -f 'i440bx.c'; then $(CYGPATH_W) 'i440bx.c'; else $(CYGPATH_W) '$(srcdir)/i440bx.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-i440bx.Tpo $(DEPDIR)/pcem-i440bx.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='i440bx.c' object='pcem-i440bx.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-i440bx.obj `if test -f 'i440bx.c'; then $(CYGPATH_W) 'i440bx.c'; else $(CYGPATH_W) '$(srcdir)/i440bx.c'; fi`
 
 pcem-ide.o: ide.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-ide.o -MD -MP -MF $(DEPDIR)/pcem-ide.Tpo -c -o pcem-ide.o `test -f 'ide.c' || echo '$(srcdir)/'`ide.c
@@ -3169,6 +3337,20 @@ pcem-pc87306.obj: pc87306.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-pc87306.obj `if test -f 'pc87306.c'; then $(CYGPATH_W) 'pc87306.c'; else $(CYGPATH_W) '$(srcdir)/pc87306.c'; fi`
 
+pcem-pc87307.o: pc87307.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-pc87307.o -MD -MP -MF $(DEPDIR)/pcem-pc87307.Tpo -c -o pcem-pc87307.o `test -f 'pc87307.c' || echo '$(srcdir)/'`pc87307.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-pc87307.Tpo $(DEPDIR)/pcem-pc87307.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='pc87307.c' object='pcem-pc87307.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-pc87307.o `test -f 'pc87307.c' || echo '$(srcdir)/'`pc87307.c
+
+pcem-pc87307.obj: pc87307.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-pc87307.obj -MD -MP -MF $(DEPDIR)/pcem-pc87307.Tpo -c -o pcem-pc87307.obj `if test -f 'pc87307.c'; then $(CYGPATH_W) 'pc87307.c'; else $(CYGPATH_W) '$(srcdir)/pc87307.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-pc87307.Tpo $(DEPDIR)/pcem-pc87307.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='pc87307.c' object='pcem-pc87307.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-pc87307.obj `if test -f 'pc87307.c'; then $(CYGPATH_W) 'pc87307.c'; else $(CYGPATH_W) '$(srcdir)/pc87307.c'; fi`
+
 pcem-pci.o: pci.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-pci.o -MD -MP -MF $(DEPDIR)/pcem-pci.Tpo -c -o pcem-pci.o `test -f 'pci.c' || echo '$(srcdir)/'`pci.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-pci.Tpo $(DEPDIR)/pcem-pci.Po
@@ -3210,6 +3392,20 @@ pcem-piix.obj: piix.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='piix.c' object='pcem-piix.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-piix.obj `if test -f 'piix.c'; then $(CYGPATH_W) 'piix.c'; else $(CYGPATH_W) '$(srcdir)/piix.c'; fi`
+
+pcem-piix_pm.o: piix_pm.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-piix_pm.o -MD -MP -MF $(DEPDIR)/pcem-piix_pm.Tpo -c -o pcem-piix_pm.o `test -f 'piix_pm.c' || echo '$(srcdir)/'`piix_pm.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-piix_pm.Tpo $(DEPDIR)/pcem-piix_pm.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='piix_pm.c' object='pcem-piix_pm.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-piix_pm.o `test -f 'piix_pm.c' || echo '$(srcdir)/'`piix_pm.c
+
+pcem-piix_pm.obj: piix_pm.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-piix_pm.obj -MD -MP -MF $(DEPDIR)/pcem-piix_pm.Tpo -c -o pcem-piix_pm.obj `if test -f 'piix_pm.c'; then $(CYGPATH_W) 'piix_pm.c'; else $(CYGPATH_W) '$(srcdir)/piix_pm.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-piix_pm.Tpo $(DEPDIR)/pcem-piix_pm.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='piix_pm.c' object='pcem-piix_pm.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-piix_pm.obj `if test -f 'piix_pm.c'; then $(CYGPATH_W) 'piix_pm.c'; else $(CYGPATH_W) '$(srcdir)/piix_pm.c'; fi`
 
 pcem-pit.o: pit.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-pit.o -MD -MP -MF $(DEPDIR)/pcem-pit.Tpo -c -o pcem-pit.o `test -f 'pit.c' || echo '$(srcdir)/'`pit.c
@@ -3855,20 +4051,6 @@ pcem-soundopenal.obj: soundopenal.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-soundopenal.obj `if test -f 'soundopenal.c'; then $(CYGPATH_W) 'soundopenal.c'; else $(CYGPATH_W) '$(srcdir)/soundopenal.c'; fi`
 
-pcem-superxt.o: superxt.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-superxt.o -MD -MP -MF $(DEPDIR)/pcem-superxt.Tpo -c -o pcem-superxt.o `test -f 'superxt.c' || echo '$(srcdir)/'`superxt.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-superxt.Tpo $(DEPDIR)/pcem-superxt.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='superxt.c' object='pcem-superxt.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-superxt.o `test -f 'superxt.c' || echo '$(srcdir)/'`superxt.c
-
-pcem-superxt.obj: superxt.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-superxt.obj -MD -MP -MF $(DEPDIR)/pcem-superxt.Tpo -c -o pcem-superxt.obj `if test -f 'superxt.c'; then $(CYGPATH_W) 'superxt.c'; else $(CYGPATH_W) '$(srcdir)/superxt.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-superxt.Tpo $(DEPDIR)/pcem-superxt.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='superxt.c' object='pcem-superxt.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-superxt.obj `if test -f 'superxt.c'; then $(CYGPATH_W) 'superxt.c'; else $(CYGPATH_W) '$(srcdir)/superxt.c'; fi`
-
 pcem-sst39sf010.o: sst39sf010.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-sst39sf010.o -MD -MP -MF $(DEPDIR)/pcem-sst39sf010.Tpo -c -o pcem-sst39sf010.o `test -f 'sst39sf010.c' || echo '$(srcdir)/'`sst39sf010.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-sst39sf010.Tpo $(DEPDIR)/pcem-sst39sf010.Po
@@ -3882,6 +4064,20 @@ pcem-sst39sf010.obj: sst39sf010.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sst39sf010.c' object='pcem-sst39sf010.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-sst39sf010.obj `if test -f 'sst39sf010.c'; then $(CYGPATH_W) 'sst39sf010.c'; else $(CYGPATH_W) '$(srcdir)/sst39sf010.c'; fi`
+
+pcem-superxt.o: superxt.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-superxt.o -MD -MP -MF $(DEPDIR)/pcem-superxt.Tpo -c -o pcem-superxt.o `test -f 'superxt.c' || echo '$(srcdir)/'`superxt.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-superxt.Tpo $(DEPDIR)/pcem-superxt.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='superxt.c' object='pcem-superxt.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-superxt.o `test -f 'superxt.c' || echo '$(srcdir)/'`superxt.c
+
+pcem-superxt.obj: superxt.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-superxt.obj -MD -MP -MF $(DEPDIR)/pcem-superxt.Tpo -c -o pcem-superxt.obj `if test -f 'superxt.c'; then $(CYGPATH_W) 'superxt.c'; else $(CYGPATH_W) '$(srcdir)/superxt.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-superxt.Tpo $(DEPDIR)/pcem-superxt.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='superxt.c' object='pcem-superxt.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-superxt.obj `if test -f 'superxt.c'; then $(CYGPATH_W) 'superxt.c'; else $(CYGPATH_W) '$(srcdir)/superxt.c'; fi`
 
 pcem-tandy_eeprom.o: tandy_eeprom.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-tandy_eeprom.o -MD -MP -MF $(DEPDIR)/pcem-tandy_eeprom.Tpo -c -o pcem-tandy_eeprom.o `test -f 'tandy_eeprom.c' || echo '$(srcdir)/'`tandy_eeprom.c
@@ -4106,6 +4302,20 @@ pcem-vid_compaq_cga.obj: vid_compaq_cga.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_compaq_cga.c' object='pcem-vid_compaq_cga.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_compaq_cga.obj `if test -f 'vid_compaq_cga.c'; then $(CYGPATH_W) 'vid_compaq_cga.c'; else $(CYGPATH_W) '$(srcdir)/vid_compaq_cga.c'; fi`
+
+pcem-vid_ddc.o: vid_ddc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_ddc.o -MD -MP -MF $(DEPDIR)/pcem-vid_ddc.Tpo -c -o pcem-vid_ddc.o `test -f 'vid_ddc.c' || echo '$(srcdir)/'`vid_ddc.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_ddc.Tpo $(DEPDIR)/pcem-vid_ddc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_ddc.c' object='pcem-vid_ddc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_ddc.o `test -f 'vid_ddc.c' || echo '$(srcdir)/'`vid_ddc.c
+
+pcem-vid_ddc.obj: vid_ddc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_ddc.obj -MD -MP -MF $(DEPDIR)/pcem-vid_ddc.Tpo -c -o pcem-vid_ddc.obj `if test -f 'vid_ddc.c'; then $(CYGPATH_W) 'vid_ddc.c'; else $(CYGPATH_W) '$(srcdir)/vid_ddc.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_ddc.Tpo $(DEPDIR)/pcem-vid_ddc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_ddc.c' object='pcem-vid_ddc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_ddc.obj `if test -f 'vid_ddc.c'; then $(CYGPATH_W) 'vid_ddc.c'; else $(CYGPATH_W) '$(srcdir)/vid_ddc.c'; fi`
 
 pcem-vid_ega.o: vid_ega.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_ega.o -MD -MP -MF $(DEPDIR)/pcem-vid_ega.Tpo -c -o pcem-vid_ega.o `test -f 'vid_ega.c' || echo '$(srcdir)/'`vid_ega.c
@@ -4653,6 +4863,146 @@ pcem-vid_voodoo.obj: vid_voodoo.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo.obj `if test -f 'vid_voodoo.c'; then $(CYGPATH_W) 'vid_voodoo.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo.c'; fi`
 
+pcem-vid_voodoo_banshee.o: vid_voodoo_banshee.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_banshee.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_banshee.Tpo -c -o pcem-vid_voodoo_banshee.o `test -f 'vid_voodoo_banshee.c' || echo '$(srcdir)/'`vid_voodoo_banshee.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_banshee.Tpo $(DEPDIR)/pcem-vid_voodoo_banshee.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_banshee.c' object='pcem-vid_voodoo_banshee.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_banshee.o `test -f 'vid_voodoo_banshee.c' || echo '$(srcdir)/'`vid_voodoo_banshee.c
+
+pcem-vid_voodoo_banshee.obj: vid_voodoo_banshee.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_banshee.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_banshee.Tpo -c -o pcem-vid_voodoo_banshee.obj `if test -f 'vid_voodoo_banshee.c'; then $(CYGPATH_W) 'vid_voodoo_banshee.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_banshee.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_banshee.Tpo $(DEPDIR)/pcem-vid_voodoo_banshee.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_banshee.c' object='pcem-vid_voodoo_banshee.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_banshee.obj `if test -f 'vid_voodoo_banshee.c'; then $(CYGPATH_W) 'vid_voodoo_banshee.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_banshee.c'; fi`
+
+pcem-vid_voodoo_banshee_blitter.o: vid_voodoo_banshee_blitter.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_banshee_blitter.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Tpo -c -o pcem-vid_voodoo_banshee_blitter.o `test -f 'vid_voodoo_banshee_blitter.c' || echo '$(srcdir)/'`vid_voodoo_banshee_blitter.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Tpo $(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_banshee_blitter.c' object='pcem-vid_voodoo_banshee_blitter.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_banshee_blitter.o `test -f 'vid_voodoo_banshee_blitter.c' || echo '$(srcdir)/'`vid_voodoo_banshee_blitter.c
+
+pcem-vid_voodoo_banshee_blitter.obj: vid_voodoo_banshee_blitter.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_banshee_blitter.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Tpo -c -o pcem-vid_voodoo_banshee_blitter.obj `if test -f 'vid_voodoo_banshee_blitter.c'; then $(CYGPATH_W) 'vid_voodoo_banshee_blitter.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_banshee_blitter.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Tpo $(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_banshee_blitter.c' object='pcem-vid_voodoo_banshee_blitter.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_banshee_blitter.obj `if test -f 'vid_voodoo_banshee_blitter.c'; then $(CYGPATH_W) 'vid_voodoo_banshee_blitter.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_banshee_blitter.c'; fi`
+
+pcem-vid_voodoo_blitter.o: vid_voodoo_blitter.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_blitter.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_blitter.Tpo -c -o pcem-vid_voodoo_blitter.o `test -f 'vid_voodoo_blitter.c' || echo '$(srcdir)/'`vid_voodoo_blitter.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_blitter.Tpo $(DEPDIR)/pcem-vid_voodoo_blitter.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_blitter.c' object='pcem-vid_voodoo_blitter.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_blitter.o `test -f 'vid_voodoo_blitter.c' || echo '$(srcdir)/'`vid_voodoo_blitter.c
+
+pcem-vid_voodoo_blitter.obj: vid_voodoo_blitter.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_blitter.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_blitter.Tpo -c -o pcem-vid_voodoo_blitter.obj `if test -f 'vid_voodoo_blitter.c'; then $(CYGPATH_W) 'vid_voodoo_blitter.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_blitter.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_blitter.Tpo $(DEPDIR)/pcem-vid_voodoo_blitter.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_blitter.c' object='pcem-vid_voodoo_blitter.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_blitter.obj `if test -f 'vid_voodoo_blitter.c'; then $(CYGPATH_W) 'vid_voodoo_blitter.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_blitter.c'; fi`
+
+pcem-vid_voodoo_display.o: vid_voodoo_display.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_display.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_display.Tpo -c -o pcem-vid_voodoo_display.o `test -f 'vid_voodoo_display.c' || echo '$(srcdir)/'`vid_voodoo_display.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_display.Tpo $(DEPDIR)/pcem-vid_voodoo_display.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_display.c' object='pcem-vid_voodoo_display.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_display.o `test -f 'vid_voodoo_display.c' || echo '$(srcdir)/'`vid_voodoo_display.c
+
+pcem-vid_voodoo_display.obj: vid_voodoo_display.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_display.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_display.Tpo -c -o pcem-vid_voodoo_display.obj `if test -f 'vid_voodoo_display.c'; then $(CYGPATH_W) 'vid_voodoo_display.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_display.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_display.Tpo $(DEPDIR)/pcem-vid_voodoo_display.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_display.c' object='pcem-vid_voodoo_display.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_display.obj `if test -f 'vid_voodoo_display.c'; then $(CYGPATH_W) 'vid_voodoo_display.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_display.c'; fi`
+
+pcem-vid_voodoo_fb.o: vid_voodoo_fb.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_fb.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_fb.Tpo -c -o pcem-vid_voodoo_fb.o `test -f 'vid_voodoo_fb.c' || echo '$(srcdir)/'`vid_voodoo_fb.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_fb.Tpo $(DEPDIR)/pcem-vid_voodoo_fb.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_fb.c' object='pcem-vid_voodoo_fb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_fb.o `test -f 'vid_voodoo_fb.c' || echo '$(srcdir)/'`vid_voodoo_fb.c
+
+pcem-vid_voodoo_fb.obj: vid_voodoo_fb.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_fb.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_fb.Tpo -c -o pcem-vid_voodoo_fb.obj `if test -f 'vid_voodoo_fb.c'; then $(CYGPATH_W) 'vid_voodoo_fb.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_fb.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_fb.Tpo $(DEPDIR)/pcem-vid_voodoo_fb.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_fb.c' object='pcem-vid_voodoo_fb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_fb.obj `if test -f 'vid_voodoo_fb.c'; then $(CYGPATH_W) 'vid_voodoo_fb.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_fb.c'; fi`
+
+pcem-vid_voodoo_fifo.o: vid_voodoo_fifo.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_fifo.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_fifo.Tpo -c -o pcem-vid_voodoo_fifo.o `test -f 'vid_voodoo_fifo.c' || echo '$(srcdir)/'`vid_voodoo_fifo.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_fifo.Tpo $(DEPDIR)/pcem-vid_voodoo_fifo.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_fifo.c' object='pcem-vid_voodoo_fifo.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_fifo.o `test -f 'vid_voodoo_fifo.c' || echo '$(srcdir)/'`vid_voodoo_fifo.c
+
+pcem-vid_voodoo_fifo.obj: vid_voodoo_fifo.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_fifo.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_fifo.Tpo -c -o pcem-vid_voodoo_fifo.obj `if test -f 'vid_voodoo_fifo.c'; then $(CYGPATH_W) 'vid_voodoo_fifo.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_fifo.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_fifo.Tpo $(DEPDIR)/pcem-vid_voodoo_fifo.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_fifo.c' object='pcem-vid_voodoo_fifo.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_fifo.obj `if test -f 'vid_voodoo_fifo.c'; then $(CYGPATH_W) 'vid_voodoo_fifo.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_fifo.c'; fi`
+
+pcem-vid_voodoo_reg.o: vid_voodoo_reg.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_reg.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_reg.Tpo -c -o pcem-vid_voodoo_reg.o `test -f 'vid_voodoo_reg.c' || echo '$(srcdir)/'`vid_voodoo_reg.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_reg.Tpo $(DEPDIR)/pcem-vid_voodoo_reg.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_reg.c' object='pcem-vid_voodoo_reg.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_reg.o `test -f 'vid_voodoo_reg.c' || echo '$(srcdir)/'`vid_voodoo_reg.c
+
+pcem-vid_voodoo_reg.obj: vid_voodoo_reg.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_reg.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_reg.Tpo -c -o pcem-vid_voodoo_reg.obj `if test -f 'vid_voodoo_reg.c'; then $(CYGPATH_W) 'vid_voodoo_reg.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_reg.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_reg.Tpo $(DEPDIR)/pcem-vid_voodoo_reg.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_reg.c' object='pcem-vid_voodoo_reg.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_reg.obj `if test -f 'vid_voodoo_reg.c'; then $(CYGPATH_W) 'vid_voodoo_reg.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_reg.c'; fi`
+
+pcem-vid_voodoo_render.o: vid_voodoo_render.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_render.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_render.Tpo -c -o pcem-vid_voodoo_render.o `test -f 'vid_voodoo_render.c' || echo '$(srcdir)/'`vid_voodoo_render.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_render.Tpo $(DEPDIR)/pcem-vid_voodoo_render.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_render.c' object='pcem-vid_voodoo_render.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_render.o `test -f 'vid_voodoo_render.c' || echo '$(srcdir)/'`vid_voodoo_render.c
+
+pcem-vid_voodoo_render.obj: vid_voodoo_render.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_render.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_render.Tpo -c -o pcem-vid_voodoo_render.obj `if test -f 'vid_voodoo_render.c'; then $(CYGPATH_W) 'vid_voodoo_render.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_render.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_render.Tpo $(DEPDIR)/pcem-vid_voodoo_render.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_render.c' object='pcem-vid_voodoo_render.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_render.obj `if test -f 'vid_voodoo_render.c'; then $(CYGPATH_W) 'vid_voodoo_render.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_render.c'; fi`
+
+pcem-vid_voodoo_setup.o: vid_voodoo_setup.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_setup.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_setup.Tpo -c -o pcem-vid_voodoo_setup.o `test -f 'vid_voodoo_setup.c' || echo '$(srcdir)/'`vid_voodoo_setup.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_setup.Tpo $(DEPDIR)/pcem-vid_voodoo_setup.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_setup.c' object='pcem-vid_voodoo_setup.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_setup.o `test -f 'vid_voodoo_setup.c' || echo '$(srcdir)/'`vid_voodoo_setup.c
+
+pcem-vid_voodoo_setup.obj: vid_voodoo_setup.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_setup.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_setup.Tpo -c -o pcem-vid_voodoo_setup.obj `if test -f 'vid_voodoo_setup.c'; then $(CYGPATH_W) 'vid_voodoo_setup.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_setup.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_setup.Tpo $(DEPDIR)/pcem-vid_voodoo_setup.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_setup.c' object='pcem-vid_voodoo_setup.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_setup.obj `if test -f 'vid_voodoo_setup.c'; then $(CYGPATH_W) 'vid_voodoo_setup.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_setup.c'; fi`
+
+pcem-vid_voodoo_texture.o: vid_voodoo_texture.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_texture.o -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_texture.Tpo -c -o pcem-vid_voodoo_texture.o `test -f 'vid_voodoo_texture.c' || echo '$(srcdir)/'`vid_voodoo_texture.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_texture.Tpo $(DEPDIR)/pcem-vid_voodoo_texture.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_texture.c' object='pcem-vid_voodoo_texture.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_texture.o `test -f 'vid_voodoo_texture.c' || echo '$(srcdir)/'`vid_voodoo_texture.c
+
+pcem-vid_voodoo_texture.obj: vid_voodoo_texture.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-vid_voodoo_texture.obj -MD -MP -MF $(DEPDIR)/pcem-vid_voodoo_texture.Tpo -c -o pcem-vid_voodoo_texture.obj `if test -f 'vid_voodoo_texture.c'; then $(CYGPATH_W) 'vid_voodoo_texture.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_texture.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-vid_voodoo_texture.Tpo $(DEPDIR)/pcem-vid_voodoo_texture.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vid_voodoo_texture.c' object='pcem-vid_voodoo_texture.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-vid_voodoo_texture.obj `if test -f 'vid_voodoo_texture.c'; then $(CYGPATH_W) 'vid_voodoo_texture.c'; else $(CYGPATH_W) '$(srcdir)/vid_voodoo_texture.c'; fi`
+
 pcem-video.o: video.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-video.o -MD -MP -MF $(DEPDIR)/pcem-video.Tpo -c -o pcem-video.o `test -f 'video.c' || echo '$(srcdir)/'`video.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-video.Tpo $(DEPDIR)/pcem-video.Po
@@ -4737,6 +5087,20 @@ pcem-w83877tf.obj: w83877tf.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-w83877tf.obj `if test -f 'w83877tf.c'; then $(CYGPATH_W) 'w83877tf.c'; else $(CYGPATH_W) '$(srcdir)/w83877tf.c'; fi`
 
+pcem-w83977tf.o: w83977tf.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-w83977tf.o -MD -MP -MF $(DEPDIR)/pcem-w83977tf.Tpo -c -o pcem-w83977tf.o `test -f 'w83977tf.c' || echo '$(srcdir)/'`w83977tf.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-w83977tf.Tpo $(DEPDIR)/pcem-w83977tf.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='w83977tf.c' object='pcem-w83977tf.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-w83977tf.o `test -f 'w83977tf.c' || echo '$(srcdir)/'`w83977tf.c
+
+pcem-w83977tf.obj: w83977tf.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-w83977tf.obj -MD -MP -MF $(DEPDIR)/pcem-w83977tf.Tpo -c -o pcem-w83977tf.obj `if test -f 'w83977tf.c'; then $(CYGPATH_W) 'w83977tf.c'; else $(CYGPATH_W) '$(srcdir)/w83977tf.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-w83977tf.Tpo $(DEPDIR)/pcem-w83977tf.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='w83977tf.c' object='pcem-w83977tf.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-w83977tf.obj `if test -f 'w83977tf.c'; then $(CYGPATH_W) 'w83977tf.c'; else $(CYGPATH_W) '$(srcdir)/w83977tf.c'; fi`
+
 pcem-x86seg.o: x86seg.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-x86seg.o -MD -MP -MF $(DEPDIR)/pcem-x86seg.Tpo -c -o pcem-x86seg.o `test -f 'x86seg.c' || echo '$(srcdir)/'`x86seg.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-x86seg.Tpo $(DEPDIR)/pcem-x86seg.Po
@@ -4820,6 +5184,118 @@ dosbox/pcem-vid_cga_comp.obj: dosbox/vid_cga_comp.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dosbox/vid_cga_comp.c' object='dosbox/pcem-vid_cga_comp.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o dosbox/pcem-vid_cga_comp.obj `if test -f 'dosbox/vid_cga_comp.c'; then $(CYGPATH_W) 'dosbox/vid_cga_comp.c'; else $(CYGPATH_W) '$(srcdir)/dosbox/vid_cga_comp.c'; fi`
+
+minivhd/pcem-cwalk.o: minivhd/cwalk.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-cwalk.o -MD -MP -MF minivhd/$(DEPDIR)/pcem-cwalk.Tpo -c -o minivhd/pcem-cwalk.o `test -f 'minivhd/cwalk.c' || echo '$(srcdir)/'`minivhd/cwalk.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-cwalk.Tpo minivhd/$(DEPDIR)/pcem-cwalk.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/cwalk.c' object='minivhd/pcem-cwalk.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-cwalk.o `test -f 'minivhd/cwalk.c' || echo '$(srcdir)/'`minivhd/cwalk.c
+
+minivhd/pcem-cwalk.obj: minivhd/cwalk.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-cwalk.obj -MD -MP -MF minivhd/$(DEPDIR)/pcem-cwalk.Tpo -c -o minivhd/pcem-cwalk.obj `if test -f 'minivhd/cwalk.c'; then $(CYGPATH_W) 'minivhd/cwalk.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/cwalk.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-cwalk.Tpo minivhd/$(DEPDIR)/pcem-cwalk.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/cwalk.c' object='minivhd/pcem-cwalk.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-cwalk.obj `if test -f 'minivhd/cwalk.c'; then $(CYGPATH_W) 'minivhd/cwalk.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/cwalk.c'; fi`
+
+minivhd/pcem-libxml2_encoding.o: minivhd/libxml2_encoding.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-libxml2_encoding.o -MD -MP -MF minivhd/$(DEPDIR)/pcem-libxml2_encoding.Tpo -c -o minivhd/pcem-libxml2_encoding.o `test -f 'minivhd/libxml2_encoding.c' || echo '$(srcdir)/'`minivhd/libxml2_encoding.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-libxml2_encoding.Tpo minivhd/$(DEPDIR)/pcem-libxml2_encoding.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/libxml2_encoding.c' object='minivhd/pcem-libxml2_encoding.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-libxml2_encoding.o `test -f 'minivhd/libxml2_encoding.c' || echo '$(srcdir)/'`minivhd/libxml2_encoding.c
+
+minivhd/pcem-libxml2_encoding.obj: minivhd/libxml2_encoding.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-libxml2_encoding.obj -MD -MP -MF minivhd/$(DEPDIR)/pcem-libxml2_encoding.Tpo -c -o minivhd/pcem-libxml2_encoding.obj `if test -f 'minivhd/libxml2_encoding.c'; then $(CYGPATH_W) 'minivhd/libxml2_encoding.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/libxml2_encoding.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-libxml2_encoding.Tpo minivhd/$(DEPDIR)/pcem-libxml2_encoding.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/libxml2_encoding.c' object='minivhd/pcem-libxml2_encoding.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-libxml2_encoding.obj `if test -f 'minivhd/libxml2_encoding.c'; then $(CYGPATH_W) 'minivhd/libxml2_encoding.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/libxml2_encoding.c'; fi`
+
+minivhd/pcem-minivhd_convert.o: minivhd/minivhd_convert.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_convert.o -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_convert.Tpo -c -o minivhd/pcem-minivhd_convert.o `test -f 'minivhd/minivhd_convert.c' || echo '$(srcdir)/'`minivhd/minivhd_convert.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_convert.Tpo minivhd/$(DEPDIR)/pcem-minivhd_convert.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_convert.c' object='minivhd/pcem-minivhd_convert.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_convert.o `test -f 'minivhd/minivhd_convert.c' || echo '$(srcdir)/'`minivhd/minivhd_convert.c
+
+minivhd/pcem-minivhd_convert.obj: minivhd/minivhd_convert.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_convert.obj -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_convert.Tpo -c -o minivhd/pcem-minivhd_convert.obj `if test -f 'minivhd/minivhd_convert.c'; then $(CYGPATH_W) 'minivhd/minivhd_convert.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_convert.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_convert.Tpo minivhd/$(DEPDIR)/pcem-minivhd_convert.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_convert.c' object='minivhd/pcem-minivhd_convert.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_convert.obj `if test -f 'minivhd/minivhd_convert.c'; then $(CYGPATH_W) 'minivhd/minivhd_convert.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_convert.c'; fi`
+
+minivhd/pcem-minivhd_create.o: minivhd/minivhd_create.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_create.o -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_create.Tpo -c -o minivhd/pcem-minivhd_create.o `test -f 'minivhd/minivhd_create.c' || echo '$(srcdir)/'`minivhd/minivhd_create.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_create.Tpo minivhd/$(DEPDIR)/pcem-minivhd_create.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_create.c' object='minivhd/pcem-minivhd_create.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_create.o `test -f 'minivhd/minivhd_create.c' || echo '$(srcdir)/'`minivhd/minivhd_create.c
+
+minivhd/pcem-minivhd_create.obj: minivhd/minivhd_create.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_create.obj -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_create.Tpo -c -o minivhd/pcem-minivhd_create.obj `if test -f 'minivhd/minivhd_create.c'; then $(CYGPATH_W) 'minivhd/minivhd_create.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_create.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_create.Tpo minivhd/$(DEPDIR)/pcem-minivhd_create.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_create.c' object='minivhd/pcem-minivhd_create.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_create.obj `if test -f 'minivhd/minivhd_create.c'; then $(CYGPATH_W) 'minivhd/minivhd_create.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_create.c'; fi`
+
+minivhd/pcem-minivhd_io.o: minivhd/minivhd_io.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_io.o -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_io.Tpo -c -o minivhd/pcem-minivhd_io.o `test -f 'minivhd/minivhd_io.c' || echo '$(srcdir)/'`minivhd/minivhd_io.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_io.Tpo minivhd/$(DEPDIR)/pcem-minivhd_io.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_io.c' object='minivhd/pcem-minivhd_io.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_io.o `test -f 'minivhd/minivhd_io.c' || echo '$(srcdir)/'`minivhd/minivhd_io.c
+
+minivhd/pcem-minivhd_io.obj: minivhd/minivhd_io.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_io.obj -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_io.Tpo -c -o minivhd/pcem-minivhd_io.obj `if test -f 'minivhd/minivhd_io.c'; then $(CYGPATH_W) 'minivhd/minivhd_io.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_io.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_io.Tpo minivhd/$(DEPDIR)/pcem-minivhd_io.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_io.c' object='minivhd/pcem-minivhd_io.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_io.obj `if test -f 'minivhd/minivhd_io.c'; then $(CYGPATH_W) 'minivhd/minivhd_io.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_io.c'; fi`
+
+minivhd/pcem-minivhd_manage.o: minivhd/minivhd_manage.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_manage.o -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_manage.Tpo -c -o minivhd/pcem-minivhd_manage.o `test -f 'minivhd/minivhd_manage.c' || echo '$(srcdir)/'`minivhd/minivhd_manage.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_manage.Tpo minivhd/$(DEPDIR)/pcem-minivhd_manage.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_manage.c' object='minivhd/pcem-minivhd_manage.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_manage.o `test -f 'minivhd/minivhd_manage.c' || echo '$(srcdir)/'`minivhd/minivhd_manage.c
+
+minivhd/pcem-minivhd_manage.obj: minivhd/minivhd_manage.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_manage.obj -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_manage.Tpo -c -o minivhd/pcem-minivhd_manage.obj `if test -f 'minivhd/minivhd_manage.c'; then $(CYGPATH_W) 'minivhd/minivhd_manage.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_manage.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_manage.Tpo minivhd/$(DEPDIR)/pcem-minivhd_manage.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_manage.c' object='minivhd/pcem-minivhd_manage.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_manage.obj `if test -f 'minivhd/minivhd_manage.c'; then $(CYGPATH_W) 'minivhd/minivhd_manage.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_manage.c'; fi`
+
+minivhd/pcem-minivhd_struct_rw.o: minivhd/minivhd_struct_rw.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_struct_rw.o -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Tpo -c -o minivhd/pcem-minivhd_struct_rw.o `test -f 'minivhd/minivhd_struct_rw.c' || echo '$(srcdir)/'`minivhd/minivhd_struct_rw.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Tpo minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_struct_rw.c' object='minivhd/pcem-minivhd_struct_rw.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_struct_rw.o `test -f 'minivhd/minivhd_struct_rw.c' || echo '$(srcdir)/'`minivhd/minivhd_struct_rw.c
+
+minivhd/pcem-minivhd_struct_rw.obj: minivhd/minivhd_struct_rw.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_struct_rw.obj -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Tpo -c -o minivhd/pcem-minivhd_struct_rw.obj `if test -f 'minivhd/minivhd_struct_rw.c'; then $(CYGPATH_W) 'minivhd/minivhd_struct_rw.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_struct_rw.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Tpo minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_struct_rw.c' object='minivhd/pcem-minivhd_struct_rw.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_struct_rw.obj `if test -f 'minivhd/minivhd_struct_rw.c'; then $(CYGPATH_W) 'minivhd/minivhd_struct_rw.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_struct_rw.c'; fi`
+
+minivhd/pcem-minivhd_util.o: minivhd/minivhd_util.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_util.o -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_util.Tpo -c -o minivhd/pcem-minivhd_util.o `test -f 'minivhd/minivhd_util.c' || echo '$(srcdir)/'`minivhd/minivhd_util.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_util.Tpo minivhd/$(DEPDIR)/pcem-minivhd_util.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_util.c' object='minivhd/pcem-minivhd_util.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_util.o `test -f 'minivhd/minivhd_util.c' || echo '$(srcdir)/'`minivhd/minivhd_util.c
+
+minivhd/pcem-minivhd_util.obj: minivhd/minivhd_util.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT minivhd/pcem-minivhd_util.obj -MD -MP -MF minivhd/$(DEPDIR)/pcem-minivhd_util.Tpo -c -o minivhd/pcem-minivhd_util.obj `if test -f 'minivhd/minivhd_util.c'; then $(CYGPATH_W) 'minivhd/minivhd_util.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_util.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) minivhd/$(DEPDIR)/pcem-minivhd_util.Tpo minivhd/$(DEPDIR)/pcem-minivhd_util.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='minivhd/minivhd_util.c' object='minivhd/pcem-minivhd_util.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o minivhd/pcem-minivhd_util.obj `if test -f 'minivhd/minivhd_util.c'; then $(CYGPATH_W) 'minivhd/minivhd_util.c'; else $(CYGPATH_W) '$(srcdir)/minivhd/minivhd_util.c'; fi`
 
 pcem-wx-config_sel.o: wx-config_sel.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-wx-config_sel.o -MD -MP -MF $(DEPDIR)/pcem-wx-config_sel.Tpo -c -o pcem-wx-config_sel.o `test -f 'wx-config_sel.c' || echo '$(srcdir)/'`wx-config_sel.c
@@ -6276,6 +6752,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f dosbox/$(DEPDIR)/$(am__dirstamp)
 	-rm -f dosbox/$(am__dirstamp)
+	-rm -f minivhd/$(DEPDIR)/$(am__dirstamp)
+	-rm -f minivhd/$(am__dirstamp)
 	-rm -f resid-fp/$(DEPDIR)/$(am__dirstamp)
 	-rm -f resid-fp/$(am__dirstamp)
 	-rm -f slirp/$(DEPDIR)/$(am__dirstamp)
@@ -6356,7 +6834,9 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_486.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_686.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_common.Po
+	-rm -f ./$(DEPDIR)/pcem-codegen_timing_cyrixiii.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_k6.Po
+	-rm -f ./$(DEPDIR)/pcem-codegen_timing_p6.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_pentium.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_winchip.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_winchip2.Po
@@ -6388,6 +6868,8 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pcem-i430hx.Po
 	-rm -f ./$(DEPDIR)/pcem-i430lx.Po
 	-rm -f ./$(DEPDIR)/pcem-i430vx.Po
+	-rm -f ./$(DEPDIR)/pcem-i440bx.Po
+	-rm -f ./$(DEPDIR)/pcem-i440fx.Po
 	-rm -f ./$(DEPDIR)/pcem-ide.Po
 	-rm -f ./$(DEPDIR)/pcem-ide_atapi.Po
 	-rm -f ./$(DEPDIR)/pcem-ide_sff8038i.Po
@@ -6433,9 +6915,11 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pcem-paths.Po
 	-rm -f ./$(DEPDIR)/pcem-pc.Po
 	-rm -f ./$(DEPDIR)/pcem-pc87306.Po
+	-rm -f ./$(DEPDIR)/pcem-pc87307.Po
 	-rm -f ./$(DEPDIR)/pcem-pci.Po
 	-rm -f ./$(DEPDIR)/pcem-pic.Po
 	-rm -f ./$(DEPDIR)/pcem-piix.Po
+	-rm -f ./$(DEPDIR)/pcem-piix_pm.Po
 	-rm -f ./$(DEPDIR)/pcem-pit.Po
 	-rm -f ./$(DEPDIR)/pcem-ppi.Po
 	-rm -f ./$(DEPDIR)/pcem-ps1.Po
@@ -6501,6 +6985,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pcem-vid_cl5429.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_colorplus.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_compaq_cga.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_ddc.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_ega.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_et4000.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_et4000w32.Po
@@ -6540,11 +7025,22 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pcem-vid_unk_ramdac.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_vga.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_voodoo.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_banshee.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_blitter.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_display.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_fb.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_fifo.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_reg.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_render.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_setup.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_texture.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_wy700.Po
 	-rm -f ./$(DEPDIR)/pcem-video.Po
 	-rm -f ./$(DEPDIR)/pcem-vl82c480.Po
 	-rm -f ./$(DEPDIR)/pcem-vt82c586b.Po
 	-rm -f ./$(DEPDIR)/pcem-w83877tf.Po
+	-rm -f ./$(DEPDIR)/pcem-w83977tf.Po
 	-rm -f ./$(DEPDIR)/pcem-wd76c10.Po
 	-rm -f ./$(DEPDIR)/pcem-wx-app.Po
 	-rm -f ./$(DEPDIR)/pcem-wx-common.Po
@@ -6583,6 +7079,14 @@ distclean: distclean-am
 	-rm -f dosbox/$(DEPDIR)/pcem-dbopl.Po
 	-rm -f dosbox/$(DEPDIR)/pcem-nukedopl.Po
 	-rm -f dosbox/$(DEPDIR)/pcem-vid_cga_comp.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-cwalk.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-libxml2_encoding.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_convert.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_create.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_io.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_manage.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_util.Po
 	-rm -f resid-fp/$(DEPDIR)/pcem-convolve-sse.Po
 	-rm -f resid-fp/$(DEPDIR)/pcem-convolve.Po
 	-rm -f resid-fp/$(DEPDIR)/pcem-envelope.Po
@@ -6731,7 +7235,9 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_486.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_686.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_common.Po
+	-rm -f ./$(DEPDIR)/pcem-codegen_timing_cyrixiii.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_k6.Po
+	-rm -f ./$(DEPDIR)/pcem-codegen_timing_p6.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_pentium.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_winchip.Po
 	-rm -f ./$(DEPDIR)/pcem-codegen_timing_winchip2.Po
@@ -6763,6 +7269,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pcem-i430hx.Po
 	-rm -f ./$(DEPDIR)/pcem-i430lx.Po
 	-rm -f ./$(DEPDIR)/pcem-i430vx.Po
+	-rm -f ./$(DEPDIR)/pcem-i440bx.Po
+	-rm -f ./$(DEPDIR)/pcem-i440fx.Po
 	-rm -f ./$(DEPDIR)/pcem-ide.Po
 	-rm -f ./$(DEPDIR)/pcem-ide_atapi.Po
 	-rm -f ./$(DEPDIR)/pcem-ide_sff8038i.Po
@@ -6808,9 +7316,11 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pcem-paths.Po
 	-rm -f ./$(DEPDIR)/pcem-pc.Po
 	-rm -f ./$(DEPDIR)/pcem-pc87306.Po
+	-rm -f ./$(DEPDIR)/pcem-pc87307.Po
 	-rm -f ./$(DEPDIR)/pcem-pci.Po
 	-rm -f ./$(DEPDIR)/pcem-pic.Po
 	-rm -f ./$(DEPDIR)/pcem-piix.Po
+	-rm -f ./$(DEPDIR)/pcem-piix_pm.Po
 	-rm -f ./$(DEPDIR)/pcem-pit.Po
 	-rm -f ./$(DEPDIR)/pcem-ppi.Po
 	-rm -f ./$(DEPDIR)/pcem-ps1.Po
@@ -6876,6 +7386,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pcem-vid_cl5429.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_colorplus.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_compaq_cga.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_ddc.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_ega.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_et4000.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_et4000w32.Po
@@ -6915,11 +7426,22 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pcem-vid_unk_ramdac.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_vga.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_voodoo.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_banshee.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_banshee_blitter.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_blitter.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_display.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_fb.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_fifo.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_reg.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_render.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_setup.Po
+	-rm -f ./$(DEPDIR)/pcem-vid_voodoo_texture.Po
 	-rm -f ./$(DEPDIR)/pcem-vid_wy700.Po
 	-rm -f ./$(DEPDIR)/pcem-video.Po
 	-rm -f ./$(DEPDIR)/pcem-vl82c480.Po
 	-rm -f ./$(DEPDIR)/pcem-vt82c586b.Po
 	-rm -f ./$(DEPDIR)/pcem-w83877tf.Po
+	-rm -f ./$(DEPDIR)/pcem-w83977tf.Po
 	-rm -f ./$(DEPDIR)/pcem-wd76c10.Po
 	-rm -f ./$(DEPDIR)/pcem-wx-app.Po
 	-rm -f ./$(DEPDIR)/pcem-wx-common.Po
@@ -6958,6 +7480,14 @@ maintainer-clean: maintainer-clean-am
 	-rm -f dosbox/$(DEPDIR)/pcem-dbopl.Po
 	-rm -f dosbox/$(DEPDIR)/pcem-nukedopl.Po
 	-rm -f dosbox/$(DEPDIR)/pcem-vid_cga_comp.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-cwalk.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-libxml2_encoding.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_convert.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_create.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_io.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_manage.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_struct_rw.Po
+	-rm -f minivhd/$(DEPDIR)/pcem-minivhd_util.Po
 	-rm -f resid-fp/$(DEPDIR)/pcem-convolve-sse.Po
 	-rm -f resid-fp/$(DEPDIR)/pcem-convolve.Po
 	-rm -f resid-fp/$(DEPDIR)/pcem-envelope.Po

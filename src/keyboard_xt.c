@@ -55,12 +55,12 @@ void keyboard_xt_poll()
                 keyboard_xt.pa = keyboard_xt.key_waiting;
                 keyboard_xt.shift_full = 1;
                 picint(2);
-                pclog("keyboard_xt : take IRQ\n");
+                // pclog("keyboard_xt : take IRQ\n");
         }
         if (key_queue_start != key_queue_end && !keyboard_xt.shift_full)
         {
                 keyboard_xt.key_waiting = key_queue[key_queue_start];
-                pclog("Reading %02X from the key queue at %i\n", keyboard_xt.key_waiting, key_queue_start);
+                // pclog("Reading %02X from the key queue at %i\n", keyboard_xt.key_waiting, key_queue_start);
                 key_queue_start = (key_queue_start + 1) & 0xf;
                 keyboard_xt.wantirq = 1;        
         }                
@@ -99,7 +99,7 @@ void keyboard_xt_adddata(uint8_t val)
 	}
 
         key_queue[key_queue_end] = val;
-        pclog("keyboard_xt : %02X added to key queue at %i\n", val, key_queue_end);
+        // pclog("keyboard_xt : %02X added to key queue at %i\n", val, key_queue_end);
         key_queue_end = (key_queue_end + 1) & 0xf;
         return;
 }

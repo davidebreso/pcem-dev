@@ -304,6 +304,8 @@ void loadnvr()
                 case ROM_SPC4200P:    f = nvrfopen("spc4200p.nvr",    "rb"); nvrmask = 127; break;
                 case ROM_SPC4216P:    f = nvrfopen("spc4216p.nvr",    "rb"); nvrmask = 127; break;
                 case ROM_SPC4620P:    f = nvrfopen("spc4620p.nvr",    "rb"); nvrmask = 127; break;
+                case ROM_SPC6000A:    f = nvrfopen("spc6000a.nvr",    "rb"); nvrmask = 127; break;
+                case ROM_SPC6033P:    f = nvrfopen("spc6033p.nvr",    "rb"); nvrmask = 127; break;
                 case ROM_DELL200:     f = nvrfopen("dell200.nvr",     "rb"); nvrmask = 127; break;
                 case ROM_IBMAT386:    f = nvrfopen("at386.nvr",       "rb"); nvrmask = 127; break;
                 case ROM_DESKPRO_386: f = nvrfopen("deskpro386.nvr",  "rb"); break;
@@ -355,6 +357,8 @@ void loadnvr()
                 case ROM_CBM_SL386SX25:    f = nvrfopen("cbm_sl386sx25.nvr",   "rb"); nvrmask = 127; break;
                 case ROM_IBMPS1_2133_451:  f = nvrfopen("ibmps1_2133.nvr",     "rb"); nvrmask = 127; break;
                 case ROM_ECS_386_32:       f = nvrfopen("ecs_386_32.nvr",      "rb"); nvrmask = 127; break;
+                case ROM_VS440FX:          f = nvrfopen("vs440fx.nvr",         "rb"); nvrmask = 127; break;
+                case ROM_GA686BX:          f = nvrfopen("ga686bx.nvr",         "rb"); nvrmask = 127; break;
                 
                 default: return;
         }
@@ -410,6 +414,8 @@ void savenvr()
                 case ROM_SPC4200P:    f = nvrfopen("spc4200p.nvr",    "wb"); break;
                 case ROM_SPC4216P:    f = nvrfopen("spc4216p.nvr",    "wb"); break;
                 case ROM_SPC4620P:    f = nvrfopen("spc4620p.nvr",    "wb"); break;
+                case ROM_SPC6000A:    f = nvrfopen("spc6000a.nvr",    "wb"); break;
+                case ROM_SPC6033P:    f = nvrfopen("spc6033p.nvr",    "wb"); break;
                 case ROM_DELL200:     f = nvrfopen("dell200.nvr",     "wb"); break;
                 case ROM_IBMAT386:    f = nvrfopen("at386.nvr",       "wb"); break;
                 case ROM_DESKPRO_386: f = nvrfopen("deskpro386.nvr",  "wb"); break;
@@ -461,6 +467,8 @@ void savenvr()
                 case ROM_CBM_SL386SX25:    f = nvrfopen("cbm_sl386sx25.nvr",   "wb"); break;
                 case ROM_IBMPS1_2133_451:  f = nvrfopen("ibmps1_2133.nvr",     "wb"); break;
                 case ROM_ECS_386_32:       f = nvrfopen("ecs_386_32.nvr",      "wb"); break;
+                case ROM_VS440FX:          f = nvrfopen("vs440fx.nvr",         "wb"); break;
+                case ROM_GA686BX:          f = nvrfopen("ga686bx.nvr",         "wb"); break;
                 
                 default: return;
         }

@@ -94,6 +94,9 @@ void superxt_write(uint16_t port, uint8_t val, void *priv)
                 } 
                 flushmmucache();                    
                 break;                
+                
+                // default:
+                // pclog("%04X:%04X SUPERXT WRITE : %04X, %02X\n", CS, cpu_state.pc, port, val);
         }
 }
 

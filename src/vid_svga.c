@@ -322,7 +322,7 @@ void svga_recalctimings(svga_t *svga)
         if (svga->crtc[9] & 0x20) svga->vblankstart |= 0x200;
         svga->vblankstart++;
         
-        svga->hdisp = svga->crtc[1];
+        svga->hdisp = svga->crtc[1] - ((svga->crtc[5] & 0x60) >> 5);
         svga->hdisp++;
 
         svga->htotal = svga->crtc[0];
@@ -336,7 +336,8 @@ void svga_recalctimings(svga_t *svga)
         
         svga->interlace = 0;
         
-        svga->ma_latch = (svga->crtc[0xc] << 8) | svga->crtc[0xd];
+        svga->ma_latch = ((svga->crtc[0xc] << 8) | svga->crtc[0xd]) + ((svga->crtc[8] & 0x60) >> 5);
+        svga->ca_adj = 0;
 
         svga->hdisp_time = svga->hdisp;
         svga->render = svga_render_blank;
@@ -658,44 +659,47 @@ void svga_poll(void *p)
                         changeframecount = svga->interlace ? 3 : 2;
                         svga->vslines = 0;
                         
-                        if (svga->interlace && svga->oddeven) svga->ma = svga->maback = svga->ma_latch + (svga->rowoffset << 1);
-                        else                                  svga->ma = svga->maback = svga->ma_latch;
-                        svga->ca = (svga->crtc[0xe] << 8) | svga->crtc[0xf];
+                        if (svga->interlace && svga->oddeven) svga->ma = svga->maback = svga->ma_latch + (svga->rowoffset << 1) + ((svga->crtc[5] & 0x60) >> 5);
+                        else                                  svga->ma = svga->maback = svga->ma_latch + ((svga->crtc[5] & 0x60) >> 5);
+                        svga->ca = ((svga->crtc[0xe] << 8) | svga->crtc[0xf]) + ((svga->crtc[0xb] & 0x60) >> 5) + svga->ca_adj;
 
                         svga->ma <<= 2;
                         svga->maback <<= 2;
                         svga->ca <<= 2;
 
-                        svga->video_res_x = wx;
-                        svga->video_res_y = wy + 1;
-//                        pclog("%i %i %i\n", svga->video_res_x, svga->video_res_y, svga->lowres);
-                        if (!(svga->gdcreg[6] & 1) && !(svga->attrregs[0x10] & 1)) /*Text mode*/
+                        if (!svga->video_res_override)
                         {
-                                svga->video_res_x /= svga->char_width;
-                                svga->video_res_y /= (svga->crtc[9] & 31) + 1;
-                                svga->video_bpp = 0;
-                        }
-                        else
-                        {
-                                if (svga->crtc[9] & 0x80)
-                                   svga->video_res_y /= 2;
-                                if (!(svga->crtc[0x17] & 2))
-                                   svga->video_res_y *= 4;
-                                else if (!(svga->crtc[0x17] & 1))
-                                   svga->video_res_y *= 2;
-                                svga->video_res_y /= (svga->crtc[9] & 31) + 1;                                   
-                                if (svga->render == svga_render_8bpp_lowres ||
-                                    svga->render == svga_render_15bpp_lowres ||
-                                    svga->render == svga_render_16bpp_lowres ||
-                                    svga->render == svga_render_24bpp_lowres ||
-                                    svga->render == svga_render_32bpp_lowres)
-                                        svga->video_res_x /= 2;
+                                svga->video_res_x = wx;
+                                svga->video_res_y = wy + 1;
 
-                                switch (svga->gdcreg[5] & 0x60)
+                                if (!(svga->gdcreg[6] & 1) && !(svga->attrregs[0x10] & 1)) /*Text mode*/
                                 {
-                                        case 0x00:            svga->video_bpp = 4;   break;
-                                        case 0x20:            svga->video_bpp = 2;   break;
-                                        case 0x40: case 0x60: svga->video_bpp = svga->bpp; break;
+                                        svga->video_res_x /= svga->char_width;
+                                        svga->video_res_y /= (svga->crtc[9] & 31) + 1;
+                                        svga->video_bpp = 0;
+                                }
+                                else
+                                {
+                                        if (svga->crtc[9] & 0x80)
+                                           svga->video_res_y /= 2;
+                                        if (!(svga->crtc[0x17] & 2))
+                                           svga->video_res_y *= 4;
+                                        else if (!(svga->crtc[0x17] & 1))
+                                           svga->video_res_y *= 2;
+                                        svga->video_res_y /= (svga->crtc[9] & 31) + 1;
+                                        if (svga->render == svga_render_8bpp_lowres ||
+                                            svga->render == svga_render_15bpp_lowres ||
+                                            svga->render == svga_render_16bpp_lowres ||
+                                            svga->render == svga_render_24bpp_lowres ||
+                                            svga->render == svga_render_32bpp_lowres)
+                                                svga->video_res_x /= 2;
+
+                                        switch (svga->gdcreg[5] & 0x60)
+                                        {
+                                                case 0x00:            svga->video_bpp = 4;   break;
+                                                case 0x20:            svga->video_bpp = 2;   break;
+                                                case 0x40: case 0x60: svga->video_bpp = svga->bpp; break;
+                                        }
                                 }
                         }
 //                        if (svga_interlace && oddeven) ma=maback=ma+(svga_rowoffset<<2);
@@ -766,13 +770,14 @@ int svga_init(svga_t *svga, void *p, int memsize,
         svga->vram_display_mask = memsize - 1;
         svga->vram_mask = memsize - 1;
         svga->decode_mask = 0x7fffff;
-        svga->changedvram = malloc(/*(memsize >> 12) << 1*/0x800000 >> 12);
+        svga->changedvram = malloc(/*(memsize >> 12) << 1*/0x1000000 >> 12);
         svga->recalctimings_ex = recalctimings_ex;
         svga->video_in  = video_in;
         svga->video_out = video_out;
         svga->hwcursor_draw = hwcursor_draw;
         svga->overlay_draw = overlay_draw;
         svga->hwcursor.ysize = 64;
+        svga->ksc5601_english_font_type = 0;
 //        _svga_recalctimings(svga);
 
         mem_mapping_add(&svga->mapping, 0xa0000, 0x20000, svga_read, svga_readw, svga_readl, svga_write, svga_writew, svga_writel, NULL, MEM_MAPPING_EXTERNAL, svga);

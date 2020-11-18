@@ -36,31 +36,39 @@ typedef struct voodoo_x86_data_t
         uint32_t trexInit1;        
 } voodoo_x86_data_t;
 
-static int last_block[2] = {0, 0};
-static int next_block_to_write[2] = {0, 0};
+static int last_block[4] = {0, 0};
+static int next_block_to_write[4] = {0, 0};
 
-#define addbyte(val)                                    \
-        code_block[block_pos++] = val;                  \
-        if (block_pos >= BLOCK_SIZE)                    \
-                fatal("Over!\n")
+#define addbyte(val)                                            \
+        do {                                                    \
+                code_block[block_pos++] = val;                  \
+                if (block_pos >= BLOCK_SIZE)                    \
+                        fatal("Over!\n");                       \
+        } while (0)
 
-#define addword(val)                                    \
-        *(uint16_t *)&code_block[block_pos] = val;      \
-        block_pos += 2;                                 \
-        if (block_pos >= BLOCK_SIZE)                    \
-                fatal("Over!\n")
+#define addword(val)                                            \
+        do {                                                    \
+                *(uint16_t *)&code_block[block_pos] = val;      \
+                block_pos += 2;                                 \
+                if (block_pos >= BLOCK_SIZE)                    \
+                        fatal("Over!\n");                       \
+        } while (0)
 
-#define addlong(val)                                    \
-        *(uint32_t *)&code_block[block_pos] = val;      \
-        block_pos += 4;                                 \
-        if (block_pos >= BLOCK_SIZE)                    \
-                fatal("Over!\n")
+#define addlong(val)                                            \
+        do {                                                    \
+                *(uint32_t *)&code_block[block_pos] = val;      \
+                block_pos += 4;                                 \
+                if (block_pos >= BLOCK_SIZE)                    \
+                        fatal("Over!\n");                       \
+        } while (0)
 
-#define addquad(val)                                    \
-        *(uint64_t *)&code_block[block_pos] = val;      \
-        block_pos += 8;                                 \
-        if (block_pos >= BLOCK_SIZE)                    \
-                fatal("Over!\n")
+#define addquad(val)                                            \
+        do {                                                    \
+                *(uint64_t *)&code_block[block_pos] = val;      \
+                block_pos += 8;                                 \
+                if (block_pos >= BLOCK_SIZE)                    \
+                        fatal("Over!\n");                       \
+        } while (0)
 
 
 static __m128i xmm_01_w;// = 0x0001000100010001ull;
@@ -694,6 +702,28 @@ static inline void voodoo_generate(uint8_t *code_block, voodoo_t *voodoo, voodoo
         addbyte(0x74);
         addbyte(0x24);
         addbyte(8+16);
+        if (voodoo->col_tiled || voodoo->aux_tiled)
+        {
+                addbyte(0x8b); /*MOV EAX, state->x[EDI]*/
+                addbyte(0x87);
+                addlong(offsetof(voodoo_state_t, x));
+                addbyte(0x89); /*MOV EBX, EAX*/
+                addbyte(0xc3);
+                addbyte(0x83); /*AND EAX, 63*/
+                addbyte(0xe0);
+                addbyte(63);
+                addbyte(0xc1); /*SHR EBX, 6*/
+                addbyte(0xeb);
+                addbyte(6);
+                addbyte(0xc1); /*SHL EBX, 11  - tile is 128*32, << 12, div 2 because word index*/
+                addbyte(0xe3);
+                addbyte(11);
+                addbyte(0x01); /*ADD EAX, EBX*/
+                addbyte(0xd8);
+                addbyte(0x89); /*MOV state->x_tiled[EDI], EAX*/
+                addbyte(0x87);
+                addlong(offsetof(voodoo_state_t, x_tiled));
+        }
         addbyte(0x66); /*PXOR XMM2, XMM2*/
         addbyte(0x0f);
         addbyte(0xef);
@@ -826,7 +856,10 @@ static inline void voodoo_generate(uint8_t *code_block, voodoo_t *voodoo, voodoo
         {
                 addbyte(0x8b); /*MOV EBX, state->x[EDI]*/
                 addbyte(0x9f);
-                addlong(offsetof(voodoo_state_t, x));
+                if (voodoo->aux_tiled)
+                        addlong(offsetof(voodoo_state_t, x_tiled));
+                else
+                        addlong(offsetof(voodoo_state_t, x));
                 addbyte(0x8b);/*MOV ECX, aux_mem[EDI]*/
                 addbyte(0x8f);
                 addlong(offsetof(voodoo_state_t, aux_mem));
@@ -2436,7 +2469,10 @@ static inline void voodoo_generate(uint8_t *code_block, voodoo_t *voodoo, voodoo
         {
                 addbyte(0x8b); /*MOV EAX, state->x[EDI]*/
                 addbyte(0x87);
-                addlong(offsetof(voodoo_state_t, x));
+                if (voodoo->col_tiled)
+                        addlong(offsetof(voodoo_state_t, x_tiled));
+                else
+                        addlong(offsetof(voodoo_state_t, x));
                 addbyte(0x8b); /*MOV EBP, fb_mem*/
                 addbyte(0xaf);
                 addlong(offsetof(voodoo_state_t, fb_mem));
@@ -2815,8 +2851,11 @@ static inline void voodoo_generate(uint8_t *code_block, voodoo_t *voodoo, voodoo
 
         addbyte(0x8b); /*MOV EDX, state->x[EDI]*/
         addbyte(0x97);
-        addlong(offsetof(voodoo_state_t, x));
-               
+        if (voodoo->col_tiled)
+                addlong(offsetof(voodoo_state_t, x_tiled));
+        else
+                addlong(offsetof(voodoo_state_t, x));
+
         addbyte(0x66); /*MOV EAX, XMM0*/
         addbyte(0x0f);
         addbyte(0x7e);
@@ -2884,7 +2923,10 @@ static inline void voodoo_generate(uint8_t *code_block, voodoo_t *voodoo, voodoo
                         }
                         addbyte(0x8b); /*MOV EDX, state->x[EDI]*/
                         addbyte(0x97);
-                        addlong(offsetof(voodoo_state_t, x));
+                        if (voodoo->col_tiled)
+                                addlong(offsetof(voodoo_state_t, x_tiled));
+                        else
+                                addlong(offsetof(voodoo_state_t, x));
                         if (dither2x2)
                         {
                                 addbyte(0xc1); /*SHL ECX, 2*/
@@ -2968,6 +3010,12 @@ static inline void voodoo_generate(uint8_t *code_block, voodoo_t *voodoo, voodoo
 
         if ((params->fbzMode & (FBZ_DEPTH_WMASK | FBZ_DEPTH_ENABLE)) == (FBZ_DEPTH_WMASK | FBZ_DEPTH_ENABLE))
         {
+                addbyte(0x8b); /*MOV EDX, state->x[EDI]*/
+                addbyte(0x97);
+                if (voodoo->aux_tiled)
+                        addlong(offsetof(voodoo_state_t, x_tiled));
+                else
+                        addlong(offsetof(voodoo_state_t, x));
                 addbyte(0x66); /*MOV AX, new_depth*/
                 addbyte(0x8b);
                 addbyte(0x87);
@@ -3227,7 +3275,7 @@ static inline void voodoo_generate(uint8_t *code_block, voodoo_t *voodoo, voodoo
         if (params->textureMode[1] & TEXTUREMODE_TRILINEAR)
                 cs = cs;
 }
-static int voodoo_recomp = 0;
+int voodoo_recomp = 0;
 
 static inline void *voodoo_get_block(voodoo_t *voodoo, voodoo_params_t *params, voodoo_state_t *state, int odd_even)
 {
@@ -3238,7 +3286,7 @@ static inline void *voodoo_get_block(voodoo_t *voodoo, voodoo_params_t *params, 
         
         for (c = 0; c < 8; c++)
         {
-                data = &codegen_data[odd_even + b*2];
+                data = &codegen_data[odd_even + b*4];
                 
                 if (state->xdir == data->xdir &&
                     params->alphaMode == data->alphaMode &&
@@ -3258,7 +3306,7 @@ static inline void *voodoo_get_block(voodoo_t *voodoo, voodoo_params_t *params, 
                 b = (b + 1) & 7;
         }
 voodoo_recomp++;
-        data = &codegen_data[odd_even + next_block_to_write[odd_even]*2];
+        data = &codegen_data[odd_even + next_block_to_write[odd_even]*4];
 //        code_block = data->code_block;
         
         voodoo_generate(data->code_block, voodoo, params, state, depth_op);
@@ -3279,7 +3327,7 @@ voodoo_recomp++;
         return data->code_block;
 }
 
-static void voodoo_codegen_init(voodoo_t *voodoo)
+void voodoo_codegen_init(voodoo_t *voodoo)
 {
         int c;
 #if defined(__linux__) || defined(__APPLE__)
@@ -3290,9 +3338,9 @@ static void voodoo_codegen_init(voodoo_t *voodoo)
 #endif
 
 #if defined WIN32 || defined _WIN32 || defined _WIN32
-        voodoo->codegen_data = VirtualAlloc(NULL, sizeof(voodoo_x86_data_t) * BLOCK_NUM*2, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+        voodoo->codegen_data = VirtualAlloc(NULL, sizeof(voodoo_x86_data_t) * BLOCK_NUM*4, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 #else
-        voodoo->codegen_data = mmap(0, sizeof(voodoo_x86_data_t) * BLOCK_NUM*2, PROT_READ|PROT_WRITE|PROT_EXEC, MAP_ANON|MAP_PRIVATE, 0, 0);
+        voodoo->codegen_data = mmap(0, sizeof(voodoo_x86_data_t) * BLOCK_NUM*4, PROT_READ|PROT_WRITE|PROT_EXEC, MAP_ANON|MAP_PRIVATE, 0, 0);
 #endif
 
         for (c = 0; c < 256; c++)
@@ -3317,11 +3365,11 @@ static void voodoo_codegen_init(voodoo_t *voodoo)
         xmm_00_ff_w[1] = _mm_set_epi32(0, 0, 0xff | (0xff << 16), 0xff | (0xff << 16));
 }
 
-static void voodoo_codegen_close(voodoo_t *voodoo)
+void voodoo_codegen_close(voodoo_t *voodoo)
 {
 #if defined WIN32 || defined _WIN32 || defined _WIN32
         VirtualFree(voodoo->codegen_data, 0, MEM_RELEASE);
 #else
-        munmap(voodoo->codegen_data, sizeof(voodoo_x86_data_t) * BLOCK_NUM*2);
+        munmap(voodoo->codegen_data, sizeof(voodoo_x86_data_t) * BLOCK_NUM*4);
 #endif
 }

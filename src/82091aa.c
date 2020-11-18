@@ -132,7 +132,7 @@ static void aip_write(uint16_t addr, uint8_t val, void *p)
                                         case SxCFG1_IRQ_3: irq = 3; break;
                                         case SxCFG1_IRQ_4: irq = 4; break;
                                 }
-                                serial1_set(base, irq, 1);
+                                serial1_set(base, irq);
                         }
                         break;
                         case AIP_SACFG2:
@@ -162,7 +162,7 @@ static void aip_write(uint16_t addr, uint8_t val, void *p)
                                         case SxCFG1_IRQ_3: irq = 3; break;
                                         case SxCFG1_IRQ_4: irq = 4; break;
                                 }
-                                serial2_set(base, irq, 1);
+                                serial2_set(base, irq);
                         }
                         break;
                         case AIP_SBCFG2:

@@ -52,6 +52,7 @@ extern "C" {
 
         void wx_exit(void* window, int value);
         void wx_stop_emulation(void* window);
+        void wx_stop_emulation_now(void* window);
 
         void* wx_createtimer(void (*fn)());
         void wx_starttimer(void* timer, int milliseconds, int once);
@@ -152,9 +153,14 @@ extern void (*wx_idle_func)(void* window, void* event);
 
 #define WX_REPARENT 72
 
+#define WX_WM_ENABLE 80
+#define WX_WM_SHOW 81
+#define WX_WM_LAYOUT 82
 
+#define WX_MB_YES wxYES
 #define WX_MB_OK wxOK
 #define WX_MB_OKCANCEL wxOK|wxCANCEL
+#define WX_MB_NODEFAULT wxYES_NO|wxNO_DEFAULT
 #define WX_IDOK wxOK
 
 #define IMAGE_JPG "jpg"

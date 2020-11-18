@@ -229,6 +229,14 @@ int mainthread(void* param)
         return TRUE;
 }
 
+void stop_emulation_now(void)
+{
+        /*Deduct a sufficiently large number of cycles that no instructions will
+          run before the main thread is terminated*/
+        cycles -= 99999999;
+        wx_stop_emulation_now(ghwnd);
+}
+
 int dir_exists(char* path)
 {
         return wx_dir_exists(path);
@@ -777,6 +785,16 @@ int getsfile(void* hwnd, char *f, char *fn, char *dir, char *ext)
 {
         int ret = wx_filedialog(hwnd, "Save", dir, f, ext, 0, openfilestring);
 #ifdef __APPLE__
+        window_doreset = 1;
+#endif
+        return ret;
+}
+
+int getfilewithcaption(void* hwnd, char *f, char *fn, char *caption)
+{
+        int ret = wx_filedialog(hwnd, caption, fn, f, 0, 1, openfilestring);
+#ifdef __APPLE__
+        /* wxWidgets on OSX may mess up the SDL-window somehow, so just in case we reset it here */
         window_doreset = 1;
 #endif
         return ret;

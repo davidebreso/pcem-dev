@@ -4,6 +4,8 @@
 #include "mouse.h"
 #include "mouse_ps2.h"
 #include "plat-mouse.h"
+#include "x86.h"
+#include "f82c710_upc.h"
 
 int mouse_scan = 0;
 
@@ -39,6 +41,7 @@ typedef struct mouse_ps2_t
 
 void mouse_ps2_write(uint8_t val, void *p)
 {
+        // pclog("%04X:%04X PS2 mouse WRITE: %02X\n", CS, cpu_state.pc, val);
         mouse_ps2_t *mouse = (mouse_ps2_t *)p;
         
         if (mouse->cd)
@@ -175,7 +178,7 @@ void mouse_ps2_poll(int x, int y, int z, int b, void *p)
 {
         mouse_ps2_t *mouse = (mouse_ps2_t *)p;
         uint8_t packet[3] = {0x08, 0, 0};
-        
+
         if (!x && !y && !z && b == mouse->b)
                 return;        
 
@@ -189,7 +192,7 @@ void mouse_ps2_poll(int x, int y, int z, int b, void *p)
             ((mouse_queue_end - mouse_queue_start) & 0xf) < 13)
         {
                 mouse->b = b;
-               // pclog("Send packet : %i %i\n", ps2_x, ps2_y);
+               // pclog("PS2 MOUSE send packet : %i %i\n", mouse->x, mouse->y);
                 if (mouse->x > 255)
                         mouse->x = 255;
                 if (mouse->x < -256)
@@ -236,8 +239,11 @@ void *mouse_ps2_init()
         mouse->flags = 0;
         mouse->mode = MOUSE_STREAM;
         
-        keyboard_at_set_mouse(mouse_ps2_write, mouse);
-        
+        if(romset == ROM_PC5086)
+                upc_set_mouse(mouse_ps2_write, mouse);
+        else
+                keyboard_at_set_mouse(mouse_ps2_write, mouse);
+
         return mouse;
 }
 
