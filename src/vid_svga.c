@@ -339,6 +339,9 @@ void svga_recalctimings(svga_t *svga)
         svga->ma_latch = ((svga->crtc[0xc] << 8) | svga->crtc[0xd]) + ((svga->crtc[8] & 0x60) >> 5);
         svga->ca_adj = 0;
 
+        svga->rowcount = svga->crtc[9] & 31;
+        svga->linedbl = svga->crtc[9] & 0x80;
+
         svga->hdisp_time = svga->hdisp;
         svga->render = svga_render_blank;
         if (!svga->scrblank && svga->attr_palette_enable)
@@ -417,8 +420,6 @@ void svga_recalctimings(svga_t *svga)
 
 //        pclog("svga_render %08X : %08X %08X %08X %08X %08X  %i %i %02X %i %i\n", svga_render, svga_render_text_40, svga_render_text_80, svga_render_8bpp_lowres, svga_render_8bpp_highres, svga_render_blank, scrblank,gdcreg[6]&1,gdcreg[5]&0x60,bpp,seqregs[1]&8);
         
-        svga->linedbl = svga->crtc[9] & 0x80;
-        svga->rowcount = svga->crtc[9] & 31;
         svga->char_width = (svga->seqregs[1] & 1) ? 8 : 9;
         if (svga->recalctimings_ex) 
                 svga->recalctimings_ex(svga);
@@ -995,7 +996,7 @@ uint8_t svga_read(uint32_t addr, void *p)
         
         cycles -= video_timing_read_b;
         cycles_lost += video_timing_read_b;
-        
+
         egareads++;
 //        pclog("Readega %06X   ",addr);
 
@@ -1011,6 +1012,11 @@ uint8_t svga_read(uint32_t addr, void *p)
                 addr &= svga->decode_mask;
                 if (addr >= svga->vram_max)
                         return 0xff;
+                latch_addr = addr & svga->vram_mask & ~3;
+                svga->la = svga->vram[latch_addr];
+                svga->lb = svga->vram[latch_addr | 0x1];
+                svga->lc = svga->vram[latch_addr | 0x2];
+                svga->ld = svga->vram[latch_addr | 0x3];
                 return svga->vram[addr & svga->vram_mask];
         }
         else if (svga->chain2_read)
@@ -1059,7 +1065,6 @@ uint8_t svga_read(uint32_t addr, void *p)
                 return ~(temp | temp2 | temp3 | temp4);
         }
 //pclog("Read %02X %04X %04X\n",vram[addr|svga->readplane],addr,svga->readplane);
-
         return svga->vram[addr | readplane];
 }
 

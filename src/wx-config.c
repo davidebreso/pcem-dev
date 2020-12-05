@@ -28,7 +28,6 @@
 #endif
 
 #include "minivhd/minivhd.h"
-#include "minivhd/minivhd_util.h"
 
 //#define MAX_CYLINDERS ((((1 << 28)-1) / 16) / 63)
 #define MAX_CYLINDERS 265264 /*Award 430VX won't POST with a larger drive*/
@@ -1849,9 +1848,13 @@ static int hdnew_dlgproc(void* hdlg, int message, INT_PARAM wParam, LONG_PARAM l
                                                 return TRUE;
                                         }
                                 }
+                                wx_messagebox(hdlg, "Differencing VHD image created.\n\n"
+                                        "WARNING: Do not open or modify the parent image(s) while this file exists.", "PCem", WX_MB_OK);
                         }
-
-                        wx_messagebox(hdlg, "Drive created, remember to partition and format the new drive.", "PCem", WX_MB_OK);
+                        if (hd_format != 3)
+                        {
+                                wx_messagebox(hdlg, "Drive created, remember to partition and format the new drive.", "PCem", WX_MB_OK);
+                        }
 
                         wx_enddialog(hdlg, 1);
                         return TRUE;

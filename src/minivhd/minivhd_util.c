@@ -2,7 +2,9 @@
  * \file
  * \brief Utility functions
  */
-
+#ifndef _FILE_OFFSET_BITS
+#define _FILE_OFFSET_BITS 64
+#endif
 #include <errno.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -14,6 +16,7 @@
 #include "libxml2_encoding.h"
 #include "minivhd_internal.h"
 #include "minivhd_util.h"
+#include "minivhd.h"
 
 #ifdef __APPLE__
 #define ftello64 ftello
@@ -98,7 +101,8 @@ void mvhd_generate_uuid(uint8_t* uuid)
 {
     /* We aren't doing crypto here, so using system time as seed should be good enough */
     srand((unsigned int)time(0));
-    for (int n = 0; n < 16; n++) {
+    int n;
+    for (n = 0; n < 16; n++) {
         uuid[n] = rand();
     }
     uuid[6] &= 0x0F;
@@ -159,7 +163,7 @@ FILE* mvhd_fopen(const char* path, const char* mode, int* err) {
         }
     }
 #else
-    f = fopen64(path, mode);
+    f = fopen(path, mode);
     if (f == NULL) {
         mvhd_errno = errno;
         *err = MVHD_ERR_FILE;
@@ -191,12 +195,17 @@ MVHDGeom mvhd_get_geometry(MVHDMeta* vhdm) {
     return geometry;
 }
 
+uint64_t mvhd_get_current_size(MVHDMeta* vhdm) {
+    return vhdm->footer.curr_sz;
+}
+
 uint32_t mvhd_gen_footer_checksum(MVHDFooter* footer) {
     uint32_t new_chk = 0;
     uint32_t orig_chk = footer->checksum;
     footer->checksum = 0;
     uint8_t* footer_bytes = (uint8_t*)footer;
-    for (size_t i = 0; i < sizeof *footer; i++) {
+    size_t i;
+    for (i = 0; i < sizeof *footer; i++) {
         new_chk += footer_bytes[i];
     }
     footer->checksum = orig_chk;
@@ -208,7 +217,8 @@ uint32_t mvhd_gen_sparse_checksum(MVHDSparseHeader* header) {
     uint32_t orig_chk = header->checksum;
     header->checksum = 0;
     uint8_t* sparse_bytes = (uint8_t*)header;
-    for (size_t i = 0; i < sizeof *header; i++) {
+    size_t i;
+    for (i = 0; i < sizeof *header; i++) {
         new_chk += sparse_bytes[i];
     }
     header->checksum = orig_chk;
@@ -260,8 +270,10 @@ int64_t mvhd_ftello64(FILE* stream)
 {
 #ifdef _MSC_VER
     return _ftelli64(stream);
-#else
+#elif defined(__MINGW32__)
     return ftello64(stream);
+#else /* This should work with linux (with _FILE_OFFSET_BITS), and hopefully OS X and BSD */
+    return ftello(stream);
 #endif
 }
 
@@ -269,25 +281,29 @@ int mvhd_fseeko64(FILE* stream, int64_t offset, int origin)
 {
 #ifdef _MSC_VER
     return _fseeki64(stream, offset, origin);
-#else
+#elif defined(__MINGW32__)
     return fseeko64(stream, offset, origin);
+#else /* This should work with linux (with _FILE_OFFSET_BITS), and hopefully OS X and BSD */
+    return fseeko(stream, offset, origin);
 #endif
 }
 
 uint32_t mvhd_crc32_for_byte(uint32_t r) {
-    for (int j = 0; j < 8; ++j)
+    int j;
+    for (j = 0; j < 8; ++j)
         r = (r & 1 ? 0 : (uint32_t)0xEDB88320L) ^ r >> 1;
     return r ^ (uint32_t)0xFF000000L;
 }
 
 uint32_t mvhd_crc32(const void* data, size_t n_bytes) {
     static uint32_t table[0x100];
+    size_t i;
     if (!*table)
-        for (size_t i = 0; i < 0x100; ++i)
+        for (i = 0; i < 0x100; ++i)
             table[i] = mvhd_crc32_for_byte(i);
 
     uint32_t crc = 0;
-    for (size_t i = 0; i < n_bytes; ++i)
+    for (i = 0; i < n_bytes; ++i)
         crc = table[(uint8_t)crc ^ ((uint8_t*)data)[i]] ^ crc >> 8;
 
     return crc;

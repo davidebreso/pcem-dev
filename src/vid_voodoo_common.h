@@ -156,6 +156,9 @@ typedef struct voodoo_params_t
         uint32_t swapbufferCMD;
 
         uint32_t stipple;
+
+        int col_tiled, aux_tiled;
+        int row_width, aux_row_width;
 } voodoo_params_t;
 
 typedef struct texture_t
@@ -298,7 +301,8 @@ typedef struct voodoo_t
         volatile int params_read_idx[4], params_write_idx;
 
         uint32_t cmdfifo_base, cmdfifo_end, cmdfifo_size;
-        int cmdfifo_rp;
+        int cmdfifo_rp, cmdfifo_ret_addr;
+        int cmdfifo_in_sub;
         volatile int cmdfifo_depth_rd, cmdfifo_depth_wr;
         volatile int cmdfifo_enabled;
         uint32_t cmdfifo_amin, cmdfifo_amax;
@@ -368,6 +372,8 @@ typedef struct voodoo_t
                 uint32_t dstFormat;
                 uint32_t dstSize;
                 uint32_t dstXY;
+                uint32_t lineStipple;
+                uint32_t lineStyle;
                 uint32_t rop;
                 uint32_t srcBaseAddr;
                 uint32_t srcFormat;
@@ -413,8 +419,11 @@ typedef struct voodoo_t
                 int host_data_count;
                 int host_data_size_src, host_data_size_dest;
                 int src_stride_src, src_stride_dest;
-                
+
                 int src_bpp;
+
+                int line_pix_pos, line_bit_pos;
+                int line_rep_cnt, line_bit_mask_size;
         } banshee_blt;
         
         struct
@@ -438,7 +447,7 @@ typedef struct voodoo_t
         rgb_t clutData256[256];
         uint32_t video_16to32[0x10000];
 
-        uint8_t dirty_line[1024];
+        uint8_t dirty_line[2048];
         int dirty_line_low, dirty_line_high;
 
         int fb_write_buffer, fb_draw_buffer;

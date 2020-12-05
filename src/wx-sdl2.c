@@ -248,18 +248,15 @@ void get_pcem_path(char *s, int size)
         wx_get_home_directory(s);
         strcat(s, ".pcem/");
 #elif defined __APPLE__
+        wx_get_home_directory(s);
+        strcat(s, "Library/Application Support/PCem/");
 
-    wx_get_home_directory(s);
-    strcat(s, "Library/Application Support/PCem/");
+        struct stat st = {0};
 
-    struct stat st = {0};
-
-    // create ~/Library/Application Support/PCem/
-    // if it doesn't exist
-    if (stat(s, &st) == -1) {
-        mkdir(s, 0700);
-    }
-
+        // create ~/Library/Application Support/PCem/ if it doesn't exist
+        if (stat(s, &st) == -1) {
+                mkdir(s, 0700);
+        }
 #else
         char* path = SDL_GetBasePath();
         strcpy(s, path);
@@ -742,6 +739,7 @@ int stop_emulation()
         endblit();
         SDL_DestroyMutex(ghMutex);
 
+        device_close_all();
         midi_close();
         
         pclog("Emulation stopped.\n");
