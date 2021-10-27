@@ -5,6 +5,7 @@
 #include "esdi_at.h"
 #include "hdd_esdi.h"
 #include "ide.h"
+#include "ide_xta.h"
 #include "mfm_at.h"
 #include "mfm_xebec.h"
 #include "scsi_53c400.h"
@@ -32,6 +33,7 @@ static struct
         {"[MFM] AT Fixed Disk Adapter",           "mfm_at",     &mfm_at_device,        1, 0, 0},
         {"[MFM] DTC 5150X",                       "dtc5150x",   &dtc_5150x_device,     1, 0, 0},
         {"[MFM] Fixed Disk Adapter (Xebec)",      "mfm_xebec",  &mfm_xebec_device,     1, 0, 0},
+        {"[XTA] Amstrad PC5086 Interface",        "xta_pc5086", &xta_pc5086_device,    1, 0, 0},
         {"[ESDI] IBM ESDI Fixed Disk Controller", "esdi_mca",   &hdd_esdi_device,      1, 0, 0},
         {"[ESDI] Western Digital WD1007V-SE1",    "wd1007vse1", &wd1007vse1_device,    0, 0, 0},
         {"[IDE] Standard IDE",                    "ide",        &ide_device,           0, 1, 0},

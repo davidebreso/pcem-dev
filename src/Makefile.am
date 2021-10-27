@@ -33,7 +33,7 @@ codegen_ops_logic.c codegen_ops_shift.c codegen_ops_misc.c codegen_ops_mov.c cod
 codegen_timing_486.c codegen_timing_686.c codegen_timing_common.c codegen_timing_cyrixiii.c codegen_timing_k6.c codegen_timing_p6.c codegen_timing_pentium.c \
 codegen_timing_winchip.c codegen_timing_winchip2.c compaq.c config.c cpu.c cpu_tables.c cs8230.c dells200.c device.c disc.c \
 disc_fdi.c disc_img.c disc_sector.c dma.c esdi_at.c f82c710_upc.c fdc.c fdc37c665.c fdc37c93x.c fdd.c fdi2raw.c gameport.c hdd.c hdd_esdi.c \
-hdd_file.c headland.c i430lx.c i430fx.c i430hx.c i430vx.c i440fx.c i440bx.c ide.c ide_atapi.c ide_sff8038i.c intel.c intel_flash.c io.c \
+hdd_file.c headland.c i430lx.c i430fx.c i430hx.c i430vx.c i440fx.c i440bx.c ide.c ide_atapi.c ide_xta.c ide_sff8038i.c intel.c intel_flash.c io.c \
 jim.c joystick_ch_flightstick_pro.c joystick_standard.c joystick_sw_pad.c joystick_tm_fcs.c keyboard.c \
 keyboard_amstrad.c keyboard_at.c keyboard_olim24.c keyboard_pcjr.c keyboard_xt.c laserxt.c lpt.c lpt_dac.c lpt_dss.c \
 mca.c mcr.c mem.c mem_bios.c mfm_at.c mfm_xebec.c model.c mouse.c mouse_msystems.c mouse_ps2.c mouse_serial.c mvp3.c \
