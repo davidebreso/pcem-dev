@@ -3,6 +3,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #endif
+#ifdef __APPLE__
+#include <libkern/OSCacheControl.h>
+#endif
 #if defined WIN32 || defined _WIN32 || defined _WIN32
 #include <windows.h>
 #endif
@@ -121,7 +124,11 @@ void codegen_allocator_clean_blocks(struct mem_block_t *block)
 #if defined __ARM_EABI__ || defined __aarch64__
         while (1)
         {
+#if defined(IOS) || defined(__APPLE__)
+		sys_cache_control(kCacheFunctionPrepareForExecution, &mem_block_alloc[block->offset], MEM_BLOCK_SIZE);
+#else
 		__clear_cache(&mem_block_alloc[block->offset], &mem_block_alloc[block->offset + MEM_BLOCK_SIZE]);
+#endif
 		if (block->next)
 			block = &mem_blocks[block->next - 1];
 		else

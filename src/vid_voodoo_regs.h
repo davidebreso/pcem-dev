@@ -691,4 +691,3 @@ enum
 #define dither ( params->fbzMode & FBZ_DITHER)
 #define dither2x2 (params->fbzMode & FBZ_DITHER_2x2)
 #define dithersub (params->fbzMode & FBZ_DITHER_SUB)
-

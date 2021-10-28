@@ -10277,4 +10277,3 @@ static const uint8_t dithersub_rb2x2[256][2][2] =
             {253, 255},
       },
 };
-

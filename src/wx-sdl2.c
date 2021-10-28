@@ -277,9 +277,7 @@ void get_pcem_base_path(char *s, int size)
 
 void set_window_title(const char *s)
 {
-#ifndef __APPLE__
         sdl_set_window_title(s);
-#endif
 }
 
 float flash_func(float x)

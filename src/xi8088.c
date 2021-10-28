@@ -45,6 +45,7 @@ int xi8088_bios_128kb()
 
 static void *xi8088_init()
 {
+        /* even though the bios by default turns the turbo off when controlling by hotkeys, pcem always starts at full speed */
         xi8088.turbo = 1;
         xi8088.turbo_setting = device_get_config_int("turbo_setting");
         xi8088.bios_128kb = device_get_config_int("bios_128kb");
