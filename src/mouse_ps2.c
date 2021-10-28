@@ -242,7 +242,7 @@ void *mouse_ps2_init()
         if(romset == ROM_PC5086)
                 upc_set_mouse(mouse_ps2_write, mouse);
         else
-                keyboard_at_set_mouse(mouse_ps2_write, mouse);
+	        keyboard_at_set_mouse(mouse_ps2_write, mouse);
 
         return mouse;
 }
