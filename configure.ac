@@ -1,7 +1,7 @@
 # configure.ac for PCem
 #
 
-AC_PREREQ([2.71])
+AC_PREREQ([2.69])
 AC_INIT([PCem],[v17],[Sarah Walker <pcem@pcem-emulator.co.uk>],[pcem])
 
 AC_CANONICAL_HOST
