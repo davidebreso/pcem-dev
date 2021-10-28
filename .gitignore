@@ -8,7 +8,7 @@
 *.o
 /pcem
 /src/pcem
-build/
+/build
 
 ### Autotools ###
 # http://www.gnu.org/software/automake

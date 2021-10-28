@@ -162,7 +162,7 @@ am__pcem_SOURCES_DIST = 386.c 386_common.c 386_dynarec.c \
 	f82c710_upc.c fdc.c fdc37c665.c fdc37c93x.c fdd.c fdi2raw.c \
 	gameport.c hdd.c hdd_esdi.c hdd_file.c headland.c i430lx.c \
 	i430fx.c i430hx.c i430vx.c i440fx.c i440bx.c ide.c ide_atapi.c \
-	ide_sff8038i.c intel.c intel_flash.c io.c jim.c \
+	ide_xta.c ide_sff8038i.c intel.c intel_flash.c io.c jim.c \
 	joystick_ch_flightstick_pro.c joystick_standard.c \
 	joystick_sw_pad.c joystick_tm_fcs.c keyboard.c \
 	keyboard_amstrad.c keyboard_at.c keyboard_olim24.c \
@@ -341,10 +341,10 @@ am_pcem_OBJECTS = pcem-386.$(OBJEXT) pcem-386_common.$(OBJEXT) \
 	pcem-i430fx.$(OBJEXT) pcem-i430hx.$(OBJEXT) \
 	pcem-i430vx.$(OBJEXT) pcem-i440fx.$(OBJEXT) \
 	pcem-i440bx.$(OBJEXT) pcem-ide.$(OBJEXT) \
-	pcem-ide_atapi.$(OBJEXT) pcem-ide_sff8038i.$(OBJEXT) \
-	pcem-intel.$(OBJEXT) pcem-intel_flash.$(OBJEXT) \
-	pcem-io.$(OBJEXT) pcem-jim.$(OBJEXT) \
-	pcem-joystick_ch_flightstick_pro.$(OBJEXT) \
+	pcem-ide_atapi.$(OBJEXT) pcem-ide_xta.$(OBJEXT) \
+	pcem-ide_sff8038i.$(OBJEXT) pcem-intel.$(OBJEXT) \
+	pcem-intel_flash.$(OBJEXT) pcem-io.$(OBJEXT) \
+	pcem-jim.$(OBJEXT) pcem-joystick_ch_flightstick_pro.$(OBJEXT) \
 	pcem-joystick_standard.$(OBJEXT) \
 	pcem-joystick_sw_pad.$(OBJEXT) pcem-joystick_tm_fcs.$(OBJEXT) \
 	pcem-keyboard.$(OBJEXT) pcem-keyboard_amstrad.$(OBJEXT) \
@@ -568,9 +568,9 @@ am__depfiles_remade = ./$(DEPDIR)/pcem-386.Po \
 	./$(DEPDIR)/pcem-i430lx.Po ./$(DEPDIR)/pcem-i430vx.Po \
 	./$(DEPDIR)/pcem-i440bx.Po ./$(DEPDIR)/pcem-i440fx.Po \
 	./$(DEPDIR)/pcem-ide.Po ./$(DEPDIR)/pcem-ide_atapi.Po \
-	./$(DEPDIR)/pcem-ide_sff8038i.Po ./$(DEPDIR)/pcem-intel.Po \
-	./$(DEPDIR)/pcem-intel_flash.Po ./$(DEPDIR)/pcem-io.Po \
-	./$(DEPDIR)/pcem-jim.Po \
+	./$(DEPDIR)/pcem-ide_sff8038i.Po ./$(DEPDIR)/pcem-ide_xta.Po \
+	./$(DEPDIR)/pcem-intel.Po ./$(DEPDIR)/pcem-intel_flash.Po \
+	./$(DEPDIR)/pcem-io.Po ./$(DEPDIR)/pcem-jim.Po \
 	./$(DEPDIR)/pcem-joystick_ch_flightstick_pro.Po \
 	./$(DEPDIR)/pcem-joystick_standard.Po \
 	./$(DEPDIR)/pcem-joystick_sw_pad.Po \
@@ -960,7 +960,7 @@ pcem_SOURCES = 386.c 386_common.c 386_dynarec.c 386_dynarec_ops.c \
 	f82c710_upc.c fdc.c fdc37c665.c fdc37c93x.c fdd.c fdi2raw.c \
 	gameport.c hdd.c hdd_esdi.c hdd_file.c headland.c i430lx.c \
 	i430fx.c i430hx.c i430vx.c i440fx.c i440bx.c ide.c ide_atapi.c \
-	ide_sff8038i.c intel.c intel_flash.c io.c jim.c \
+	ide_xta.c ide_sff8038i.c intel.c intel_flash.c io.c jim.c \
 	joystick_ch_flightstick_pro.c joystick_standard.c \
 	joystick_sw_pad.c joystick_tm_fcs.c keyboard.c \
 	keyboard_amstrad.c keyboard_at.c keyboard_olim24.c \
@@ -1347,6 +1347,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ide.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ide_atapi.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ide_sff8038i.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-ide_xta.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-intel.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-intel_flash.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcem-io.Po@am__quote@ # am--include-marker
@@ -2796,6 +2797,20 @@ pcem-ide_atapi.obj: ide_atapi.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ide_atapi.c' object='pcem-ide_atapi.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-ide_atapi.obj `if test -f 'ide_atapi.c'; then $(CYGPATH_W) 'ide_atapi.c'; else $(CYGPATH_W) '$(srcdir)/ide_atapi.c'; fi`
+
+pcem-ide_xta.o: ide_xta.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-ide_xta.o -MD -MP -MF $(DEPDIR)/pcem-ide_xta.Tpo -c -o pcem-ide_xta.o `test -f 'ide_xta.c' || echo '$(srcdir)/'`ide_xta.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-ide_xta.Tpo $(DEPDIR)/pcem-ide_xta.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ide_xta.c' object='pcem-ide_xta.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-ide_xta.o `test -f 'ide_xta.c' || echo '$(srcdir)/'`ide_xta.c
+
+pcem-ide_xta.obj: ide_xta.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-ide_xta.obj -MD -MP -MF $(DEPDIR)/pcem-ide_xta.Tpo -c -o pcem-ide_xta.obj `if test -f 'ide_xta.c'; then $(CYGPATH_W) 'ide_xta.c'; else $(CYGPATH_W) '$(srcdir)/ide_xta.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/pcem-ide_xta.Tpo $(DEPDIR)/pcem-ide_xta.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ide_xta.c' object='pcem-ide_xta.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -c -o pcem-ide_xta.obj `if test -f 'ide_xta.c'; then $(CYGPATH_W) 'ide_xta.c'; else $(CYGPATH_W) '$(srcdir)/ide_xta.c'; fi`
 
 pcem-ide_sff8038i.o: ide_sff8038i.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pcem_CFLAGS) $(CFLAGS) -MT pcem-ide_sff8038i.o -MD -MP -MF $(DEPDIR)/pcem-ide_sff8038i.Tpo -c -o pcem-ide_sff8038i.o `test -f 'ide_sff8038i.c' || echo '$(srcdir)/'`ide_sff8038i.c
@@ -6892,6 +6907,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pcem-ide.Po
 	-rm -f ./$(DEPDIR)/pcem-ide_atapi.Po
 	-rm -f ./$(DEPDIR)/pcem-ide_sff8038i.Po
+	-rm -f ./$(DEPDIR)/pcem-ide_xta.Po
 	-rm -f ./$(DEPDIR)/pcem-intel.Po
 	-rm -f ./$(DEPDIR)/pcem-intel_flash.Po
 	-rm -f ./$(DEPDIR)/pcem-io.Po
@@ -7294,6 +7310,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pcem-ide.Po
 	-rm -f ./$(DEPDIR)/pcem-ide_atapi.Po
 	-rm -f ./$(DEPDIR)/pcem-ide_sff8038i.Po
+	-rm -f ./$(DEPDIR)/pcem-ide_xta.Po
 	-rm -f ./$(DEPDIR)/pcem-intel.Po
 	-rm -f ./$(DEPDIR)/pcem-intel_flash.Po
 	-rm -f ./$(DEPDIR)/pcem-io.Po
