@@ -56,6 +56,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #undef pause
+#include <sys/types.h>
+#include <sys/stat.h>
 #endif
 
 extern void creatediscimage_open(void *hwnd);
@@ -247,20 +249,30 @@ void get_pcem_path(char *s, int size)
 #ifdef __linux
         wx_get_home_directory(s);
         strcat(s, ".pcem/");
-#elif defined __APPLE__
+#elif defined(__APPLE__)
+        /*TODO: Use CoreFoundation functions to get proper directory, in case 
+          the Application Support directory is different (I.E., with signing)*/
         wx_get_home_directory(s);
         strcat(s, "Library/Application Support/PCem/");
 
         struct stat st = {0};
 
-        // create ~/Library/Application Support/PCem/ if it doesn't exist
-        if (stat(s, &st) == -1) {
+        // create ~/Library/Application Support/PCem/
+        // if it doesn't exist
+        if (stat(s, &st) == -1) 
+        {
                 mkdir(s, 0700);
         }
 #else
         char* path = SDL_GetBasePath();
         strcpy(s, path);
 #endif
+}
+
+void get_pcem_base_path(char *s, int size)
+{
+        char* path = SDL_GetBasePath();
+        strcpy(s, path);
 }
 
 void set_window_title(const char *s)
