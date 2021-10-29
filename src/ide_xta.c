@@ -40,12 +40,10 @@
  *              for specific machines.
  *
  * NOTE:        The XTA interface is 0-based for sector numbers !!
+ * *
+ * Author:      Davide Bresolin
  *
- * Version:     @(#)hdc_ide_xta.c       1.0.18  2021/03/16
- *
- * Author:      Fred N. van Kempen, <decwiz@yahoo.com>
- *
- *              Based on my earlier HD20 driver for the EuroPC.
+ *              Based on Fred N. van Kempen driver for VARCem.
  *
  *              Copyright 2017-2021 Fred N. van Kempen.
  *              Copyright 2020 Altheos.
@@ -106,13 +104,11 @@
 
 #include "ide_xta.h"
 
-
 #define HDC_TIME        (50*TIMER_USEC)
 #define XTA_NUM         2                       // #supported drives
 
 #define WD_BIOS_FILE            "idexywd2.bin"
 #define PC5086_BIOS_FILE        "pc5086/c800.bin"
-
 
 extern char ide_fn[7][512];
 
@@ -190,7 +186,6 @@ enum {
     STATE_COMPL
 };
 
-
 /* The device control block (6 bytes) */
 #pragma pack(push,1)
 typedef struct {
@@ -254,6 +249,7 @@ typedef struct {
     int8_t      dma;                    // controller DMA channel
     int8_t      type;                   // controller type ID
     int8_t      spt;                    // sectors per track
+    int8_t	switches;		// controller switches
 
     uint32_t    rom_addr;               // address where ROM is
     const char  *rom_filename;          // name of ROM image file
@@ -946,11 +942,11 @@ hdc_in(uint16_t port, void *priv)
                 break;
 
         case 2:         /* "read option jumpers" */
-                ret = 0x0;             /*  0xff: all switches off */
+                ret = dev->switches;             /*  0xff: all switches off */
                 break;
     }
 
-    // pclog("%04X:%04X %s: reading port=%04x val=%02x\n", CS, cpu_state.pc, dev->name, port, ret);
+    pclog("%04X:%04X %s: reading port=%04x val=%02x\n", CS, cpu_state.pc, dev->name, port, ret);
     return(ret);        
 }
 
@@ -1040,9 +1036,7 @@ xta_close(void *priv)
     free(dev);
 }
 
-
 static void *xta_init(int8_t type)
-// const device_t *info, UNUSED(void *parent))
 {
     drive_t *drive;
     hdc_t *dev;
@@ -1053,7 +1047,6 @@ static void *xta_init(int8_t type)
     dev = (hdc_t *)malloc(sizeof(hdc_t));
     memset(dev, 0x00, sizeof(hdc_t));
     dev->type = type;
-    // bus = (info->local >> 8) & 255;
 
     /* Do per-controller-type setup. */
     switch (dev->type) {
@@ -1066,27 +1059,9 @@ static void *xta_init(int8_t type)
                 dev->rom_filename = WD_BIOS_FILE;
                 dev->dma = 3;
                 dev->spt = 17;          // MFM
+                dev->switches = 0xff;	// All switches are off
                 break;
-
-        case 1:         // EuroPC
-                dev->name = "HD20";
-                dev->base = 0x0320;
-                dev->irq = 5;
-                dev->dma = 3;
-                dev->spt = 17;          // MFM
-                break;
-
-        case 2:         // Toshiba T1200
-                dev->name = "T1200-HD";
-                dev->base = 0x0320;
-                dev->irq = 5;
-                dev->dma = 3;
-                // dev->rom_addr = 0xc8000;
-                // dev->rom_filename = WD_BIOS_FILE;
-                dev->spt = 34;
-                break;
-
-        case 3:         // Amstrad PC5086
+        case 1:         // Amstrad PC5086
                 dev->name = "PC5086-HD";
                 dev->base = 0x0320;
                 dev->irq = 5;
@@ -1094,6 +1069,7 @@ static void *xta_init(int8_t type)
                 dev->rom_addr = 0xc8000;
                 dev->rom_filename = PC5086_BIOS_FILE;
                 dev->spt = 17;          // MFM
+                dev->switches = 0;	// Set drive type to 0
                 break;
     }
 
@@ -1109,6 +1085,7 @@ static void *xta_init(int8_t type)
 
         hdd_load(&drive->hdd_file, i, ide_fn[i] );
         if (drive->hdd_file.f == NULL)  {
+        	pclog("Drive %d is not present.\n", i);
                 drive->present = 0;
                 continue;
         }
@@ -1125,11 +1102,6 @@ static void *xta_init(int8_t type)
         drive->cfg_spt = drive->spt;
         drive->cfg_hpc = drive->hpc;
         drive->cfg_tracks = drive->tracks;
-
-        pclog("%04X:%04X %s: drive%i (cyl=%i,hd=%i,spt=%i), disk %i\n",
-             CS, cpu_state.pc, dev->name, i,
-             drive->tracks, drive->hpc, drive->spt, i);
-
     }
 
     /* Enable the I/O block. */
@@ -1148,7 +1120,7 @@ static void *xta_init(int8_t type)
 }
 
 
-static const device_config_t wdxt150_config[] = {
+static device_config_t wdxt150_config[] = {
     {
             .name = "base",
             .description = "Address",
@@ -1223,43 +1195,11 @@ device_t xta_wdxt150_device = {
     NULL, 
     NULL, 
     NULL, 
-    NULL,
-};
-
-static void *xta_hd20_init() {
-    return xta_init(1);
-}
-
-device_t xta_hd20_device = {
-    "EuroPC HD20 Fixed Disk Controller",
-    0,
-    xta_hd20_init, 
-    xta_close, 
-    NULL,
-    NULL, 
-    NULL, 
-    NULL, 
-    NULL,
-};
-
-static void *xta_t1200_init() {
-    return xta_init(2);
-}
-
-device_t xta_t1200_device = {
-    "Toshiba T1200 Fixed Disk Controller",
-    0,
-    xta_t1200_init, 
-    xta_close, 
-    NULL,
-    NULL, 
-    NULL, 
-    NULL, 
-    NULL,
+    wdxt150_config,
 };
 
 static void *xta_pc5086_init() {
-    return xta_init(3);
+    return xta_init(1);
 }
 
 static int xta_pc5086_available()
@@ -1278,3 +1218,5 @@ device_t xta_pc5086_device = {
     NULL, 
     NULL,
 };
+
+
