@@ -1,4 +1,4 @@
-/*This is the Chips and Technologies C82100 chipset used in the Amstrad PC5086 model*/
+/* This is the Chips and Technologies 82c100 chipset used in the Amstrad PC5086 */
 #include "ibm.h"
 #include "cpu.h"
 #include "io.h"
@@ -7,23 +7,22 @@
 
 #include "superxt.h"
 
-static uint8_t superxt_regs[256];
-static int superxt_index;
-
-/* EMS data */
-static struct superxt_ems {
+/* SuperXT registers and EMS data */
+typedef struct superxt_t {
+	uint8_t regs[256];
+	uint8_t regs_index;
 	uint8_t ems_reg[4];
 	mem_mapping_t mapping[4];
 	uint32_t page_exec[4];
-	// uint8_t  ems_port_index;
 	uint16_t ems_port;
-	uint8_t  is_640k;	
 	uint32_t ems_base;
 	int32_t  ems_pages;
-} superxt_ems;
+} superxt_t;
+
+static superxt_t superxt;
 
 /* Given an EMS page ID, return its physical address in RAM. */
-uint32_t superxt_ems_execaddr(struct superxt_ems *sys, int pg, uint16_t val)
+uint32_t superxt_ems_execaddr(superxt_t *sys, int pg, uint16_t val)
 {
 	if (!(val & 0x80)) return 0;	/* Bit 7 reset => not mapped */
 	if (!sys->ems_pages) return 0;	/* No EMS available */
@@ -42,7 +41,7 @@ uint32_t superxt_ems_execaddr(struct superxt_ems *sys, int pg, uint16_t val)
 
 static uint8_t superxt_ems_in(uint16_t addr, void *priv)
 {
-	struct superxt_ems *sys = (struct superxt_ems *)priv;
+	superxt_t *sys = (superxt_t *)priv;
 	int pg = (addr >> 14) & 3;
 	/* EMS registers are not in order in the 64K window:
 	 *	register 0 maps at 0x0000
@@ -59,7 +58,7 @@ static uint8_t superxt_ems_in(uint16_t addr, void *priv)
 
 static void superxt_ems_out(uint16_t addr, uint8_t val, void *priv)
 {
-	struct superxt_ems *sys = (struct superxt_ems *)priv;
+	superxt_t *sys = (superxt_t *)priv;
 	int pg = (addr >> 14) & 3;
 	/* EMS registers are not in order in the 64K window:
 	 *	register 0 maps at 0x0000
@@ -86,24 +85,7 @@ static void superxt_ems_out(uint16_t addr, uint8_t val, void *priv)
 	}
 }
 
-/****** TO DO: implement memory configurations with 512k conventional 
-static void superxt_ems_set_640k(struct superxt_ems *sys, uint8_t val)
-{
-	if (val && mem_size >= 640)
-	{
-		mem_mapping_set_addr(&ram_low_mapping, 0, 640 * 1024);
-		sys->is_640k = 1;
-	} 
-	else
-	{
-		mem_mapping_set_addr(&ram_low_mapping, 0, 512 * 1024);
-		sys->is_640k = 0;
-	}
-}
-*******/
-
-/****** TO DO: implement configurable EMS registers addresses *****/
-static void superxt_ems_set_config(struct superxt_ems *sys, uint8_t val)
+static void superxt_ems_set_config(superxt_t *sys, uint8_t val)
 {
 	int n;
 
@@ -138,9 +120,8 @@ static void superxt_ems_set_config(struct superxt_ems *sys, uint8_t val)
 	flushmmucache();
 	// pclog("EMS base -> %05x\n", sys->ems_base); 
 }
-/********/
 
-static int superxt_addr_to_page(uint32_t addr, struct superxt_ems *sys)
+static int superxt_addr_to_page(uint32_t addr, superxt_t *sys)
 {
 	int pg = ((addr - sys->ems_base) >> 14);
 	
@@ -150,7 +131,7 @@ static int superxt_addr_to_page(uint32_t addr, struct superxt_ems *sys)
 /* Read RAM in the EMS page frame */
 static uint8_t superxt_ems_read_ram(uint32_t addr, void *priv)
 {
-	struct superxt_ems *sys = (struct superxt_ems *)priv;
+	superxt_t *sys = (superxt_t *)priv;
 	int pg = superxt_addr_to_page(addr, sys);
 
 	// if (pg < 0 || pg > 3) return 0xFF;
@@ -161,7 +142,7 @@ static uint8_t superxt_ems_read_ram(uint32_t addr, void *priv)
 
 static uint16_t superxt_ems_read_ramw(uint32_t addr, void *priv)
 {
-	struct superxt_ems *sys = (struct superxt_ems *)priv;
+	superxt_t *sys = (superxt_t *)priv;
 	int pg = superxt_addr_to_page(addr, sys);
 
 	// if (pg < 0 || pg > 3) return 0xFF;
@@ -174,7 +155,7 @@ static uint16_t superxt_ems_read_ramw(uint32_t addr, void *priv)
 
 static uint32_t superxt_ems_read_raml(uint32_t addr, void *priv)
 {
-	struct superxt_ems *sys = (struct superxt_ems *)priv;
+	superxt_t *sys = (superxt_t *)priv;
 	int pg = superxt_addr_to_page(addr, sys);
 
 	// if (pg < 0 || pg > 3) return 0xFF;
@@ -185,7 +166,7 @@ static uint32_t superxt_ems_read_raml(uint32_t addr, void *priv)
 /* Write RAM in the EMS page frame */
 static void superxt_ems_write_ram(uint32_t addr, uint8_t val, void *priv)
 {
-	struct superxt_ems *sys = (struct superxt_ems *)priv;
+	superxt_t *sys = (superxt_t *)priv;
 	int pg = superxt_addr_to_page(addr, sys);
 
 	if (pg < 0 || pg > 3) return;
@@ -196,7 +177,7 @@ static void superxt_ems_write_ram(uint32_t addr, uint8_t val, void *priv)
 
 static void superxt_ems_write_ramw(uint32_t addr, uint16_t val, void *priv)
 {
-	struct superxt_ems *sys = (struct superxt_ems *)priv;
+	superxt_t *sys = (superxt_t *)priv;
 	int pg = superxt_addr_to_page(addr, sys);
 
 	// if (pg < 0 || pg > 3) return;
@@ -210,7 +191,7 @@ static void superxt_ems_write_ramw(uint32_t addr, uint16_t val, void *priv)
 
 static void superxt_ems_write_raml(uint32_t addr, uint32_t val, void *priv)
 {
-	struct superxt_ems *sys = (struct superxt_ems *)priv;
+	superxt_t *sys = (superxt_t *)priv;
 	int pg = superxt_addr_to_page(addr, sys);
 
 	// if (pg < 0 || pg > 3) return;
@@ -221,18 +202,20 @@ static void superxt_ems_write_raml(uint32_t addr, uint32_t val, void *priv)
 
 void superxt_write(uint16_t port, uint8_t val, void *priv)
 {
-        switch (port)
+	superxt_t *sys = (superxt_t *)priv;
+	
+	switch (port)
         {
                 case 0x22:
-                superxt_index = val;
+                sys->regs_index = val;
                 break;
                 
                 case 0x23:
-                superxt_regs[superxt_index] = val;
-                switch(superxt_index)
+                sys->regs[sys->regs_index] = val;
+                switch(sys->regs_index)
                 {
 			case 0x4C:	/* EMS configuration register */
-                	superxt_ems_set_config(&superxt_ems, val);
+                	superxt_ems_set_config(sys, val);
                 	break;
                 	
                 	case 0x40:	/* Clock/Mode Size */
@@ -240,67 +223,46 @@ void superxt_write(uint16_t port, uint8_t val, void *priv)
                 	break;
                 }                
                 break;
-
-                // case 0x0208: case 0x4208: case 0x8208: case 0xC208: 
-                // superxt_emspage[port >> 14] = val;                
-                // break;
-                
-                // default:
-                // pclog("%04X:%04X SUPERXT WRITE : %04X, %02X\n", CS, cpu_state.pc, port, val);
         }
 }
 
 uint8_t superxt_read(uint16_t port, void *priv)
 {
+	superxt_t *sys = (superxt_t *)priv;
+
         switch (port)
         {
                 case 0x22:
-                return superxt_index;
+                return sys->regs_index;
                 
                 case 0x23:
-                return superxt_regs[superxt_index];
-                
-                // case 0x0208: case 0x4208: case 0x8208: case 0xC208: 
-                // return superxt_emspage[port >> 14];  
-                
-                // default:
-                // pclog("%04X:%04X SUPERXT READ : %04X\n", CS, cpu_state.pc, port);
+                return sys->regs[sys->regs_index];
         }
         return 0xff;
 }
 
 void superxt_init()
 {
-        /* Set register 0x42 to invalid configuration at startup */
-        superxt_regs[0x42] = 0;
-
-	/* Clear EMS mapping data */
-	memset(&superxt_ems, 0, sizeof(superxt_ems));
+	/* Clear configuration */
+	memset(&superxt, 0, sizeof(superxt));
 		
 	/* Compute the number of available EMS pages */
-	superxt_ems.ems_pages = ((mem_size - 640) / 16);
-	if (superxt_ems.ems_pages < 0) superxt_ems.ems_pages = 0;
-	/* Map the EMS page frame */
+	superxt.ems_pages = ((mem_size - 640) / 16);
+	if (superxt.ems_pages < 0) superxt.ems_pages = 0;
+	/* Map the EMS page frame at default segment D000 */
 	for (int pg = 0; pg < 4; pg++)
 	{
-		mem_mapping_add(&superxt_ems.mapping[pg], 
+		mem_mapping_add(&superxt.mapping[pg], 
 			0xD0000 + (0x4000 * pg), 16384, 
 			superxt_ems_read_ram,  superxt_ems_read_ramw,  superxt_ems_read_raml,
 			superxt_ems_write_ram, superxt_ems_write_ramw, superxt_ems_write_raml,
 			NULL, MEM_MAPPING_EXTERNAL, 
-			&superxt_ems);
+			&superxt);
 		/* Start them all off disabled */
-		mem_mapping_disable(&superxt_ems.mapping[pg]);
+		mem_mapping_disable(&superxt.mapping[pg]);
 	}
 	/* Set EMS port address and base address */
-	superxt_ems_set_config(&superxt_ems, 0x00);
+	superxt_ems_set_config(&superxt, 0x00);
 
-        io_sethandler(0x0022, 0x0002, superxt_read, NULL, NULL, superxt_write, NULL, NULL,  NULL); 
-
-/*** 	
-        io_sethandler(0x0208, 0x0001, superxt_ems_in, NULL, NULL, superxt_ems_out, NULL, NULL,  &superxt_ems);
-        io_sethandler(0x4208, 0x0001, superxt_ems_in, NULL, NULL, superxt_ems_out, NULL, NULL,  &superxt_ems);
-        io_sethandler(0x8208, 0x0001, superxt_ems_in, NULL, NULL, superxt_ems_out, NULL, NULL,  &superxt_ems);
-        io_sethandler(0xc208, 0x0001, superxt_ems_in, NULL, NULL, superxt_ems_out, NULL, NULL,  &superxt_ems);
-****/
+        io_sethandler(0x0022, 0x0002, superxt_read, NULL, NULL, superxt_write, NULL, NULL,  &superxt); 
 }
