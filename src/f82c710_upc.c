@@ -477,6 +477,7 @@ void upc_mouse_write(uint16_t port, uint8_t val, void *priv)
                         upc->mouse_status &= ~UPC_MOUSE_RX_FULL;
                         upc->mouse_status |= UPC_MOUSE_DEV_IDLE | UPC_MOUSE_TX_IDLE;
                         upc->mouse_data_new = -1;
+                        picintc(upc->mouse_last_irq);
                         upc->mouse_last_irq = 0;
                         mouse_scan = 0;
                 }
