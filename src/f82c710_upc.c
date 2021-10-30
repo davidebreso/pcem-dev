@@ -516,7 +516,8 @@ void upc_mouse_poll(void *priv)
         upc_t *upc = (upc_t *)priv;
         timer_advance_u64(&upc->mouse_delay_timer, (100 * TIMER_USEC));
 
-	if(upc->mouse_data_new != -1 && !upc->mouse_last_irq && mouse_scan) 
+	if(upc->mouse_data_new != -1 && !upc->mouse_last_irq && mouse_scan && 
+	   !(upc->mouse_status & UPC_MOUSE_RX_FULL)) 
 	{
 		/* IRQ is free and there is data to be received */
                 /* raise IRQ if enabled */
@@ -531,6 +532,7 @@ void upc_mouse_poll(void *priv)
                 upc->mouse_status |= UPC_MOUSE_RX_FULL;
                 upc->mouse_status &= ~(UPC_MOUSE_DEV_IDLE);
                 upc->mouse_last_irq = 1 << upc->mouse_irq;
+                return;
         }
 
         /* check if there is something in the mouse queue */

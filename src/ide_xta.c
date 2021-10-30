@@ -1,8 +1,6 @@
 /*
  *              Implementation of a generic IDE-XTA disk controller.
- *
- *              This file is a port from the VARCem Project.
- *
+ * *
  *              XTA is the acronym for 'XT-Attached', which was basically
  *              the XT-counterpart to what we know now as IDE (which is
  *              also named ATA - AT Attachment.)  The basic ideas was to
@@ -248,7 +246,7 @@ typedef struct {
     uint16_t    base;                   // controller base I/O address
     int8_t      irq;                    // controller IRQ channel
     int8_t      dma;                    // controller DMA channel
-    int8_t      type;                   // controller type ID
+    // int8_t      type;                   // controller type ID
     int8_t      spt;                    // sectors per track
     int8_t	switches;		// controller switches
 
@@ -899,7 +897,7 @@ hdc_in(uint16_t port, void *priv)
     hdc_t *dev = (hdc_t *)priv;
     uint8_t ret = 0xff;
         
-    switch (port & 7) {
+    switch (port - dev->base) {
         case 0:         /* DATA register */
                 dev->status &= ~STAT_IRQ;
 
@@ -948,7 +946,7 @@ hdc_out(uint16_t port, uint8_t val, void *priv)
 
     // pclog("%04X:%04X %s: writing port=%04x val=%02x\n", CS, cpu_state.pc, dev->name, port, val);
 
-    switch (port & 7) {
+    switch (port - dev->base) {
         case 0:         /* DATA register */
                 if (dev->state == STATE_RDATA) {
                         if (! (dev->status & STAT_REQ)) {
@@ -1008,42 +1006,50 @@ xta_close(void *priv)
 {
     hdc_t *dev = (hdc_t *)priv;
     drive_t *drive;
-    int d;
 
     /* Remove the I/O handler. */
     io_removehandler(dev->base, 4,
                      hdc_in,NULL,NULL, hdc_out,NULL,NULL, dev);
 
-    /* Close all disks and their images. */
-    // for (d = 0; d < XTA_NUM; d++) {
-    //    drive = &dev->drives[d];
-
+    /* Close disk and its image. */
     hdd_close(&dev->drive.hdd_file);
-    // }
 
     /* Release the device. */
     free(dev);
 }
 
-static void *xta_init(int8_t type, int8_t drive_id, uint16_t base, int8_t irq,
+static void *xta_init(const char *name, int8_t drive_id, uint16_t base, int8_t irq,
 	int8_t switches, uint32_t rom_addr, const char *rom_filename)
 {
     drive_t *drive;
     hdc_t *dev;
-    // int c, i;
 
     /* Allocate and initialize device block. */
     dev = (hdc_t *)malloc(sizeof(hdc_t));
     memset(dev, 0x00, sizeof(hdc_t));
-    dev->type = type;
 
-    /* Load any disks for this device class. */
-//    for (i = 0; i < XTA_NUM; i++) {
+    /* Set device parameters */
+    dev->name = name;
+    dev->base = base;
+    dev->irq = irq;
+    dev->rom_addr = rom_addr;
+    dev->rom_filename = rom_filename;
+    dev->dma = 3;
+    dev->spt = 17;          // MFM
+    dev->switches = switches;
+
+    pclog("%04X:%04X %s: initializing (I/O=%04X, IRQ=%i, DMA=%i",
+                CS, cpu_state.pc, dev->name, dev->base, dev->irq, dev->dma);
+    if (dev->rom_addr != 0x000000)
+        pclog(", BIOS=%06X", dev->rom_addr);
+    pclog(")\n");
+
+    /* Load disk image for this device. */
     drive = &dev->drive;
 
     hdd_load(&drive->hdd_file, drive_id, ide_fn[drive_id] );
-    if (drive->hdd_file.f == NULL)  {
-        pclog("Drive %d is not present.\n", 0);
+    if (!drive->hdd_file.f)  {
+        pclog("Drive %d is not present.\n", drive_id);
         drive->present = 0;
         // continue;
     } else {
@@ -1060,55 +1066,14 @@ static void *xta_init(int8_t type, int8_t drive_id, uint16_t base, int8_t irq,
         drive->cfg_spt = drive->spt;
         drive->cfg_hpc = drive->hpc;
         drive->cfg_tracks = drive->tracks;
+
+        /* Enable the I/O block. */
+        io_sethandler(dev->base, 4,
+                      hdc_in,NULL,NULL, hdc_out,NULL,NULL, dev);
+
+        /* Create a timer for command delays. */
+        timer_add(&dev->callback_timer, hdc_callback, dev, 0);
     }
-
-    /* Do per-controller-type setup. */
-    switch (dev->type) {
-
-        case 0:         // WDXT-150, with BIOS
-                dev->name = "WDXT-150";
-                dev->base = base;
-                dev->irq = irq;
-                dev->rom_addr = rom_addr;
-                dev->rom_filename = rom_filename;
-                dev->dma = 3;
-                dev->spt = 17;          // MFM
-                dev->switches = switches;
-                break;
-        case 1:         // Amstrad PC5086
-                dev->name = "PC5086-HD";
-                dev->base = base;
-                dev->irq = irq;
-                dev->rom_addr = rom_addr;
-                dev->rom_filename = rom_filename;
-                dev->dma = 3;
-                dev->spt = 17;          // MFM
-                dev->switches = switches;
-                break;
-        case 2:         // Seagate ST-05X
-                dev->name = "ST-05X";
-                dev->base = base;
-                dev->irq = irq;
-                dev->rom_addr = rom_addr;
-                dev->rom_filename = rom_filename;
-                dev->dma = 3;
-                dev->spt = 17;          // MFM
-                dev->switches = switches;
-                break;
-    }
-
-    pclog("%04X:%04X %s: initializing (I/O=%04X, IRQ=%i, DMA=%i",
-                CS, cpu_state.pc, dev->name, dev->base, dev->irq, dev->dma);
-    if (dev->rom_addr != 0x000000)
-        pclog(", BIOS=%06X", dev->rom_addr);
-    pclog(")\n");
-
-    /* Enable the I/O block. */
-    io_sethandler(dev->base, 4,
-                  hdc_in,NULL,NULL, hdc_out,NULL,NULL, dev);
-
-    /* Create a timer for command delays. */
-    timer_add(&dev->callback_timer, hdc_callback, dev, 0);
 
     return((void *)dev);
 }
@@ -1172,7 +1137,7 @@ static device_config_t wdxt150_config[] = {
 };
 
 static void *xta_wdxt150_init() {
-    hdc_t *dev = xta_init(0, 0, device_get_config_int("base"), 
+    hdc_t *dev = xta_init("WDXT-150", 0, device_get_config_int("base"), 
     			  device_get_config_int("irq"), 0xff,
     			  device_get_config_int("bios_addr"), WD_BIOS_FILE);
 
@@ -1201,7 +1166,7 @@ device_t xta_wdxt150_device = {
 };
 
 static void *xta_pc5086_init() {
-    hdc_t *dev = xta_init(1, 0, 0x320, 5, 0x0, 0xC8000, PC5086_BIOS_FILE);
+    hdc_t *dev = xta_init("PC5086-HD", 0, 0x320, 5, 0x0, 0xC8000, PC5086_BIOS_FILE);
 
     /* Load BIOS */
     rom_init(&dev->bios_rom, (char *)dev->rom_filename,
@@ -1254,8 +1219,33 @@ static device_config_t st05x_config[] = {
             .default_int = 0xc8000
     },
     {
-            .name = "drive0_type",
-            .description = "Drive 0 type",
+            .name = "drive1_type",
+            .description = "Drive 1 type",
+            .type = CONFIG_SELECTION,
+            .selection =
+            {
+                    {
+                            .description = "Type 0, CHS 980/5/17",
+                            .value = 0x0
+                    },
+                    {
+                            .description = "Type 1, CHS 615/6/17",
+                            .value = 0x1
+                    },
+                    {
+                            .description = "Type 2, CHS 980/5/17",
+                            .value = 0x2
+                    },
+                    {
+                            .description = "Type 3, CHS 615/4/17",
+                            .value = 0x3
+                    }
+           },
+            .default_int = 0x0
+    },    
+    {
+            .name = "drive2_type",
+            .description = "Drive 2 type",
             .type = CONFIG_SELECTION,
             .selection =
             {
@@ -1284,14 +1274,28 @@ static device_config_t st05x_config[] = {
 };
 
 static void *xta_st05x_init() {
-    hdc_t *dev = xta_init(2, 0, 0x320, 5, device_get_config_int("drive0_type"),
+    /* The ST-05X provides two drive interfaces, one at 0x320 and the other at 0x324 */
+    hdc_t **devs = (hdc_t **)malloc(sizeof(hdc_t *));
+    devs[0] = xta_init("ST-05X-D0", 0, 0x320, 5, device_get_config_int("drive1_type"),
+    			  device_get_config_int("bios_addr"), ST_BIOS_FILE);
+    devs[1] = xta_init("ST-05X-D1", 1, 0x324, 5, device_get_config_int("drive2_type"),
     			  device_get_config_int("bios_addr"), ST_BIOS_FILE);
 
-    /* Load BIOS */
-    rom_init(&dev->bios_rom, (char *)dev->rom_filename,
-	     dev->rom_addr, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
+    /* Load BIOS only for first interface */
+    rom_init(&devs[0]->bios_rom, (char *)devs[0]->rom_filename,
+	     devs[0]->rom_addr, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
 
-    return dev;
+    return devs;
+}
+
+static void xta_st05x_close(void *priv)
+{
+    hdc_t **devs = (hdc_t **)priv;
+    
+    xta_close(devs[0]);
+    xta_close(devs[1]);
+    
+    free(devs);
 }
 
 static int xta_st05x_available()
@@ -1303,7 +1307,7 @@ device_t xta_st05x_device = {
     "Seagate ST-05X Adapter Card",
     0,
     xta_st05x_init, 
-    xta_close, 
+    xta_st05x_close, 
     xta_st05x_available,
     NULL, 
     NULL, 
