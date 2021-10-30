@@ -109,6 +109,7 @@
 
 #define WD_BIOS_FILE            "idexywd2.bin"
 #define PC5086_BIOS_FILE        "pc5086/c800.bin"
+#define ST_BIOS_FILE        	"st05x24.bin"
 
 extern char ide_fn[7][512];
 
@@ -276,7 +277,7 @@ typedef struct {
                 comp;                   // operation completion byte
     int         count;                  // requested sector count
 
-    drive_t     drives[XTA_NUM];        // the attached drive(s)
+    drive_t     drive;        		// the attached drive
 
     uint8_t     data[512];              // data buffer
     uint8_t     sector_buf[512];        // sector buffer
@@ -392,7 +393,7 @@ do_format(hdc_t *dev, drive_t *drive, dcb_t *dcb)
                       drive->id, dev->track, dev->head);
 
                 /* Activate the status icon. */
-                // hdd_active(drive->hdd_num, 1);
+                readflash_set(READFLASH_HDC, drive->hdd_num);
 
 do_fmt:
                 /*
@@ -426,8 +427,6 @@ do_fmt:
                 goto do_fmt;
     }
 
-    /* De-activate the status icon. */
-    // hdd_active(drive->hdd_num, 0);
 }
 
 
@@ -444,7 +443,7 @@ hdc_callback(void *priv)
     int val;
 
     /* Get the correct drive for this request. */
-    drive = &dev->drives[dcb->drvsel];
+    drive = &dev->drive;
     dev->comp = (dcb->drvsel) ? COMP_DRIVE : 0x00;
     dev->status |= STAT_DCB;
 
@@ -527,7 +526,7 @@ hdc_callback(void *priv)
 
                         case STATE_SEND:
                                 /* Activate the status icon. */
-                                // hdd_active(drive->hdd_num, 1);
+                                readflash_set(READFLASH_HDC, drive->hdd_num);
 
                                 pclog("%04X:%04X %s: read_%s(%i: %i,%i,%i) cnt=%i\n",
                                       CS, cpu_state.pc, dev->name, (no_data)?"verify":"sector",
@@ -536,8 +535,6 @@ hdc_callback(void *priv)
 do_send:
                                 /* Get address of sector to load. */
                                 if (! get_sector(dev, drive, &addr)) {
-                                        /* De-activate the status icon. */
-                                        // hdd_active(drive->hdd_num, 0);
                                         dev->comp |= COMP_ERR;
                                         set_intr(dev);
                                         return;
@@ -600,9 +597,6 @@ do_send:
                                               (no_data)?"verify":"sector",
                                               drive->id);
 
-                                        /* De-activate the status icon. */
-                                        // hdd_active(drive->hdd_num, 0);
-
                                         set_intr(dev);
                                         return;
                                 }
@@ -648,7 +642,7 @@ do_send:
 
                         case STATE_RECV:
                                 /* Activate the status icon. */
-                                // hdd_active(drive->hdd_num, 1);
+				readflash_set(READFLASH_HDC, drive->hdd_num);
 
                                 pclog("%04X:%04X %s: write_%s(%i: %i,%i,%i) cnt=%i\n",
                                       CS, cpu_state.pc, dev->name, (no_data)?"verify":"sector",
@@ -705,8 +699,6 @@ do_recv:
 
                                 /* Get address of sector to write. */
                                 if (! get_sector(dev, drive, &addr)) {
-                                        /* De-activate the status icon. */
-                                        // hdd_active(drive->hdd_num, 0);
 
                                         dev->comp |= COMP_ERR;
                                         set_intr(dev);
@@ -723,9 +715,6 @@ do_recv:
                                               CS, cpu_state.pc, dev->name,
                                               (no_data)?"verify":"sector",
                                               drive->id);
-
-                                        /* De-activate the status icon. */
-                                        // hdd_active(drive->hdd_num, 0);
 
                                         set_intr(dev);
                                         return;
@@ -1026,71 +1015,40 @@ xta_close(void *priv)
                      hdc_in,NULL,NULL, hdc_out,NULL,NULL, dev);
 
     /* Close all disks and their images. */
-    for (d = 0; d < XTA_NUM; d++) {
-        drive = &dev->drives[d];
+    // for (d = 0; d < XTA_NUM; d++) {
+    //    drive = &dev->drives[d];
 
-        hdd_close(&drive->hdd_file);
-    }
+    hdd_close(&dev->drive.hdd_file);
+    // }
 
     /* Release the device. */
     free(dev);
 }
 
-static void *xta_init(int8_t type)
+static void *xta_init(int8_t type, int8_t drive_id, uint16_t base, int8_t irq,
+	int8_t switches, uint32_t rom_addr, const char *rom_filename)
 {
     drive_t *drive;
     hdc_t *dev;
-    int c, i;
-    int bus;
+    // int c, i;
 
     /* Allocate and initialize device block. */
     dev = (hdc_t *)malloc(sizeof(hdc_t));
     memset(dev, 0x00, sizeof(hdc_t));
     dev->type = type;
 
-    /* Do per-controller-type setup. */
-    switch (dev->type) {
-
-        case 0:         // WDXT-150, with BIOS
-                dev->name = "WDXT-150";
-                dev->base = device_get_config_int("base");
-                dev->irq = device_get_config_int("irq");
-                dev->rom_addr = device_get_config_int("bios_addr");
-                dev->rom_filename = WD_BIOS_FILE;
-                dev->dma = 3;
-                dev->spt = 17;          // MFM
-                dev->switches = 0xff;	// All switches are off
-                break;
-        case 1:         // Amstrad PC5086
-                dev->name = "PC5086-HD";
-                dev->base = 0x0320;
-                dev->irq = 5;
-                dev->dma = 3;
-                dev->rom_addr = 0xc8000;
-                dev->rom_filename = PC5086_BIOS_FILE;
-                dev->spt = 17;          // MFM
-                dev->switches = 0;	// Set drive type to 0
-                break;
-    }
-
-    pclog("%04X:%04X %s: initializing (I/O=%04X, IRQ=%i, DMA=%i",
-                CS, cpu_state.pc, dev->name, dev->base, dev->irq, dev->dma);
-    if (dev->rom_addr != 0x000000)
-        pclog(", BIOS=%06X", dev->rom_addr);
-    pclog(")\n");
-
     /* Load any disks for this device class. */
-    for (i = 0; i < XTA_NUM; i++) {
-        drive = &dev->drives[i];
+//    for (i = 0; i < XTA_NUM; i++) {
+    drive = &dev->drive;
 
-        hdd_load(&drive->hdd_file, i, ide_fn[i] );
-        if (drive->hdd_file.f == NULL)  {
-        	pclog("Drive %d is not present.\n", i);
-                drive->present = 0;
-                continue;
-        }
-        drive->id = i;
-        drive->hdd_num = i;
+    hdd_load(&drive->hdd_file, drive_id, ide_fn[drive_id] );
+    if (drive->hdd_file.f == NULL)  {
+        pclog("Drive %d is not present.\n", 0);
+        drive->present = 0;
+        // continue;
+    } else {
+        drive->id = drive_id;
+        drive->hdd_num = drive_id;
         drive->present = 1;
 
         /* These are the "hardware" parameters (from the image.) */
@@ -1104,15 +1062,51 @@ static void *xta_init(int8_t type)
         drive->cfg_tracks = drive->tracks;
     }
 
+    /* Do per-controller-type setup. */
+    switch (dev->type) {
+
+        case 0:         // WDXT-150, with BIOS
+                dev->name = "WDXT-150";
+                dev->base = base;
+                dev->irq = irq;
+                dev->rom_addr = rom_addr;
+                dev->rom_filename = rom_filename;
+                dev->dma = 3;
+                dev->spt = 17;          // MFM
+                dev->switches = switches;
+                break;
+        case 1:         // Amstrad PC5086
+                dev->name = "PC5086-HD";
+                dev->base = base;
+                dev->irq = irq;
+                dev->rom_addr = rom_addr;
+                dev->rom_filename = rom_filename;
+                dev->dma = 3;
+                dev->spt = 17;          // MFM
+                dev->switches = switches;
+                break;
+        case 2:         // Seagate ST-05X
+                dev->name = "ST-05X";
+                dev->base = base;
+                dev->irq = irq;
+                dev->rom_addr = rom_addr;
+                dev->rom_filename = rom_filename;
+                dev->dma = 3;
+                dev->spt = 17;          // MFM
+                dev->switches = switches;
+                break;
+    }
+
+    pclog("%04X:%04X %s: initializing (I/O=%04X, IRQ=%i, DMA=%i",
+                CS, cpu_state.pc, dev->name, dev->base, dev->irq, dev->dma);
+    if (dev->rom_addr != 0x000000)
+        pclog(", BIOS=%06X", dev->rom_addr);
+    pclog(")\n");
+
     /* Enable the I/O block. */
     io_sethandler(dev->base, 4,
                   hdc_in,NULL,NULL, hdc_out,NULL,NULL, dev);
 
-    /* Load BIOS if it has one. */
-    if (dev->rom_addr != 0x000000)
-        rom_init(&dev->bios_rom, (char *)dev->rom_filename,
-                 dev->rom_addr, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
-                
     /* Create a timer for command delays. */
     timer_add(&dev->callback_timer, hdc_callback, dev, 0);
 
@@ -1178,7 +1172,15 @@ static device_config_t wdxt150_config[] = {
 };
 
 static void *xta_wdxt150_init() {
-    return xta_init(0);
+    hdc_t *dev = xta_init(0, 0, device_get_config_int("base"), 
+    			  device_get_config_int("irq"), 0xff,
+    			  device_get_config_int("bios_addr"), WD_BIOS_FILE);
+
+    /* Load BIOS */
+    rom_init(&dev->bios_rom, (char *)dev->rom_filename,
+	     dev->rom_addr, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
+
+    return dev;
 }
 
 static int xta_wdxt150_available()
@@ -1199,7 +1201,13 @@ device_t xta_wdxt150_device = {
 };
 
 static void *xta_pc5086_init() {
-    return xta_init(1);
+    hdc_t *dev = xta_init(1, 0, 0x320, 5, 0x0, 0xC8000, PC5086_BIOS_FILE);
+
+    /* Load BIOS */
+    rom_init(&dev->bios_rom, (char *)dev->rom_filename,
+	     dev->rom_addr, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
+
+    return dev;
 }
 
 static int xta_pc5086_available()
@@ -1217,6 +1225,90 @@ device_t xta_pc5086_device = {
     NULL, 
     NULL, 
     NULL,
+};
+
+static device_config_t st05x_config[] = {
+    {
+            .name = "bios_addr",
+            .description = "BIOS Address",
+            .type = CONFIG_SELECTION,
+            .selection =
+            {
+                    {
+                            .description = "C800H",
+                            .value = 0xc8000
+                    },
+                    {
+                            .description = "D000H",
+                            .value = 0xd0000
+                    },
+                    {
+                            .description = "D800H",
+                            .value = 0xd8000
+                    },
+                    {
+                            .description = "E000H",
+                            .value = 0xe0000
+                    }
+           },
+            .default_int = 0xc8000
+    },
+    {
+            .name = "drive0_type",
+            .description = "Drive 0 type",
+            .type = CONFIG_SELECTION,
+            .selection =
+            {
+                    {
+                            .description = "Type 0, CHS 980/5/17",
+                            .value = 0x0
+                    },
+                    {
+                            .description = "Type 1, CHS 615/6/17",
+                            .value = 0x1
+                    },
+                    {
+                            .description = "Type 2, CHS 980/5/17",
+                            .value = 0x2
+                    },
+                    {
+                            .description = "Type 3, CHS 615/4/17",
+                            .value = 0x3
+                    }
+           },
+            .default_int = 0x0
+    },    
+    {
+        .type = -1
+    }
+};
+
+static void *xta_st05x_init() {
+    hdc_t *dev = xta_init(2, 0, 0x320, 5, device_get_config_int("drive0_type"),
+    			  device_get_config_int("bios_addr"), ST_BIOS_FILE);
+
+    /* Load BIOS */
+    rom_init(&dev->bios_rom, (char *)dev->rom_filename,
+	     dev->rom_addr, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
+
+    return dev;
+}
+
+static int xta_st05x_available()
+{
+        return rom_present(ST_BIOS_FILE);
+}
+
+device_t xta_st05x_device = {
+    "Seagate ST-05X Adapter Card",
+    0,
+    xta_st05x_init, 
+    xta_close, 
+    xta_st05x_available,
+    NULL, 
+    NULL, 
+    NULL, 
+    st05x_config,
 };
 
 
