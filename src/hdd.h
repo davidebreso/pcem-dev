@@ -3,6 +3,7 @@
 char *hdd_controller_get_name(int hdd);
 char *hdd_controller_get_internal_name(int hdd);
 int hdd_controller_get_flags(int hdd);
+int hdd_controller_builtin(int hdd, int model_id);
 int hdd_controller_available(int hdd);
 int hdd_controller_is_mfm(char* internal_name);
 int hdd_controller_is_ide(char *internal_name);

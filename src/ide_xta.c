@@ -1177,7 +1177,7 @@ static void *xta_pc5086_init() {
 
 static int xta_pc5086_available()
 {
-        return rom_present(PC5086_BIOS_FILE);
+    return rom_present(PC5086_BIOS_FILE);
 }
 
 device_t xta_pc5086_device = {

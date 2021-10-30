@@ -24,30 +24,31 @@ static struct
         char name[50];
         char internal_name[16];
         device_t *device;
+        int builtin_id;
         int is_mfm;
         int is_ide;
         int is_scsi;
 } hdd_controllers[] = 
 {
-        {"None",                                  "none",        &null_hdd_device,      0, 0, 0},
-        {"[MFM] AT Fixed Disk Adapter",           "mfm_at",      &mfm_at_device,        1, 0, 0},
-        {"[MFM] DTC 5150X",                       "dtc5150x",    &dtc_5150x_device,     1, 0, 0},
-        {"[MFM] Fixed Disk Adapter (Xebec)",      "mfm_xebec",   &mfm_xebec_device,     1, 0, 0},
-        {"[XTA] Western Digital WD-XT150",        "xta_wdxt150", &xta_wdxt150_device,   1, 0, 0},
-        {"[XTA] Seagate ST-05X",                  "xta_st05x",   &xta_st05x_device,     1, 0, 0},
-        {"[XTA] Amstrad PC5086 Interface",        "xta_pc5086",  &xta_pc5086_device,    1, 0, 0},
-        {"[ESDI] IBM ESDI Fixed Disk Controller", "esdi_mca",    &hdd_esdi_device,      1, 0, 0},
-        {"[ESDI] Western Digital WD1007V-SE1",    "wd1007vse1",  &wd1007vse1_device,    0, 0, 0},
-        {"[IDE] Standard IDE",                    "ide",         &ide_device,           0, 1, 0},
-        {"[IDE] XTIDE",                           "xtide",       &xtide_device,         0, 1, 0},
-        {"[IDE] XTIDE (AT)",                      "xtide_at",    &xtide_at_device,      0, 1, 0},
-        {"[IDE] XTIDE (PS/1)",                    "xtide_ps1",   &xtide_ps1_device,     0, 1, 0},
-        {"[SCSI] Adaptec AHA-1542C",              "aha1542c",    &scsi_aha1542c_device, 0, 0, 1},
-        {"[SCSI] BusLogic BT-545S",               "bt545s",      &scsi_bt545s_device,   0, 0, 1},
-        {"[SCSI] IBM SCSI Adapter with Cache",    "ibmscsi_mca", &scsi_ibm_device,      0, 0, 1},
-        {"[SCSI] Longshine LCS-6821N",            "lcs6821n",    &scsi_lcs6821n_device, 0, 0, 1},
-        {"[SCSI] Rancho RT1000B",                 "rt1000b",     &scsi_rt1000b_device,  0, 0, 1},
-        {"[SCSI] Trantor T130B",                  "t130b",       &scsi_t130b_device,    0, 0, 1},
+        {"None",                                  "none",        &null_hdd_device,      -1,		0, 0, 0},
+        {"[MFM] AT Fixed Disk Adapter",           "mfm_at",      &mfm_at_device,        -1,		1, 0, 0},
+        {"[MFM] DTC 5150X",                       "dtc5150x",    &dtc_5150x_device,     -1,		1, 0, 0},
+        {"[MFM] Fixed Disk Adapter (Xebec)",      "mfm_xebec",   &mfm_xebec_device,     -1,		1, 0, 0},
+        {"[XTA] Western Digital WD-XT150",        "xta_wdxt150", &xta_wdxt150_device,   -1,		1, 0, 0},
+        {"[XTA] Seagate ST-05X",                  "xta_st05x",   &xta_st05x_device,     -1,		1, 0, 0},
+        {"[XTA] Amstrad PC5086 Interface",        "xta_pc5086",  &xta_pc5086_device,    ROM_PC5086,	1, 0, 0},
+        {"[ESDI] IBM ESDI Fixed Disk Controller", "esdi_mca",    &hdd_esdi_device,      -1,		1, 0, 0},
+        {"[ESDI] Western Digital WD1007V-SE1",    "wd1007vse1",  &wd1007vse1_device,    -1,		0, 0, 0},
+        {"[IDE] Standard IDE",                    "ide",         &ide_device,           -1,		0, 1, 0},
+        {"[IDE] XTIDE",                           "xtide",       &xtide_device,         -1,		0, 1, 0},
+        {"[IDE] XTIDE (AT)",                      "xtide_at",    &xtide_at_device,      -1,		0, 1, 0},
+        {"[IDE] XTIDE (PS/1)",                    "xtide_ps1",   &xtide_ps1_device,     -1,		0, 1, 0},
+        {"[SCSI] Adaptec AHA-1542C",              "aha1542c",    &scsi_aha1542c_device, -1,		0, 0, 1},
+        {"[SCSI] BusLogic BT-545S",               "bt545s",      &scsi_bt545s_device,   -1,		0, 0, 1},
+        {"[SCSI] IBM SCSI Adapter with Cache",    "ibmscsi_mca", &scsi_ibm_device,      -1,		0, 0, 1},
+        {"[SCSI] Longshine LCS-6821N",            "lcs6821n",    &scsi_lcs6821n_device, -1,		0, 0, 1},
+        {"[SCSI] Rancho RT1000B",                 "rt1000b",     &scsi_rt1000b_device,  -1,		0, 0, 1},
+        {"[SCSI] Trantor T130B",                  "t130b",       &scsi_t130b_device,    -1,		0, 0, 1},
         {"", "", NULL, 0, 0}
 };
 
@@ -64,6 +65,12 @@ char *hdd_controller_get_internal_name(int hdd)
 int hdd_controller_get_flags(int hdd)
 {
         return hdd_controllers[hdd].device->flags;
+}
+
+int hdd_controller_builtin(int hdd, int model_id)
+{
+        if(hdd_controllers[hdd].builtin_id == -1) return 1;
+        return (hdd_controllers[hdd].builtin_id == model_id);
 }
 
 int hdd_controller_available(int hdd)

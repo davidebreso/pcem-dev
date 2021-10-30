@@ -275,6 +275,11 @@ static void recalc_hdd_list(void* hdlg, int model, int use_selected_hdd, int for
                         c++;
                         continue;
                 }
+                if (!hdd_controller_builtin(c, models[model].id))
+                {
+                	c++;
+                	continue;
+                }
                 if (!hdd_controller_available(c))
                 {
                         c++;
@@ -1427,8 +1432,10 @@ static struct
         {1024, 5},  {612, 2},  {1024,  9}, {1024,  8},
         {615,  8},  {987, 3},   {462,  7},  {820,  6},
         {977,  5},  {981, 5},   {830,  7},  {830, 10},
-        {917, 15}, {1224, 15}
+        {917, 15}, {1224, 15},  {980,  5}
 };
+
+#define NUM_HD_TYPES 47
 
 static int hdd_controller_selected_is_mfm(void* hdlg)
 {
@@ -1479,7 +1486,7 @@ static void check_hd_type(void* hdlg, off64_t sz)
 
         if (hdd_controller_selected_is_mfm(hdlg))
         {
-                for (c = 0; c < 46; c++)
+                for (c = 0; c < NUM_HD_TYPES; c++)
                 {
                         if ((hd_types[c].cylinders * hd_types[c].heads * 17 * 512) == sz)
                         {
@@ -1747,7 +1754,7 @@ static int hdnew_dlgproc(void* hdlg, int message, INT_PARAM wParam, LONG_PARAM l
 //                hd_type = 0;
                 h = wx_getdlgitem(hdlg, WX_ID("IDC_HDTYPE"));
                 wx_sendmessage(h, WX_CB_ADDSTRING, 0, (LONG_PARAM)"Custom type");
-                for (c = 1; c <= 46; c++)
+                for (c = 1; c <= NUM_HD_TYPES; c++)
                 {
                         sprintf(s, "Type %02i : cylinders=%i, heads=%i, size=%iMB", c, hd_types[c-1].cylinders, hd_types[c-1].heads, (hd_types[c-1].cylinders * hd_types[c-1].heads * 17 * 512) / (1024 * 1024));
                         wx_sendmessage(h, WX_CB_ADDSTRING, 0, (LONG_PARAM)s);
@@ -1895,7 +1902,7 @@ static int hdnew_dlgproc(void* hdlg, int message, INT_PARAM wParam, LONG_PARAM l
                         wx_sendmessage(h, WX_WM_SETTEXT, 0, (LONG_PARAM)s);
 
                         hd_type = 0;
-                        for (c = 1; c <= 46; c++)
+                        for (c = 1; c <= NUM_HD_TYPES; c++)
                         {
                                 pclog("Compare %i,%i %i,%i %i,%i\n", hd[0].spt,17, hd[0].hpc,hd_types[c-1].heads, hd[0].tracks,hd_types[c-1].cylinders);
                                 if (hd[0].spt == 17 && hd[0].hpc == hd_types[c-1].heads && hd[0].tracks == hd_types[c-1].cylinders)
@@ -2030,7 +2037,7 @@ static int hdsize_dlgproc(void* hdlg, int message, INT_PARAM wParam, LONG_PARAM 
                 case WX_INITDIALOG:
                 h = wx_getdlgitem(hdlg, WX_ID("IDC_HDTYPE"));
                 wx_sendmessage(h, WX_CB_ADDSTRING, 0, (LONG_PARAM)"Custom type");
-                for (c = 1; c <= 46; c++)
+                for (c = 1; c <= NUM_HD_TYPES; c++)
                 {
                         sprintf(s, "Type %02i : cylinders=%i, heads=%i, size=%iMB", c, hd_types[c-1].cylinders, hd_types[c-1].heads, (hd_types[c-1].cylinders * hd_types[c-1].heads * 17 * 512) / (1024 * 1024));
                         wx_sendmessage(h, WX_CB_ADDSTRING, 0, (LONG_PARAM)s);
