@@ -78,10 +78,19 @@ void scat_shadow_state_update()
 {
         int i, val;
 
-        for (i = 0; i < 24; i++)
+        if ((scat_regs[SCAT_DRAM_CONFIGURATION] & 0xF) < 4)
         {
-                val = ((scat_regs[SCAT_SHADOW_RAM_ENABLE_1 + (i >> 3)] >> (i & 7)) & 1) ? MEM_READ_INTERNAL | MEM_WRITE_INTERNAL : MEM_READ_EXTERNAL | MEM_WRITE_EXTERNAL;
-                mem_set_mem_state((i + 40) << 14, 0x4000, val);
+                /*Less than 1MB low memory, no shadow RAM available*/
+                for (i = 0; i < 24; i++)
+                        mem_set_mem_state((i + 40) << 14, 0x4000, MEM_READ_EXTERNAL | MEM_WRITE_EXTERNAL);
+        }
+        else
+        {
+                for (i = 0; i < 24; i++)
+                {
+                        val = ((scat_regs[SCAT_SHADOW_RAM_ENABLE_1 + (i >> 3)] >> (i & 7)) & 1) ? MEM_READ_INTERNAL | MEM_WRITE_INTERNAL : MEM_READ_EXTERNAL | MEM_WRITE_EXTERNAL;
+                        mem_set_mem_state((i + 40) << 14, 0x4000, val);
+                }
         }
 
         flushmmucache();
@@ -1037,12 +1046,12 @@ void scat_write(uint16_t port, uint8_t val, void *priv)
                         scat_reg_valid = 1;
                         break;
                         case SCAT_POWER_MANAGEMENT:
-                        // TODO - Only use AUX parity disable bit for this version. Other bits should be implemented later.
-                        val &= (scat_regs[SCAT_VERSION] & 0xF0) == 0 ? 0x40 : 0x60;
+                        cpu_set_nonturbo_divider((val & 0xc) > 0 ? 1 << ((val & 0xc) >> 2) : 0);
                         scat_reg_valid = 1;
                         break;
                         case SCAT_DRAM_CONFIGURATION:
                         scat_map_update = 1;
+                        scat_shadow_update = 1;
 
                         if((scat_regs[SCAT_VERSION] & 0xF0) == 0)
                         {
@@ -1209,6 +1218,9 @@ uint8_t scat_read(uint16_t port, void *priv)
                 {
                         case SCAT_MISCELLANEOUS_STATUS:
                         val = (scat_regs[scat_index] & 0x3f) | (~nmi_mask & 0x80) | ((mem_a20_key & 2) << 5);
+                        break;
+                        case SCAT_POWER_MANAGEMENT:
+                        val = (scat_regs[scat_index] & (cpu_get_turbo() ? 0xF3 : 0xFF));
                         break;
                         case SCAT_DRAM_CONFIGURATION:
                         if ((scat_regs[SCAT_VERSION] & 0xF0) == 0) val = (scat_regs[scat_index] & 0x8f) | (cpu_waitstates == 1 ? 0 : 0x10);

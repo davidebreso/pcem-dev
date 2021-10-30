@@ -337,7 +337,7 @@ void et4000w32p_recalcmapping(et4000w32p_t *et4000)
                         case 0x0: case 0x4: case 0x8: case 0xC: /*128k at A0000*/
                         mem_mapping_set_addr(&svga->mapping, 0xa0000, 0x20000);
                         mem_mapping_disable(&et4000->mmu_mapping);
-                        svga->banked_mask = 0xffff;
+                        svga->banked_mask = 0x1ffff;
                         break;
                         case 0x1: /*64k at A0000*/
                         mem_mapping_set_addr(&svga->mapping, 0xa0000, 0x10000);
@@ -1206,6 +1206,8 @@ void *et4000w32p_init()
         et4000->wake_fifo_thread = thread_create_event();
         et4000->fifo_not_full_event = thread_create_event();
         et4000->fifo_thread = thread_create(fifo_thread, et4000);
+
+        et4000->svga.packed_chain4 = 1;
 
         return et4000;
 }

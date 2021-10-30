@@ -86,11 +86,11 @@ static void w83877tf_write_reg(w83877tf_t *w83877tf, int index, uint8_t val)
 
         serial1_remove();
         if (w83877tf->regs[0x24] >= 0x40)
-                serial1_set((w83877tf->regs[0x24] & ~1) << 2, w83877tf->regs[0x28] >> 4, 1);
+                serial1_set((w83877tf->regs[0x24] & ~1) << 2, w83877tf->regs[0x28] >> 4);
 
         serial2_remove();
         if (w83877tf->regs[0x25] >= 0x40)
-                serial2_set((w83877tf->regs[0x25] & ~1) << 2, w83877tf->regs[0x28] & 0xf, 1);
+                serial2_set((w83877tf->regs[0x25] & ~1) << 2, w83877tf->regs[0x28] & 0xf);
 
 //        pclog("LPT at %04x\n", w83877tf->regs[0x23] << 2);
 //        pclog("Serial1 at %04x %i\n", (w83877tf->regs[0x24] & ~1) << 2, w83877tf->regs[0x28] >> 4);
@@ -235,14 +235,20 @@ static void w83877_common_init(int chip, uint16_t base, uint8_t key)
                 w83877tf_global.regs[0x16] = 0x04;
         else
                 w83877tf_global.regs[0x16] = 0x05;
-        w83877tf_global.regs[0x20] = 0xfc;
-        w83877tf_global.regs[0x23] = 0xde;
-        w83877tf_global.regs[0x24] = 0xfe;
-        w83877tf_global.regs[0x25] = 0xbe;
-        w83877tf_global.regs[0x26] = 0x23;
-        w83877tf_global.regs[0x27] = 0x05;
-        w83877tf_global.regs[0x28] = 0x43;
-        w83877tf_global.regs[0x29] = 0x60;
+        w83877tf_global.regs[0x20] = 0;
+        w83877tf_global.regs[0x23] = 0;
+        w83877tf_global.regs[0x24] = 0;
+        w83877tf_global.regs[0x25] = 0;
+        w83877tf_global.regs[0x26] = 0;
+        w83877tf_global.regs[0x27] = 0;
+        w83877tf_global.regs[0x28] = 0;
+        w83877tf_global.regs[0x29] = 0;
+
+        fdc_remove();
+        lpt1_remove();
+        lpt2_remove();
+        serial1_remove();
+        serial2_remove();
 
         w83877tf_global.chip = chip;
         w83877tf_global.unlock_key = key;

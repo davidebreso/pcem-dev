@@ -10,6 +10,8 @@
 #endif
 #include "config.h"
 #include "slirp_config.h"
+#include <fcntl.h> // for open
+#include <unistd.h> // for close
 
 #ifndef container_of
 #define container_of(address, type, field) ((type *)( \
@@ -78,6 +80,10 @@ typedef char *SLIRPcaddr_t;
 #endif
 #ifdef HAVE_STDINT_H
 # include <stdint.h>
+#endif
+
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 
 #ifndef _MSC_VER

@@ -999,13 +999,18 @@ void s3_out(uint16_t addr, uint8_t val, void *p)
                         return;
                 if ((svga->crtcreg == 7) && (svga->crtc[0x11] & 0x80))
                         val = (svga->crtc[7] & ~0x10) | (val & 0x10);
-                if (svga->crtcreg >= 0x20 && svga->crtcreg != 0x38 && (svga->crtc[0x38] & 0xcc) != 0x48) return;
+                if (svga->crtcreg >= 0x20 && svga->crtcreg != 0x38 && svga->crtcreg != 0x39 && (svga->crtc[0x38] & 0xcc) != 0x48)
+                {
+                        if (!((svga->crtc[0x39] & 0xe0) == 0xa0 && svga->crtcreg >= 0x40 && svga->crtcreg <= 0x6d))
+                                return;
+                }
                 old = svga->crtc[svga->crtcreg];
                 svga->crtc[svga->crtcreg] = val;
                 switch (svga->crtcreg)
                 {
                         case 0x31:
                         s3->ma_ext = (s3->ma_ext & 0x1c) | ((val & 0x30) >> 4);
+                        svga->force_dword_mode = val & 0x08;
                         break;
                         case 0x32:
                         svga->vram_display_mask = (val & 0x40) ? 0x3ffff : s3->vram_mask;
@@ -1658,15 +1663,35 @@ static void polygon_setup(s3_t *s3)
         }
 }
 
-#define READ_SRC(addr, dat) if (s3->bpp == 0)      dat = svga->vram[  (addr) & s3->vram_mask]; \
-                            else if (s3->bpp == 1) dat = vram_w[(addr) & (s3->vram_mask >> 1)]; \
-                            else                   dat = vram_l[(addr) & (s3->vram_mask >> 2)]; \
+/*Remap address for chain-4/doubleword style layout*/
+static inline uint32_t dword_remap(uint32_t in_addr)
+{
+        return ((in_addr << 2) & 0x3fff0) |
+                ((in_addr >> 14) & 0xc) |
+                (in_addr & ~0x3fffc);
+}
+static inline uint32_t dword_remap_w(uint32_t in_addr)
+{
+        return ((in_addr << 2) & 0x1fff8) |
+                ((in_addr >> 14) & 0x6) |
+                (in_addr & ~0x1fffe);
+}
+static inline uint32_t dword_remap_l(uint32_t in_addr)
+{
+        return ((in_addr << 2) & 0xfffc) |
+                ((in_addr >> 14) & 0x3) |
+                (in_addr & ~0xffff);
+}
+
+#define READ_SRC(addr, dat) if (s3->bpp == 0)      dat = svga->vram[  dword_remap(addr) & s3->vram_mask]; \
+                            else if (s3->bpp == 1) dat = vram_w[dword_remap_w(addr) & (s3->vram_mask >> 1)]; \
+                            else                   dat = vram_l[dword_remap_l(addr) & (s3->vram_mask >> 2)]; \
                             if (vram_mask)                                           \
                                     dat = ((dat & rd_mask) == rd_mask);
 
-#define READ_DST(addr, dat) if (s3->bpp == 0)      dat = svga->vram[  (addr) & s3->vram_mask]; \
-                            else if (s3->bpp == 1) dat = vram_w[(addr) & (s3->vram_mask >> 1)]; \
-                            else                   dat = vram_l[(addr) & (s3->vram_mask >> 2)];
+#define READ_DST(addr, dat) if (s3->bpp == 0)      dat = svga->vram[  dword_remap(addr) & s3->vram_mask]; \
+                            else if (s3->bpp == 1) dat = vram_w[dword_remap_w(addr) & (s3->vram_mask >> 1)]; \
+                            else                   dat = vram_l[dword_remap_l(addr) & (s3->vram_mask >> 2)];
 
 #define MIX     {                                                                                               \
                         uint32_t old_dest_dat = dest_dat;                                                       \
@@ -1695,18 +1720,18 @@ static void polygon_setup(s3_t *s3)
 
 #define WRITE(addr)     if (s3->bpp == 0)                                                                               \
                         {                                                                                               \
-                                svga->vram[(addr) & s3->vram_mask] = dest_dat;                                          \
-                                svga->changedvram[((addr) & s3->vram_mask) >> 12] = changeframecount;                   \
+                                svga->vram[dword_remap(addr) & s3->vram_mask] = dest_dat;                                          \
+                                svga->changedvram[(dword_remap(addr) & s3->vram_mask) >> 12] = changeframecount;                   \
                         }                                                                                               \
                         else if (s3->bpp == 1)                                                                          \
                         {                                                                                               \
-                                vram_w[(addr) & (s3->vram_mask >> 1)] = dest_dat;                                       \
-                                svga->changedvram[((addr) & (s3->vram_mask >> 1)) >> 11] = changeframecount;            \
+                                vram_w[dword_remap_w(addr) & (s3->vram_mask >> 1)] = dest_dat;                                       \
+                                svga->changedvram[(dword_remap_w(addr) & (s3->vram_mask >> 1)) >> 11] = changeframecount;            \
                         }                                                                                               \
                         else                                                                                            \
                         {                                                                                               \
-                                vram_l[(addr) & (s3->vram_mask >> 2)] = dest_dat;                                       \
-                                svga->changedvram[((addr) & (s3->vram_mask >> 2)) >> 10] = changeframecount;            \
+                                vram_l[dword_remap_l(addr) & (s3->vram_mask >> 2)] = dest_dat;                                       \
+                                svga->changedvram[(dword_remap_l(addr) & (s3->vram_mask >> 2)) >> 10] = changeframecount;            \
                         }
 
 void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat, s3_t *s3)
@@ -1726,10 +1751,30 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
         int compare_mode = (s3->accel.multifunc[0xe] >> 7) & 3;
         uint32_t rd_mask = s3->accel.rd_mask;
         int cmd = s3->accel.cmd >> 13;
+        uint32_t srcbase, dstbase;
         
         if ((s3->chip == S3_TRIO64) && (s3->accel.cmd & (1 << 11)))
                 cmd |= 8;
         
+        if ((s3->accel.multifunc[13] >> 4) & 7)
+                srcbase = 0x100000 * ((s3->accel.multifunc[13] >> 4) & 3);
+        else
+                srcbase = 0x100000 * ((s3->accel.multifunc[14] >> 2) & 3);
+        if ((s3->accel.multifunc[13] >> 0) & 7)
+                dstbase = 0x100000 * ((s3->accel.multifunc[13] >> 0) & 3);
+        else
+                dstbase = 0x100000 * ((s3->accel.multifunc[14] >> 0) & 3);
+        if (s3->bpp == 1)
+        {
+                srcbase >>= 1;
+                dstbase >>= 1;
+        }
+        else if (s3->bpp == 3)
+        {
+                srcbase >>= 2;
+                dstbase >>= 2;
+        }
+
         s3->force_busy = 1;
 //return;
 //        if (!cpu_input) pclog("Start S3 command %i  %i, %i  %i, %i (clip %i, %i to %i, %i  %i)\n", s3->accel.cmd >> 13, s3->accel.cur_x, s3->accel.cur_y, s3->accel.maj_axis_pcnt & 0xfff, s3->accel.multifunc[0]  & 0xfff, clip_l, clip_t, clip_r, clip_b, s3->accel.multifunc[0xe] & 0x20);
@@ -1792,8 +1837,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                 {
                         while (count-- && s3->accel.sy >= 0)
                         {
-                                if (s3->accel.cx >= clip_l && s3->accel.cx <= clip_r &&
-                                    s3->accel.cy >= clip_t && s3->accel.cy <= clip_b)
+                                if ((s3->accel.cx & 0xfff) >= clip_l && (s3->accel.cx & 0xfff) <= clip_r &&
+                                    (s3->accel.cy & 0xfff) >= clip_t && (s3->accel.cy & 0xfff) <= clip_b)
                                 {
                                         switch ((mix_dat & mix_mask) ? frgd_mix : bkgd_mix)
                                         {
@@ -1842,8 +1887,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                 {
                         while (count-- && s3->accel.sy >= 0)
                         {
-                                if (s3->accel.cx >= clip_l && s3->accel.cx <= clip_r &&
-                                    s3->accel.cy >= clip_t && s3->accel.cy <= clip_b)
+                                if ((s3->accel.cx & 0xfff) >= clip_l && (s3->accel.cx & 0xfff) <= clip_r &&
+                                    (s3->accel.cy & 0xfff) >= clip_t && (s3->accel.cy & 0xfff) <= clip_b)
                                 {
                                         switch ((mix_dat & mix_mask) ? frgd_mix : bkgd_mix)
                                         {
@@ -1927,7 +1972,7 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                         s3->accel.cy   = s3->accel.cur_y;
                         if (s3->accel.cur_y & 0x1000) s3->accel.cy |= ~0xfff;
                         
-                        s3->accel.dest = s3->accel.cy * s3->width;
+                        s3->accel.dest = dstbase + s3->accel.cy * s3->width;
 
 //                        pclog("Dest %08X  (%i, %i) %04X %04X\n", s3->accel.dest, s3->accel.cx, s3->accel.cy, s3->accel.cur_x, s3->accel.cur_x & 0x1000);
                 }
@@ -1940,8 +1985,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                 
                 while (count-- && s3->accel.sy >= 0)
                 {
-                        if (s3->accel.cx >= clip_l && s3->accel.cx <= clip_r &&
-                            s3->accel.cy >= clip_t && s3->accel.cy <= clip_b)
+                        if ((s3->accel.cx & 0xfff) >= clip_l && (s3->accel.cx & 0xfff) <= clip_r &&
+                            (s3->accel.cy & 0xfff) >= clip_t && (s3->accel.cy & 0xfff) <= clip_b)
                         {
                                 switch ((mix_dat & mix_mask) ? frgd_mix : bkgd_mix)
                                 {
@@ -1987,7 +2032,7 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                                 if (s3->accel.cmd & 0x80) s3->accel.cy++;
                                 else                     s3->accel.cy--;
                                 
-                                s3->accel.dest = s3->accel.cy * s3->width;
+                                s3->accel.dest = dstbase + s3->accel.cy * s3->width;
                                 s3->accel.sy--;
 
                                 if (cpu_input/* && (s3->accel.multifunc[0xa] & 0xc0) == 0x80*/) return;
@@ -2017,8 +2062,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                         s3->accel.cy   = s3->accel.cur_y & 0xfff;
                         if (s3->accel.cur_y & 0x1000) s3->accel.cy |= ~0xfff;
 
-                        s3->accel.src  = s3->accel.cy * s3->width;
-                        s3->accel.dest = s3->accel.dy * s3->width;
+                        s3->accel.src  = srcbase + s3->accel.cy * s3->width;
+                        s3->accel.dest = dstbase + s3->accel.dy * s3->width;
                         
 //                        pclog("Source %08X Dest %08X  (%i, %i) - (%i, %i)\n", s3->accel.src, s3->accel.dest, s3->accel.cx, s3->accel.cy, s3->accel.dx, s3->accel.dy);
                 }
@@ -2037,8 +2082,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                 {
                         while (1)
                         {
-                                if (s3->accel.dx >= clip_l && s3->accel.dx <= clip_r &&
-                                    s3->accel.dy >= clip_t && s3->accel.dy <= clip_b)
+                                if ((s3->accel.dx & 0xfff) >= clip_l && (s3->accel.dx & 0xfff) <= clip_r &&
+                                    (s3->accel.dy & 0xfff) >= clip_t && (s3->accel.dy & 0xfff) <= clip_b)
                                 {
                                         READ_SRC(s3->accel.src + s3->accel.cx, src_dat);
                                         READ_DST(s3->accel.dest + s3->accel.dx, dest_dat);  
@@ -2060,8 +2105,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                                         s3->accel.cy++;
                                         s3->accel.dy++;
         
-                                        s3->accel.src  = s3->accel.cy * s3->width;
-                                        s3->accel.dest = s3->accel.dy * s3->width;
+                                        s3->accel.src  = srcbase + s3->accel.cy * s3->width;
+                                        s3->accel.dest = dstbase + s3->accel.dy * s3->width;
         
                                         s3->accel.sy--;
         
@@ -2074,8 +2119,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                 {                     
                         while (count-- && s3->accel.sy >= 0)
                         {
-                                if (s3->accel.dx >= clip_l && s3->accel.dx <= clip_r &&
-                                    s3->accel.dy >= clip_t && s3->accel.dy <= clip_b)
+                                if ((s3->accel.dx & 0xfff) >= clip_l && (s3->accel.dx & 0xfff) <= clip_r &&
+                                    (s3->accel.dy & 0xfff) >= clip_t && (s3->accel.dy & 0xfff) <= clip_b)
                                 {
                                         if (vram_mask)
                                         {
@@ -2148,8 +2193,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                                                 s3->accel.dy--;
                                         }
 
-                                        s3->accel.src  = s3->accel.cy * s3->width;
-                                        s3->accel.dest = s3->accel.dy * s3->width;
+                                        s3->accel.src  = srcbase + s3->accel.cy * s3->width;
+                                        s3->accel.dest = dstbase + s3->accel.dy * s3->width;
 
                                         s3->accel.sy--;
 
@@ -2182,12 +2227,12 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
 //                        s3->accel.cy = (s3->accel.cy & ~7) | (s3->accel.dy & 7);
 
                         s3->accel.pattern  = (s3->accel.cy * s3->width) + s3->accel.cx;
-                        s3->accel.dest     = s3->accel.dy * s3->width;
+                        s3->accel.dest     = dstbase + s3->accel.dy * s3->width;
                         
                         s3->accel.cx = s3->accel.dx & 7;
                         s3->accel.cy = s3->accel.dy & 7;
                         
-                        s3->accel.src  = s3->accel.pattern + (s3->accel.cy * s3->width);
+                        s3->accel.src  = srcbase + s3->accel.pattern + (s3->accel.cy * s3->width);
 
 //                        pclog("Source %08X Dest %08X  (%i, %i) - (%i, %i)\n", s3->accel.src, s3->accel.dest, s3->accel.cx, s3->accel.cy, s3->accel.dx, s3->accel.dy);
 //                        dumpregs();
@@ -2202,8 +2247,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
 
                 while (count-- && s3->accel.sy >= 0)
                 {
-                        if (s3->accel.dx >= clip_l && s3->accel.dx <= clip_r &&
-                            s3->accel.dy >= clip_t && s3->accel.dy <= clip_b)
+                        if ((s3->accel.dx & 0xfff) >= clip_l && (s3->accel.dx & 0xfff) <= clip_r &&
+                            (s3->accel.dy & 0xfff) >= clip_t && (s3->accel.dy & 0xfff) <= clip_b)
                         {
                                 if (vram_mask)
                                 {
@@ -2275,8 +2320,8 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                                         s3->accel.dy--;
                                 }
 
-                                s3->accel.src  = s3->accel.pattern + (s3->accel.cy * s3->width);
-                                s3->accel.dest = s3->accel.dy * s3->width;
+                                s3->accel.src  = srcbase + s3->accel.pattern + (s3->accel.cy * s3->width);
+                                s3->accel.dest = dstbase + s3->accel.dy * s3->width;
 
                                 s3->accel.sy--;
 
@@ -2309,12 +2354,12 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                                 int y = s3->accel.poly_cy;
                                 int x_count = ABS((s3->accel.poly_cx2 >> 20) - s3->accel.poly_x) + 1;
 
-                                s3->accel.dest = y * s3->width;
+                                s3->accel.dest = dstbase + y * s3->width;
                                 
                                 while (x_count-- && count--)
                                 {
-                                        if (s3->accel.poly_x >= clip_l && s3->accel.poly_x <= clip_r &&
-                                            s3->accel.poly_cy >= clip_t && s3->accel.poly_cy <= clip_b)
+                                        if ((s3->accel.poly_x & 0xfff) >= clip_l && (s3->accel.poly_x & 0xfff) <= clip_r &&
+                                            (s3->accel.poly_cy & 0xfff) >= clip_t && (s3->accel.poly_cy & 0xfff) <= clip_b)
                                         {
                                                 switch (frgd_mix)
                                                 {
@@ -2384,15 +2429,15 @@ void s3_accel_start(int count, int cpu_input, uint32_t mix_dat, uint32_t cpu_dat
                                 int y = s3->accel.poly_cy;
                                 int x_count = ABS((s3->accel.poly_cx2 >> 20) - s3->accel.poly_x) + 1;
 
-                                s3->accel.src  = s3->accel.pattern + ((y & 7) * s3->width);
-                                s3->accel.dest = y * s3->width;
+                                s3->accel.src  = srcbase + s3->accel.pattern + ((y & 7) * s3->width);
+                                s3->accel.dest = dstbase + y * s3->width;
                                 
                                 while (x_count-- && count--)
                                 {
                                         int pat_x = s3->accel.poly_x & 7;
                                         
-                                        if (s3->accel.poly_x >= clip_l && s3->accel.poly_x <= clip_r &&
-                                            s3->accel.poly_cy >= clip_t && s3->accel.poly_cy <= clip_b)
+                                        if ((s3->accel.poly_x & 0xfff) >= clip_l && (s3->accel.poly_x & 0xfff) <= clip_r &&
+                                            (s3->accel.poly_cy & 0xfff) >= clip_t && (s3->accel.poly_cy & 0xfff) <= clip_b)
                                         {
                                                 if (vram_mask)
                                                 {
@@ -2496,8 +2541,10 @@ void s3_hwcursor_draw(svga_t *svga, int displine)
 //        pclog("HWcursor %i %i\n", svga->hwcursor_latch.x, svga->hwcursor_latch.y);
         for (x = 0; x < 64; x += 16)
         {
-                dat[0] = (svga->vram[svga->hwcursor_latch.addr]     << 8) | svga->vram[svga->hwcursor_latch.addr + 1];
-                dat[1] = (svga->vram[svga->hwcursor_latch.addr + 2] << 8) | svga->vram[svga->hwcursor_latch.addr + 3];
+                uint32_t remapped_addr = dword_remap(svga->hwcursor_latch.addr);
+
+                dat[0] = (svga->vram[remapped_addr]     << 8) | svga->vram[remapped_addr + 1];
+                dat[1] = (svga->vram[remapped_addr + 2] << 8) | svga->vram[remapped_addr + 3];
                 for (xx = 0; xx < 16; xx++)
                 {
                         if (offset >= svga->hwcursor_latch.x)

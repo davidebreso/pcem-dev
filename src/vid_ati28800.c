@@ -268,7 +268,7 @@ uint8_t ati28800k_in(uint16_t addr, void *p)
 void ati28800_recalctimings(svga_t *svga)
 {
         ati28800_t *ati28800 = (ati28800_t *)svga->p;
-        pclog("ati28800_recalctimings\n");
+        //pclog("ati28800_recalctimings\n");
 
         switch (((ati28800->regs[0xbe] & 0x10) >> 1) | ((ati28800->regs[0xb9] & 2) << 1) | ((svga->miscout & 0x0C) >> 2))
         {
@@ -282,7 +282,7 @@ void ati28800_recalctimings(svga_t *svga)
                 case 0x09: svga->clock = (cpuclock * (double)(1ull << 32)) / 32000000.0; break;
                 case 0x0A: svga->clock = (cpuclock * (double)(1ull << 32)) / 37500000.0; break;
                 case 0x0B: svga->clock = (cpuclock * (double)(1ull << 32)) / 39000000.0; break;
-                case 0x0C: svga->clock = (cpuclock * (double)(1ull << 32)) / 40000000.0; break;
+                case 0x0C: svga->clock = (cpuclock * (double)(1ull << 32)) / 50350000.0; break;
                 case 0x0D: svga->clock = (cpuclock * (double)(1ull << 32)) / 56644000.0; break;
                 case 0x0E: svga->clock = (cpuclock * (double)(1ull << 32)) / 75000000.0; break;
                 case 0x0F: svga->clock = (cpuclock * (double)(1ull << 32)) / 65000000.0; break;
@@ -299,7 +299,7 @@ void ati28800_recalctimings(svga_t *svga)
 
         if (!svga->scrblank && (ati28800->regs[0xb0] & 0x20)) /*Extended 256 colour modes*/
         {
-                pclog("8bpp_highres\n");
+                //pclog("8bpp_highres\n");
                 svga->render = svga_render_8bpp_highres;
                 svga->rowoffset <<= 1;
                 svga->ma <<= 1;
@@ -368,6 +368,10 @@ void *ati28800k_init()
 
         ati28800->svga.miscout = 1;
         ati28800->svga.ksc5601_sbyte_mask = 0;
+        ati28800->svga.ksc5601_udc_area_msb[0] = 0xC9;
+        ati28800->svga.ksc5601_udc_area_msb[1] = 0xFE;
+        ati28800->svga.ksc5601_swap_mode = 0;
+        ati28800->svga.ksc5601_english_font_type = 0;
 
         ati_eeprom_load(&ati28800->eeprom, "atikorvga.nvr", 0);
 
@@ -401,8 +405,49 @@ void *ati28800k_spc4620p_init()
 
         ati28800->svga.miscout = 1;
         ati28800->svga.ksc5601_sbyte_mask = 0;
+        ati28800->svga.ksc5601_udc_area_msb[0] = 0xC9;
+        ati28800->svga.ksc5601_udc_area_msb[1] = 0xFE;
+        ati28800->svga.ksc5601_swap_mode = 0;
+        ati28800->svga.ksc5601_english_font_type = 0;
 
         ati_eeprom_load(&ati28800->eeprom, "svb6120a.nvr", 0);
+
+        return ati28800;
+}
+
+void *ati28800k_spc6033p_init()
+{
+        ati28800_t *ati28800 = malloc(sizeof(ati28800_t));
+        memset(ati28800, 0, sizeof(ati28800_t));
+
+        ati28800->port_03dd_val = 0;
+        ati28800->get_korean_font_base = 0;
+        ati28800->get_korean_font_index = 0;
+        ati28800->get_korean_font_enabled = 0;
+        ati28800->get_korean_font_kind = 0;
+        ati28800->in_get_korean_font_kind_set = 0;
+        ati28800->ksc5601_mode_enabled = 0;
+
+        rom_init(&ati28800->bios_rom, "spc6033p/phoenix.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
+        loadfont("spc6033p/svb6120a_font.rom", 6);
+        
+        svga_init(&ati28800->svga, ati28800, 1 << 19, /*512kb*/
+                   ati28800k_recalctimings,
+                   ati28800k_in, ati28800k_out,
+                   NULL,
+                   NULL);
+
+        io_sethandler(0x01ce, 0x0002, ati28800k_in, NULL, NULL, ati28800k_out, NULL, NULL, ati28800);
+        io_sethandler(0x03c0, 0x0020, ati28800k_in, NULL, NULL, ati28800k_out, NULL, NULL, ati28800);
+
+        ati28800->svga.miscout = 1;
+        ati28800->svga.ksc5601_sbyte_mask = 0;
+        ati28800->svga.ksc5601_udc_area_msb[0] = 0xC9;
+        ati28800->svga.ksc5601_udc_area_msb[1] = 0xFE;
+        ati28800->svga.ksc5601_swap_mode = 0;
+        ati28800->svga.ksc5601_english_font_type = 0;
+
+        ati_eeprom_load(&ati28800->eeprom, "svb6120a_spc6033p.nvr", 0);
 
         return ati28800;
 }
@@ -487,6 +532,18 @@ device_t ati28800k_spc4620p_device =
         "SVB-6120A",
         0,
         ati28800k_spc4620p_init,
+        ati28800_close,
+        NULL,
+        ati28800_speed_changed,
+        ati28800_force_redraw,
+        ati28800k_add_status_info
+};
+
+device_t ati28800k_spc6033p_device =
+{
+        "SVB-6120A",
+        0,
+        ati28800k_spc6033p_init,
         ati28800_close,
         NULL,
         ati28800_speed_changed,

@@ -117,7 +117,8 @@ void svga_out(uint16_t addr, uint8_t val, void *p)
                         case 4: 
                         svga->chain2_write = !(val & 4);
                         svga->chain4 = val & 8;
-                        svga->fast = (svga->gdcreg[8] == 0xff && !(svga->gdcreg[3] & 0x18) && !svga->gdcreg[1]) && svga->chain4;
+                        svga->fast = (svga->gdcreg[8] == 0xff && !(svga->gdcreg[3] & 0x18) && !svga->gdcreg[1]) &&
+                                        ((svga->chain4 && svga->packed_chain4) || svga->fb_only);
                         break;
                 }
                 break;
@@ -202,7 +203,8 @@ void svga_out(uint16_t addr, uint8_t val, void *p)
                         case 7: svga->colournocare=val; break;
                 }
                 svga->gdcreg[svga->gdcaddr & 15] = val;                
-                svga->fast = (svga->gdcreg[8] == 0xff && !(svga->gdcreg[3] & 0x18) && !svga->gdcreg[1]) && svga->chain4;
+                svga->fast = (svga->gdcreg[8] == 0xff && !(svga->gdcreg[3] & 0x18) && !svga->gdcreg[1]) &&
+                                ((svga->chain4 && svga->packed_chain4) || svga->fb_only);
                 if (((svga->gdcaddr & 15) == 5  && (val ^ o) & 0x70) || ((svga->gdcaddr & 15) == 6 && (val ^ o) & 1))
                         svga_recalctimings(svga);
                 break;
@@ -337,7 +339,11 @@ void svga_recalctimings(svga_t *svga)
         
         svga->interlace = 0;
         
-        svga->ma_latch = (svga->crtc[0xc] << 8) | svga->crtc[0xd];
+        svga->ma_latch = ((svga->crtc[0xc] << 8) | svga->crtc[0xd]) + ((svga->crtc[8] & 0x60) >> 5);
+        svga->ca_adj = 0;
+
+        svga->rowcount = svga->crtc[9] & 31;
+        svga->linedbl = svga->crtc[9] & 0x80;
 
         svga->hdisp_time = svga->hdisp;
         svga->render = svga_render_blank;
@@ -417,8 +423,6 @@ void svga_recalctimings(svga_t *svga)
 
 //        pclog("svga_render %08X : %08X %08X %08X %08X %08X  %i %i %02X %i %i\n", svga_render, svga_render_text_40, svga_render_text_80, svga_render_8bpp_lowres, svga_render_8bpp_highres, svga_render_blank, scrblank,gdcreg[6]&1,gdcreg[5]&0x60,bpp,seqregs[1]&8);
         
-        svga->linedbl = svga->crtc[9] & 0x80;
-        svga->rowcount = svga->crtc[9] & 31;
         svga->char_width = (svga->seqregs[1] & 1) ? 8 : 9;
         if (svga->recalctimings_ex) 
                 svga->recalctimings_ex(svga);
@@ -443,6 +447,8 @@ void svga_recalctimings(svga_t *svga)
         	svga->dispontime = TIMER_USEC;
 	if (svga->dispofftime < TIMER_USEC)
         	svga->dispofftime = TIMER_USEC;
+
+        svga_recalc_remap_func(svga);
 /*        printf("SVGA horiz total %i display end %i vidclock %f\n",svga->crtc[0],svga->crtc[1],svga->clock);
         printf("SVGA vert total %i display end %i max row %i vsync %i\n",svga->vtotal,svga->dispend,(svga->crtc[9]&31)+1,svga->vsyncstart);
         printf("total %f on %i cycles off %i cycles frame %i sec %i %02X\n",disptime*crtcconst,svga->dispontime,svga->dispofftime,(svga->dispontime+svga->dispofftime)*svga->vtotal,(svga->dispontime+svga->dispofftime)*svga->vtotal*70,svga->seqregs[1]);
@@ -661,42 +667,45 @@ void svga_poll(void *p)
                         
                         if (svga->interlace && svga->oddeven) svga->ma = svga->maback = svga->ma_latch + (svga->rowoffset << 1);
                         else                                  svga->ma = svga->maback = svga->ma_latch;
-                        svga->ca = (svga->crtc[0xe] << 8) | svga->crtc[0xf];
+                        svga->ca = ((svga->crtc[0xe] << 8) | svga->crtc[0xf]) + svga->ca_adj;
 
                         svga->ma <<= 2;
                         svga->maback <<= 2;
                         svga->ca <<= 2;
 
-                        svga->video_res_x = wx;
-                        svga->video_res_y = wy + 1;
-//                        pclog("%i %i %i\n", svga->video_res_x, svga->video_res_y, svga->lowres);
-                        if (!(svga->gdcreg[6] & 1) && !(svga->attrregs[0x10] & 1)) /*Text mode*/
+                        if (!svga->video_res_override)
                         {
-                                svga->video_res_x /= svga->char_width;
-                                svga->video_res_y /= (svga->crtc[9] & 31) + 1;
-                                svga->video_bpp = 0;
-                        }
-                        else
-                        {
-                                if (svga->crtc[9] & 0x80)
-                                   svga->video_res_y /= 2;
-                                if (!(svga->crtc[0x17] & 2))
-                                   svga->video_res_y *= 4;
-                                else if (!(svga->crtc[0x17] & 1))
-                                   svga->video_res_y *= 2;
-                                svga->video_res_y /= (svga->crtc[9] & 31) + 1;                                   
-                                if (svga->render == svga_render_8bpp_lowres ||
-                                    svga->render == svga_render_15bpp_lowres ||
-                                    svga->render == svga_render_16bpp_lowres ||
-                                    svga->render == svga_render_24bpp_lowres ||
-                                    svga->render == svga_render_32bpp_lowres)
-                                        svga->video_res_x /= 2;
+                                svga->video_res_x = wx;
+                                svga->video_res_y = wy + 1;
 
-                                switch (svga->gdcreg[5] & 0x60)
+                                if (!(svga->gdcreg[6] & 1) && !(svga->attrregs[0x10] & 1)) /*Text mode*/
                                 {
-                                        case 0x00:            svga->video_bpp = 4;   break;
-                                        case 0x20:            svga->video_bpp = 2;   break;
-                                        case 0x40: case 0x60: svga->video_bpp = svga->bpp; break;
+                                        svga->video_res_x /= svga->char_width;
+                                        svga->video_res_y /= (svga->crtc[9] & 31) + 1;
+                                        svga->video_bpp = 0;
+                                }
+                                else
+                                {
+                                        if (svga->crtc[9] & 0x80)
+                                           svga->video_res_y /= 2;
+                                        if (!(svga->crtc[0x17] & 2))
+                                           svga->video_res_y *= 4;
+                                        else if (!(svga->crtc[0x17] & 1))
+                                           svga->video_res_y *= 2;
+                                        svga->video_res_y /= (svga->crtc[9] & 31) + 1;
+                                        if (svga->render == svga_render_8bpp_lowres ||
+                                            svga->render == svga_render_15bpp_lowres ||
+                                            svga->render == svga_render_16bpp_lowres ||
+                                            svga->render == svga_render_24bpp_lowres ||
+                                            svga->render == svga_render_32bpp_lowres)
+                                                svga->video_res_x /= 2;
+
+                                        switch (svga->gdcreg[5] & 0x60)
+                                        {
+                                                case 0x00:            svga->video_bpp = 4;   break;
+                                                case 0x20:            svga->video_bpp = 2;   break;
+                                                case 0x40: case 0x60: svga->video_bpp = svga->bpp; break;
+                                        }
                                 }
                         }
 //                        if (svga_interlace && oddeven) ma=maback=ma+(svga_rowoffset<<2);
@@ -767,13 +776,14 @@ int svga_init(svga_t *svga, void *p, int memsize,
         svga->vram_display_mask = memsize - 1;
         svga->vram_mask = memsize - 1;
         svga->decode_mask = 0x7fffff;
-        svga->changedvram = malloc(/*(memsize >> 12) << 1*/0x800000 >> 12);
+        svga->changedvram = malloc(/*(memsize >> 12) << 1*/0x1000000 >> 12);
         svga->recalctimings_ex = recalctimings_ex;
         svga->video_in  = video_in;
         svga->video_out = video_out;
         svga->hwcursor_draw = hwcursor_draw;
         svga->overlay_draw = overlay_draw;
         svga->hwcursor.ysize = 64;
+        svga->ksc5601_english_font_type = 0;
 //        _svga_recalctimings(svga);
 
         mem_mapping_add(&svga->mapping, 0xa0000, 0x20000, svga_read, svga_readw, svga_readl, svga_write, svga_writew, svga_writel, NULL, MEM_MAPPING_EXTERNAL, svga);
@@ -811,10 +821,16 @@ void svga_write(uint32_t addr, uint8_t val, void *p)
         addr += svga->write_bank;
 
         if (!(svga->gdcreg[6] & 1)) svga->fullchange=2;
-        if (svga->chain4 || svga->fb_only)
+        if ((svga->chain4 && svga->packed_chain4) || svga->fb_only)
         {
                 writemask2=1<<(addr&3);
                 addr&=~3;
+        }
+        else if (svga->chain4)
+        {
+                writemask2 = 1 << (addr & 3);
+                addr &= ~3;
+                addr = ((addr & 0xfffc) << 2) | ((addr & 0x30000) >> 14) | (addr & ~0x3ffff);
         }
         else if (svga->chain2_write)
         {
@@ -991,7 +1007,7 @@ uint8_t svga_read(uint32_t addr, void *p)
         
         cycles -= video_timing_read_b;
         cycles_lost += video_timing_read_b;
-        
+
         egareads++;
 //        pclog("Readega %06X   ",addr);
 
@@ -1002,12 +1018,22 @@ uint8_t svga_read(uint32_t addr, void *p)
         
 //        pclog("%05X %i %04X:%04X %02X %02X %i\n",addr,svga->chain4,CS,pc, vram[addr & 0x7fffff], vram[(addr << 2) & 0x7fffff], svga->readmode);
 //        pclog("%i\n", svga->readmode);
-        if (svga->chain4 || svga->fb_only) 
+        if ((svga->chain4 && svga->packed_chain4) || svga->fb_only)
         { 
                 addr &= svga->decode_mask;
                 if (addr >= svga->vram_max)
                         return 0xff;
+                latch_addr = addr & svga->vram_mask & ~3;
+                svga->la = svga->vram[latch_addr];
+                svga->lb = svga->vram[latch_addr | 0x1];
+                svga->lc = svga->vram[latch_addr | 0x2];
+                svga->ld = svga->vram[latch_addr | 0x3];
                 return svga->vram[addr & svga->vram_mask];
+        }
+        else if (svga->chain4)
+        {
+                readplane = addr & 3;
+                addr = ((addr & 0xfffc) << 2) | ((addr & 0x30000) >> 14) | (addr & ~0x3ffff);
         }
         else if (svga->chain2_read)
         {
@@ -1055,7 +1081,6 @@ uint8_t svga_read(uint32_t addr, void *p)
                 return ~(temp | temp2 | temp3 | temp4);
         }
 //pclog("Read %02X %04X %04X\n",vram[addr|svga->readplane],addr,svga->readplane);
-
         return svga->vram[addr | readplane];
 }
 
@@ -1073,10 +1098,15 @@ void svga_write_linear(uint32_t addr, uint8_t val, void *p)
         if (svga_output) pclog("Write LFB %08X %02X ", addr, val);
         if (!(svga->gdcreg[6] & 1)) 
                 svga->fullchange = 2;
-        if (svga->chain4 || svga->fb_only)
+        if ((svga->chain4 && svga->packed_chain4) || svga->fb_only)
         {
                 writemask2=1<<(addr&3);
                 addr&=~3;
+        }
+        else if (svga->chain4)
+        {
+                writemask2 = 1 << (addr & 3);
+                addr = ((addr & 0xfffc) << 2) | ((addr & 0x30000) >> 14) | (addr & ~0x3ffff);
         }
         else if (svga->chain2_write)
         {
@@ -1253,12 +1283,17 @@ uint8_t svga_read_linear(uint32_t addr, void *p)
 
         egareads++;
         
-        if (svga->chain4 || svga->fb_only) 
+        if ((svga->chain4 && svga->packed_chain4) || svga->fb_only)
         { 
                 addr &= svga->decode_mask;
                 if (addr >= svga->vram_max)
                         return 0xff;
                 return svga->vram[addr & svga->vram_mask]; 
+        }
+        else if (svga->chain4)
+        {
+                readplane = addr & 3;
+                addr = ((addr & 0xfffc) << 2) | ((addr & 0x30000) >> 14) | (addr & ~0x3ffff);
         }
         else if (svga->chain2_read)
         {
@@ -1267,7 +1302,9 @@ uint8_t svga_read_linear(uint32_t addr, void *p)
                 addr <<= 2;
         }
         else
+        {
                 addr<<=2;
+        }
 
         addr &= svga->decode_mask;
         

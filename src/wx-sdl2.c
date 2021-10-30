@@ -56,6 +56,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #undef pause
+#include <sys/types.h>
+#include <sys/stat.h>
 #endif
 
 extern void creatediscimage_open(void *hwnd);
@@ -229,6 +231,14 @@ int mainthread(void* param)
         return TRUE;
 }
 
+void stop_emulation_now(void)
+{
+        /*Deduct a sufficiently large number of cycles that no instructions will
+          run before the main thread is terminated*/
+        cycles -= 99999999;
+        wx_stop_emulation_now(ghwnd);
+}
+
 int dir_exists(char* path)
 {
         return wx_dir_exists(path);
@@ -239,30 +249,35 @@ void get_pcem_path(char *s, int size)
 #ifdef __linux
         wx_get_home_directory(s);
         strcat(s, ".pcem/");
-#elif defined __APPLE__
+#elif defined(__APPLE__)
+        /*TODO: Use CoreFoundation functions to get proper directory, in case 
+          the Application Support directory is different (I.E., with signing)*/
+        wx_get_home_directory(s);
+        strcat(s, "Library/Application Support/PCem/");
 
-    wx_get_home_directory(s);
-    strcat(s, "Library/Application Support/PCem/");
+        struct stat st = {0};
 
-    struct stat st = {0};
-
-    // create ~/Library/Application Support/PCem/
-    // if it doesn't exist
-    if (stat(s, &st) == -1) {
-        mkdir(s, 0700);
-    }
-
+        // create ~/Library/Application Support/PCem/
+        // if it doesn't exist
+        if (stat(s, &st) == -1) 
+        {
+                mkdir(s, 0700);
+        }
 #else
         char* path = SDL_GetBasePath();
         strcpy(s, path);
 #endif
 }
 
+void get_pcem_base_path(char *s, int size)
+{
+        char* path = SDL_GetBasePath();
+        strcpy(s, path);
+}
+
 void set_window_title(const char *s)
 {
-#ifndef __APPLE__
         sdl_set_window_title(s);
-#endif
 }
 
 float flash_func(float x)
@@ -734,6 +749,7 @@ int stop_emulation()
         endblit();
         SDL_DestroyMutex(ghMutex);
 
+        device_close_all();
         midi_close();
         
         pclog("Emulation stopped.\n");
@@ -777,6 +793,16 @@ int getsfile(void* hwnd, char *f, char *fn, char *dir, char *ext)
 {
         int ret = wx_filedialog(hwnd, "Save", dir, f, ext, 0, openfilestring);
 #ifdef __APPLE__
+        window_doreset = 1;
+#endif
+        return ret;
+}
+
+int getfilewithcaption(void* hwnd, char *f, char *fn, char *caption)
+{
+        int ret = wx_filedialog(hwnd, caption, fn, f, 0, 1, openfilestring);
+#ifdef __APPLE__
+        /* wxWidgets on OSX may mess up the SDL-window somehow, so just in case we reset it here */
         window_doreset = 1;
 #endif
         return ret;

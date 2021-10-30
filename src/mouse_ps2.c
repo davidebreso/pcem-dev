@@ -178,8 +178,7 @@ void mouse_ps2_poll(int x, int y, int z, int b, void *p)
 {
         mouse_ps2_t *mouse = (mouse_ps2_t *)p;
         uint8_t packet[3] = {0x08, 0, 0};
-        // pclog("PS2 MOUSE poll\n", mouse->x, mouse->y);
-        
+
         if (!x && !y && !z && b == mouse->b)
                 return;        
 
@@ -240,12 +239,11 @@ void *mouse_ps2_init()
         mouse->flags = 0;
         mouse->mode = MOUSE_STREAM;
         
-        if(romset == ROM_PC5086) {
+        if(romset == ROM_PC5086)
                 upc_set_mouse(mouse_ps2_write, mouse);
-        } else {
-                keyboard_at_set_mouse(mouse_ps2_write, mouse);
-        }
-        
+        else
+	        keyboard_at_set_mouse(mouse_ps2_write, mouse);
+
         return mouse;
 }
 

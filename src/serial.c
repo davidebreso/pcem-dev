@@ -258,12 +258,15 @@ void serial1_init(uint16_t addr, int irq, int has_fifo)
         timer_add(&serial1.receive_timer, serial_receive_callback, &serial1, 0);
         serial1.has_fifo = has_fifo;
 }
-void serial1_set(uint16_t addr, int irq, int has_fifo)
+void serial1_set(uint16_t addr, int irq)
 {
         serial1_remove();
         io_sethandler(addr, 0x0008, serial_read,  NULL, NULL, serial_write,  NULL, NULL, &serial1);
         serial1.irq = irq;
         serial1.addr = addr;
+}
+void serial1_set_has_fifo(int has_fifo)
+{
         serial1.has_fifo = has_fifo;
 }
 void serial1_remove()
@@ -281,12 +284,15 @@ void serial2_init(uint16_t addr, int irq, int has_fifo)
         timer_add(&serial2.receive_timer, serial_receive_callback, &serial2, 0);
         serial2.has_fifo = has_fifo;
 }
-void serial2_set(uint16_t addr, int irq, int has_fifo)
+void serial2_set(uint16_t addr, int irq)
 {
         serial2_remove();
         io_sethandler(addr, 0x0008, serial_read, NULL, NULL, serial_write, NULL, NULL, &serial2);
         serial2.irq = irq;
         serial2.addr = addr;
+}
+void serial2_set_has_fifo(int has_fifo)
+{
         serial2.has_fifo = has_fifo;
 }
 void serial2_remove()

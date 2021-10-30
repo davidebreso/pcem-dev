@@ -310,6 +310,10 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                                 keyboard_at.output_port = val;
                                 break;
                                 
+                                case 0xd2: /*Write to keyboard output buffer*/
+                                keyboard_at_adddata(val);
+                                break;
+
                                 case 0xd3: /*Write to mouse output buffer*/
                                 keyboard_at_adddata_mouse(val);
                                 break;
@@ -522,9 +526,9 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                                 key_ctrl_queue_start = key_ctrl_queue_end = 0;
                                 keyboard_at.status &= ~STAT_OFULL;
                         }
-			/* T3100e expects STAT_IFULL to be set immediately
+			/* T3100e and Samsung SPC-6000A expects STAT_IFULL to be set immediately
 			 * after sending 0xAA */
-                        if(romset == ROM_T3100E) keyboard_at.status |= STAT_IFULL;
+                        if(romset == ROM_T3100E || romset == ROM_SPC6000A) keyboard_at.status |= STAT_IFULL;
                         keyboard_at.status |= STAT_SYSFLAG;
                         keyboard_at.mem[0] |= 0x04;
                         keyboard_at_adddata(0x55);
@@ -586,6 +590,11 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                         	keyboard_at.want60 = 1;
 			break;
 
+                        case 0xba:
+                        if (romset == ROM_ENDEAVOR || romset == ROM_ZAPPA || romset == ROM_ITAUTEC_INFOWAYM)
+                                keyboard_at_adddata(0);
+                        break;
+
 			/* T3100e commands not implemented:
 			 * 0xB7: Emulate PS/2 keyboard
 			 * 0xB8: Emulate AT keyboard */ 
@@ -616,7 +625,11 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
 			if (romset == ROM_T3100E)
 				keyboard_at.input_port = (t3100e_mono_get() & 1) ? 0xFF : 0xBF;
 
-                        keyboard_at_adddata(keyboard_at.input_port | 4);
+                        if (romset == ROM_ENDEAVOR || romset == ROM_ZAPPA || romset == ROM_ITAUTEC_INFOWAYM)
+                                keyboard_at_adddata(keyboard_at.input_port | 4 | 0x40);
+                        else
+                                keyboard_at_adddata(keyboard_at.input_port | 4);
+
                         keyboard_at.input_port = ((keyboard_at.input_port + 1) & 3) | (keyboard_at.input_port & 0xfc);
                         break;
                         
@@ -624,7 +637,10 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                         break;
                         
                         case 0xca: /*AMI - read keyboard mode*/
-                        keyboard_at_adddata(0x00); /*ISA mode*/
+                        if (romset == ROM_GA686BX) /*TODO*/
+                                keyboard_at_adddata(0x01); /*PS2 mode*/
+                        else
+                                keyboard_at_adddata(0x00); /*ISA mode*/
                         break;
                         
                         case 0xcb: /*AMI - set keyboard mode*/
@@ -643,6 +659,10 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                         keyboard_at.want60 = 1;
                         break;
                         
+                        case 0xd2: /*Write keyboard output buffer*/
+                        keyboard_at.want60 = 1;
+                        break;
+
                         case 0xd3: /*Write mouse output buffer*/
                         keyboard_at.want60 = 1;
                         break;
@@ -655,17 +675,14 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv)
                         keyboard_at_adddata(0x00);
                         break;
 
-                        case 0xe8: /* Super-286TR: turbo ON */
-                        // TODO: 0xe8 is always followed by 0xba
-                        // TODO: I don't know where to call cpu_set_turbo(1) to avoid slow POST after ctrl-alt-del when on low speed (if this is the real behavior!)
-                        if (romset == ROM_HYUNDAI_SUPER286TR)
-                                cpu_set_turbo(1); // 12 MHz
-                        break;
-
-                        case 0xe9: /* Super-286TR: turbo OFF */
-                        if (romset == ROM_HYUNDAI_SUPER286TR)
-                                cpu_set_turbo(0); // 8 MHz
-                        break;
+                        // AWARD BIOS: called after turbo ON/OFF in the
+                        // Hyundai Super-286TR and probably other AWARD 286
+                        // bioses. Related to the Turbo LEDs. Exact function
+                        // can't be confirmed because the system in question
+                        // has no such leds.
+                        //case 0xe8: /* Turbo ON, always followed by 0xba */
+                        //case 0xe9: /* Turbo OFF */
+                        //break;
                         
                         case 0xef: /*??? - sent by AMI486*/
                         break;

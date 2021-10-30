@@ -1,8 +1,8 @@
 # configure.ac for PCem
 #
 
-AC_PREREQ([2.61])
-AC_INIT(PCem, v16, Sarah Walker <pcem@pcem-emulator.co.uk>, pcem)
+AC_PREREQ([2.69])
+AC_INIT([PCem],[v17],[Sarah Walker <pcem@pcem-emulator.co.uk>],[pcem])
 
 AC_CANONICAL_HOST
 
@@ -15,7 +15,7 @@ AM_PROG_CC_C_O
 
 AC_MSG_CHECKING([whether to build for release])
 AC_ARG_ENABLE(release_build,
-          AC_HELP_STRING([--enable-release-build], [build for release]))
+          AS_HELP_STRING([--enable-release-build],[build for release]))
 if test "$enable_release_build" = "yes"; then
    AC_MSG_RESULT([yes])
 else
@@ -25,20 +25,20 @@ AM_CONDITIONAL(RELEASE_BUILD, [test "$enable_release_build" = "yes"])
 
 AC_MSG_CHECKING([whether to enable debugging])
 AC_ARG_ENABLE(debug,
-          AC_HELP_STRING([--enable-debug], [build debug executable]))
+          AS_HELP_STRING([--enable-debug],[build debug executable]))
 if test "$enable_debug" = "yes"; then
-   CFLAGS="-Wall -O0 -g -D_DEBUG -fcommon"
-   CXXFLAGS="-Wall -O0 -g -D_DEBUG -fcommon"
+   CFLAGS="$CFLAGS -Wall -O0 -g -D_DEBUG -fcommon"
+   CXXFLAGS="$CXXFLAGS -Wall -O0 -g -D_DEBUG -fcommon"
    AC_MSG_RESULT([yes])
 else
-   CFLAGS="-O3 -fcommon"
-   CXXFLAGS="-O3 -fcommon"
+   CFLAGS="$CFLAGS -O3 -fcommon"
+   CXXFLAGS="$CXXFLAGS -O3 -fcommon"
    AC_MSG_RESULT([no])
 fi
 
 AC_MSG_CHECKING([whether to enable networking])
 AC_ARG_ENABLE(networking,
-          AC_HELP_STRING([--enable-networking], [enable networking]))
+          AS_HELP_STRING([--enable-networking],[enable networking]))
 if test "$enable_networking" = "yes"; then
    AC_MSG_RESULT([yes])
 else
@@ -47,7 +47,7 @@ fi
 
 AC_MSG_CHECKING([whether to use ALSA for MIDI output])
 AC_ARG_ENABLE(alsa,
-          AC_HELP_STRING([--enable-alsa], [use ALSA for MIDI]))
+          AS_HELP_STRING([--enable-alsa],[use ALSA for MIDI]))
 if test "$enable_alsa" = "yes"; then
    AC_MSG_RESULT([yes])
 else
@@ -140,6 +140,7 @@ case "$host" in
        LIBS="$LIBS -framework OpenGL"
        LIBS="$LIBS -framework OpenAL"
        build_macosx="yes"
+       CFLAGS="$CFLAGS -DHAVE_UNISTD_H"
        ;;
     *-*-cygwin* | *-*-mingw32*)
        AC_CHECK_LIB([opengl32], [main], [], \
@@ -159,6 +160,7 @@ case "$host" in
            [echo "You need to install the OpenAL library."
            exit -1])
        build_linux="yes"
+       CFLAGS="$CFLAGS -DHAVE_UNISTD_H"
        ;;
     *-*-freebsd*)
        CFLAGS="$CFLAGS -I/usr/local/include"
@@ -171,6 +173,7 @@ case "$host" in
            [echo "You need to install the OpenAL library."
            exit -1])
        build_other="yes"
+       CFLAGS="$CFLAGS -DHAVE_UNISTD_H"
        ;;
     *)
        AC_CHECK_LIB([GL], [glGetError], [], \
@@ -183,6 +186,7 @@ case "$host" in
        ;;
 esac
 
+CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $WX_LIBS $SDL_LIBS"
 
 AM_CONDITIONAL(OS_LINUX, [test "$build_linux" = "yes"])
@@ -190,4 +194,5 @@ AM_CONDITIONAL(OS_WINDOWS, [test "$build_win" = "yes"])
 AM_CONDITIONAL(OS_OTHER, [test "$build_other" = "yes"])
 AM_CONDITIONAL(OS_MACOSX, [test "$build_macosx" = "yes"])
 
-AC_OUTPUT([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

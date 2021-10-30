@@ -115,8 +115,10 @@ void wx_checkmenuitem(void* menu, int id, int checked)
 
         if (item)
                 item->Check(checked);
+#ifndef RELEASE_BUILD
         else
                 std::cout << "Menu item not found: " << id << std::endl;
+#endif
 }
 
 void wx_enablemenuitem(void* menu, int id, int enable)
@@ -129,8 +131,10 @@ void wx_enablemenuitem(void* menu, int id, int enable)
 
         if (item)
                 item->Enable(enable);
+#ifndef RELEASE_BUILD
         else
                 std::cout << "Menu item not found: " << id << std::endl;
+#endif
 }
 
 void* wx_getsubmenu(void* menu, int id)
@@ -402,6 +406,21 @@ int wx_sendmessage(void* window, int type, LONG_PARAM param1, LONG_PARAM param2)
                 ((wxWindow *)window)->Reparent((wxWindow *)param1);
                 break;
         }
+        case WX_WM_ENABLE:
+        {
+                ((wxWindow*)window)->Enable((bool)param2);
+                break;
+        }
+        case WX_WM_SHOW:
+        {
+                ((wxWindow*)window)->Show((bool)param2);
+                break;
+        }
+        case WX_WM_LAYOUT:
+        {
+                ((wxWindow*)window)->Layout();
+                break;
+        }
         }
 
         ((wxWindow*)window)->Fit();
@@ -430,6 +449,13 @@ void wx_exit(void* window, int value)
 void wx_stop_emulation(void* window)
 {
         wxCommandEvent* event = new wxCommandEvent(WX_STOP_EMULATION_EVENT, wxID_ANY);
+        event->SetEventObject((wxWindow*)window);
+        wxQueueEvent((wxWindow*)window, event);
+}
+
+void wx_stop_emulation_now(void* window)
+{
+        wxCommandEvent* event = new wxCommandEvent(WX_STOP_EMULATION_NOW_EVENT, wxID_ANY);
         event->SetEventObject((wxWindow*)window);
         wxQueueEvent((wxWindow*)window, event);
 }
