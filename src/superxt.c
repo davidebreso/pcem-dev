@@ -169,7 +169,7 @@ static void superxt_ems_write_ram(uint32_t addr, uint8_t val, void *priv)
 	superxt_t *sys = (superxt_t *)priv;
 	int pg = superxt_addr_to_page(addr, sys);
 
-	if (pg < 0 || pg > 3) return;
+	// if (pg < 0 || pg > 3) return;
 	addr = sys->page_exec[pg] + (addr & 0x3FFF);
 	ram[addr] = val;	
 }

@@ -40,6 +40,7 @@
 
 #include "ibm.h"
 #include "device.h"
+#include "mem.h"
 
 #include "nethandler.h"
 
@@ -107,6 +108,8 @@ void slirp_tic();
 #define  BX_NE2K_MEMSIZ    (32*1024)
 #define  BX_NE2K_MEMSTART  (16*1024)
 #define  BX_NE2K_MEMEND    (BX_NE2K_MEMSTART + BX_NE2K_MEMSIZ)
+
+#define  NE2K_SRAM_SIZE    (64*1024)
 
 typedef struct ne2000_t
 {
@@ -272,6 +275,10 @@ typedef struct ne2000_t
         /*RTL8029AS registers*/
         uint8_t config0, config2, config3;
         uint8_t _9346cr;
+        
+        /* SRAM mapping and data */
+        mem_mapping_t mapping;
+        uint8_t sram[NE2K_SRAM_SIZE];
 } ne2000_t;
 
 static void ne2000_tx_event(int val, void *p);
@@ -419,6 +426,22 @@ static inline void ne2000_chipmem_write_w(uint32_t address, uint16_t value, ne20
 {
         if ((address >= BX_NE2K_MEMSTART) && (address < BX_NE2K_MEMEND))
                 *(uint16_t *)(ne2000->mem + (address - BX_NE2K_MEMSTART)) = cpu_to_le16(value);
+}
+
+//
+// read_sram/write_sram - access the 64K SRAM.
+// This memory replaces the boot ROM and can be used as upper memory
+//
+uint8_t  ne2000_read_sram(uint32_t addr, void *priv)
+{
+    ne2000_t *ne2000 = (ne2000_t *)priv;
+    return ne2000->sram[addr & 0xFFFF];
+}
+
+void ne2000_write_sram(uint32_t addr, uint8_t val, void *priv)
+{
+    ne2000_t *ne2000 = (ne2000_t *)priv;
+    ne2000->sram[addr & 0xFFFF] = val;
 }
 
 //
@@ -1896,6 +1919,7 @@ void *ne2000_init()
 {
         ne2000_t *ne2000 = ne2000_common_init();
         uint16_t addr;
+        uint32_t sram_addr;
 
         ne2000->type = NE2000_NE2000;
                 
@@ -1905,6 +1929,16 @@ void *ne2000_init()
         io_sethandler(addr, 0x0010, ne2000_read, NULL, NULL, ne2000_write, NULL, NULL, ne2000);
         io_sethandler(addr+0x10, 0x0010, ne2000_asic_read_b, ne2000_asic_read_w, NULL, ne2000_asic_write_b, ne2000_asic_write_w, NULL, ne2000);
         io_sethandler(addr+0x1f, 0x0001, ne2000_reset_read, NULL, NULL, ne2000_reset_write, NULL, NULL, ne2000);
+        
+        sram_addr = device_get_config_int("sram_addr");
+        if(sram_addr) {
+		    mem_mapping_add(&ne2000->mapping, 
+			    sram_addr, 0x10000, 
+			    ne2000_read_sram,  NULL, NULL,
+			    ne2000_write_sram, NULL, NULL,
+			    NULL, MEM_MAPPING_EXTERNAL, 
+			    ne2000);
+        }
         
         return ne2000;
 }
@@ -1950,7 +1984,6 @@ static device_config_t ne2000_config[] =
         {
                 .name = "addr",
                 .description = "Address",
-                .type = CONFIG_BINARY,
                 .type = CONFIG_SELECTION,
                 .selection =
                 {
@@ -2019,6 +2052,31 @@ static device_config_t ne2000_config[] =
                         }
                 },
                 .default_int = 10
+        },
+        {
+                .name = "sram_addr",
+                .description = "64K SRAM Address",
+                .type = CONFIG_SELECTION,
+                .selection =
+                {
+                        {
+                                .description = "Disabled",
+                                .value = 0x00000
+                        },
+                        {
+                                .description = "C000H",
+                                .value = 0xc0000
+                        },
+                        {
+                                .description = "D000H",
+                                .value = 0xd0000
+                        },
+                        {
+                                .description = "E000H",
+                                .value = 0xe0000
+                        }
+               },
+               .default_int = 0x00000
         },
         {
                 .type = -1
