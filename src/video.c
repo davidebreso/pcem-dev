@@ -130,7 +130,7 @@ static VIDEO_CARD video_cards[] =
         {"Trident TVGA9000B",                      "tvga9000b",      &tvga9000b_device,                 GFX_TVGA9000B,       VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 7,  7, 12,   7,  7, 12}},
         {"Trident TGUI9400CXi",                    "tgui9400cxi",    &tgui9400cxi_device,               GFX_TGUI9400CXI,     VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  8, 16,   4,  8, 16}},
         {"Trident TGUI9440",                       "tgui9440",       &tgui9440_device,                  GFX_TGUI9440,        VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_BUS, 4,  8, 16,   4,  8, 16}},
-        {"Trigem Korean VGA (Tseng ET4000AX)",      "tgkorvga",       &et4000k_device,                   GFX_TGKOREANVGA,     VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 3,  3,  6,   5,  5, 10}},
+        {"Trigem Korean VGA (Tseng ET4000AX)",     "tgkorvga",       &et4000k_device,                   GFX_TGKOREANVGA,     VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 3,  3,  6,   5,  5, 10}},
         {"Tseng ET4000AX",                         "et4000ax",       &et4000_device,                    GFX_ET4000,          VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 3,  3,  6,   5,  5, 10}},
         {"VGA",                                    "vga",            &vga_device,                       GFX_VGA,             VIDEO_FLAG_TYPE_SPECIAL, {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
         {"Wyse 700",                               "wy700",          &wy700_device,                     GFX_WY700,           VIDEO_FLAG_TYPE_CGA,     {VIDEO_ISA, 8, 16, 32,   8, 16, 32}},
@@ -143,6 +143,7 @@ static video_timings_t timing_pc1640   = {VIDEO_ISA, 8,16,32, 8,16,32};
 static video_timings_t timing_pc200    = {VIDEO_ISA, 8,16,32, 8,16,32};
 static video_timings_t timing_m24      = {VIDEO_ISA, 8,16,32, 8,16,32};
 static video_timings_t timing_pvga1a   = {VIDEO_ISA, 6, 8,16, 6, 8,16};
+static video_timings_t timing_ct451    = {VIDEO_ISA, 6, 8,16, 6, 8,16};
 static video_timings_t timing_wd90c11  = {VIDEO_ISA, 3, 3, 6, 5, 5,10};
 static video_timings_t timing_avga2    = {VIDEO_ISA, 3, 3, 6, 5, 5,10};
 static video_timings_t timing_oti067   = {VIDEO_ISA, 6, 8,16, 6, 8,16};
@@ -217,6 +218,11 @@ device_t *video_card_getdevice(int card, int romset)
                 case ROM_PC3086:
                 if (card == GFX_BUILTIN)
                         return &paradise_pvga1a_pc3086_device;
+                break;
+
+                case ROM_PC5086:
+                if (card == GFX_BUILTIN)
+                        return &ct451_pc5086_device;
                 break;
 
                 case ROM_MEGAPC:
@@ -377,6 +383,7 @@ int video_is_mda()
                 case ROM_PC1640:
                 case ROM_PC2086:
                 case ROM_PC3086:
+                case ROM_PC5086:
                 case ROM_MEGAPC:
                 case ROM_ACER386:
                 if (gfxcard != GFX_BUILTIN)
@@ -433,6 +440,7 @@ int video_is_cga()
                 case ROM_PC1640:
                 case ROM_PC2086:
                 case ROM_PC3086:
+                case ROM_PC5086:
                 case ROM_MEGAPC:
                 case ROM_ACER386:
                 if (gfxcard != GFX_BUILTIN)
@@ -474,6 +482,7 @@ int video_is_ega_vga()
                 case ROM_PC1640:
                 case ROM_PC2086:
                 case ROM_PC3086:
+                case ROM_PC5086:
                 case ROM_MEGAPC:
                 case ROM_ACER386:
                 case ROM_AMA932J:
@@ -601,6 +610,11 @@ void video_updatetiming()
                         case ROM_PC3086:
                         if (gfxcard == GFX_BUILTIN)
                                 timing = &timing_pvga1a;
+                        break;
+
+                        case ROM_PC5086:
+                        if (gfxcard == GFX_BUILTIN)
+                                timing = &timing_ct451;
                         break;
 
                         case ROM_MEGAPC:
@@ -795,6 +809,14 @@ void video_init()
                 if (gfxcard == GFX_BUILTIN)
                 {
                         device_add(&paradise_pvga1a_pc3086_device);
+                        return;
+                }
+                break;
+
+                case ROM_PC5086:
+                if (gfxcard == GFX_BUILTIN)
+                {
+                        device_add(&ct451_pc5086_device);
                         return;
                 }
                 break;

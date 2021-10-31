@@ -10,7 +10,7 @@
 #include "vid_svga.h"
 
 /* Enable debug log */
-int ct451log = 0;
+int ct451log = 1;
 
 typedef struct ct451_t
 {
@@ -304,6 +304,24 @@ device_t ct451_device =
         ct451_init,
         ct451_close,
         ct451_available,
+        ct451_speed_changed,
+        ct451_force_redraw,
+        ct451_add_status_info
+};
+
+void *ct451_pc5086_init()
+{
+        return ct451_common_init("pc5086/c000.bin", 256);
+}
+
+
+device_t ct451_pc5086_device =
+{
+        "C&T 82C451 (Amstrad PC5086)",
+        0,
+        ct451_pc5086_init,
+        ct451_close,
+        NULL,
         ct451_speed_changed,
         ct451_force_redraw,
         ct451_add_status_info

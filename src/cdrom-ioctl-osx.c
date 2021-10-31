@@ -706,7 +706,7 @@ static uint32_t ioctl_size()
 
 static int ioctl_status()
 {
-        if (!ioctl_ready)
+        if (!ioctl_ready())
                 return CD_STATUS_EMPTY;
 	return CD_STATUS_STOPPED;
 }

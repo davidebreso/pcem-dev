@@ -157,14 +157,14 @@ void StatusPane::Render(wxDC& dc)
                                 updatestatus = 0;
                                 get_status(statusMachineText, statusDeviceText);
                         }
-                        if (statusMachineText) {
+                        if (statusMachineText[0]) {
                                 int statusX = 5;
                                 int statusY = height+5;
                                 wxSize size = dc.GetMultiLineTextExtent(statusMachineText);
                                 dc.DrawText(statusMachineText, statusX, statusY);
                                 width = MAX(width, statusX+size.GetWidth());
                                 height = MAX(height, statusY+size.GetHeight());
-                                if (statusDeviceText) {
+                                if (statusDeviceText[0]) {
                                         wxSize dSize = dc.GetMultiLineTextExtent(statusDeviceText);
                                         dc.DrawText(statusDeviceText, statusX+ceil((size.GetWidth()+50)/100.0)*100, statusY);
                                         width = MAX(width, statusX+ceil((size.GetWidth()+50)/100.0)*100+ceil((dSize.GetWidth()+50)/100.0)*100);
