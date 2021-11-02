@@ -49,6 +49,8 @@
 #define UPC_MOUSE_CLEAR        0x40      /* bit 6, Device Clear */
 #define UPC_MOUSE_ENABLE       0x80      /* bit 7, Device Enable */
 
+#define UPC_MOUSE_DELAY        (600 * TIMER_USEC)
+
 typedef struct upc_t
 {
         int configuration_state; // state of algorithm to enter configuration mode
@@ -71,6 +73,7 @@ typedef struct upc_t
         uint8_t mouse_data;     // Mouse interface data register
         int mouse_data_new;	// Next value for data register
         int mouse_last_irq;
+        int mouse_is_sending;
         void (*mouse_write)(uint8_t val, void *p);
         void *mouse_p;
         pc_timer_t mouse_delay_timer;
@@ -488,7 +491,10 @@ void upc_mouse_write(uint16_t port, uint8_t val, void *priv)
         {
                 if ((upc->mouse_status & UPC_MOUSE_TX_IDLE) && (upc->mouse_status & UPC_MOUSE_ENABLE))
                 {
+        		timer_set_delay_u64(&upc->mouse_delay_timer, UPC_MOUSE_DELAY);
                         upc->mouse_data = val;
+                        upc->mouse_status &= ~UPC_MOUSE_TX_IDLE;
+                        upc->mouse_is_sending = 1;
                         if (upc->mouse_write)
                                 upc->mouse_write(val, upc->mouse_p);
                 }
@@ -514,24 +520,32 @@ void upc_set_mouse(void (*mouse_write)(uint8_t val, void *p), void *p)
 void upc_mouse_poll(void *priv)
 {
         upc_t *upc = (upc_t *)priv;
-        timer_advance_u64(&upc->mouse_delay_timer, (100 * TIMER_USEC));
+        timer_advance_u64(&upc->mouse_delay_timer, UPC_MOUSE_DELAY);
+        
+        if(upc->mouse_is_sending) 
+        {
+        	/* set UPC_MOUSE_TX_IDLE to end transmission */
+        	upc->mouse_status |= UPC_MOUSE_TX_IDLE;
+        	upc->mouse_is_sending = 0;
+        	return;
+        }
 
 	if(upc->mouse_data_new != -1 && !upc->mouse_last_irq && mouse_scan && 
 	   !(upc->mouse_status & UPC_MOUSE_RX_FULL)) 
 	{
 		/* IRQ is free and there is data to be received */
-                /* raise IRQ if enabled */
-                if (upc->mouse_status & UPC_MOUSE_INTS_ON)
-                {
-                        picint(1 << upc->mouse_irq);
-                        // pclog("upc_mouse : take IRQ %d\n", upc->mouse_irq);
-                }
 		upc->mouse_data = upc->mouse_data_new & 0xff;
 		upc->mouse_data_new = -1;
                 /* update mouse status */
                 upc->mouse_status |= UPC_MOUSE_RX_FULL;
                 upc->mouse_status &= ~(UPC_MOUSE_DEV_IDLE);
+                /* raise IRQ if enabled */
                 upc->mouse_last_irq = 1 << upc->mouse_irq;
+                if (upc->mouse_status & UPC_MOUSE_INTS_ON)
+                {
+                        picint(1 << upc->mouse_irq);
+                        // pclog("upc_mouse : take IRQ %d\n", upc->mouse_irq);
+                }
                 return;
         }
 
@@ -542,6 +556,7 @@ void upc_mouse_poll(void *priv)
                 // pclog("Mouse timer. %d %d %02X %02X\n", mouse_queue_start, mouse_queue_end, upc->mouse_status, upc->mouse_data);
 	        upc->mouse_data_new = mouse_queue[mouse_queue_start];
                 mouse_queue_start = (mouse_queue_start + 1) & 0xf;
+                return;
         }
 }
 
