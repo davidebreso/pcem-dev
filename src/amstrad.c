@@ -171,6 +171,9 @@ void amstrad_init()
         io_sethandler(0xdead, 0x0001, amstrad_read,       NULL, NULL, amstrad_write,       NULL, NULL,  NULL);
         if ((romset == ROM_PC200 || romset == ROM_PPC512) && gfxcard != GFX_BUILTIN)        
                 io_sethandler(0x03de, 0x0001, amstrad_read,       NULL, NULL, amstrad_write,       NULL, NULL,  NULL);
+        /* Set enhanced keyboard layout for PC2086, PC3086, PPC512/640 and Sinclair PC200 */
+        if(romset == ROM_PC2086 || romset == ROM_PC3086 || romset == ROM_PPC512 || romset == ROM_PC200)
+                ENHANCED_KEYB = 1;
 
 	
 }

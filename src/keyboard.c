@@ -412,9 +412,11 @@ void keyboard_process()
 {
         int c;
         int d;
-        scancode *scancodes = (AT || romset == ROM_XI8088) ? at_scancodes : scancode_xt;
-        if (!keyboard_scan) return;
+        scancode *scancodes = scancode_xt;
+        if (ENHANCED_KEYB) scancodes = scancode_set1;
+        if (AT || romset == ROM_XI8088) scancodes = at_scancodes;
         if (TANDY) scancodes = scancode_tandy;
+        if (!keyboard_scan) return;
                 
         for (c = 0; c < 272; c++)
         {
@@ -466,7 +468,9 @@ void keyboard_process()
 
 void keyboard_send_scancode(int code, int is_break)
 {
-        scancode *scancodes = (AT || romset == ROM_XI8088) ? at_scancodes : scancode_xt;
+        scancode *scancodes = scancode_xt;
+        if (ENHANCED_KEYB) scancodes = scancode_set1;
+        if (AT || romset == ROM_XI8088) scancodes = at_scancodes;
         int d = 0;
 
         if (!keyboard_scan) return;

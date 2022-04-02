@@ -140,7 +140,7 @@ void     at_vs440fx_init();
 void     at_ga686bx_init();
 int model;
 
-int AMSTRAD, AT, PCI, TANDY, MCA;
+int AMSTRAD, AT, PCI, TANDY, MCA, ENHANCED_KEYB;
 
 MODEL models[] =
 {
@@ -387,6 +387,7 @@ void tandy1k_init()
 void tandy1ksl2_init()
 {
 //        TANDY = 1;
+        ENHANCED_KEYB = 1;
         common_init();
         mem_add_bios();
         keyboard_tandy_init();
@@ -413,6 +414,7 @@ void ams_init()
 
 void pc5086_init()
 {
+        ENHANCED_KEYB = 1;
         xt_init();
         lpt1_remove();      /* remove LPT ports, they will be enabled by 82C710 */
         lpt2_remove();
@@ -870,7 +872,7 @@ void at_ga686bx_init()
 void model_init()
 {
         pclog("Initting as %s\n", model_getname());
-        AMSTRAD = AT = PCI = TANDY = MCA = 0;
+        AMSTRAD = AT = PCI = TANDY = MCA = ENHANCED_KEYB = 0;
         ide_set_bus_master(NULL, NULL, NULL, NULL);
         
         models[model].init();

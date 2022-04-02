@@ -175,7 +175,7 @@ int driveempty[2];
 #define PCJR (romset == ROM_IBMPCJR)
 
 int GAMEBLASTER, GUS, SSI2001, voodoo_enabled;
-extern int AMSTRAD, AT, is386, PCI, TANDY, MCA;
+extern int AMSTRAD, AT, is386, PCI, TANDY, MCA, ENHANCED_KEYB;
 
 enum
 {

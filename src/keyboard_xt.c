@@ -106,7 +106,7 @@ void keyboard_xt_adddata(uint8_t val)
 
 void keyboard_xt_write(uint16_t port, uint8_t val, void *priv)
 {
-//        pclog("keyboard_xt : write %04X %02X %02X\n", port, val, keyboard_xt.pb);
+        pclog("keyboard_xt : write %04X %02X %02X\n", port, val, keyboard_xt.pb);
 /*        if (ram[8] == 0xc3) 
         {
                 output = 3;
@@ -153,7 +153,7 @@ void keyboard_xt_write(uint16_t port, uint8_t val, void *priv)
 uint8_t keyboard_xt_read(uint16_t port, void *priv)
 {
         uint8_t temp = 0xff;
-//        pclog("keyboard_xt : read %04X ", port);
+        pclog("keyboard_xt : read %04X ", port);
         switch (port)
         {
                 case 0x60:
@@ -228,7 +228,7 @@ uint8_t keyboard_xt_read(uint16_t port, void *priv)
                 //dumpregs();
                 //exit(-1);
         }
-//        pclog("%02X\n", temp);
+        pclog("%02X\n", temp);
         return temp;
 }
 
